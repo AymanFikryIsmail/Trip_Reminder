@@ -18,18 +18,21 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
 
     private ImageView boosters;
     private Animation animation;
-
+    ProgressBar pBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+         pBar = findViewById(R.id.progressBar);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.splash_anim);
         animation.setAnimationListener(this);
 
         boosters = findViewById(R.id.app_anim_boosters);
         boosters.startAnimation(animation);
-
+        pBar.setProgress(0);
+        pBar.setMax(100);
         new LoadingTask(this).execute();
     }
 
@@ -49,7 +52,7 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
     public void onAnimationRepeat(Animation animation) {
     }
 
-    class LoadingTask extends AsyncTask<Void, Void, Void> {
+    class LoadingTask extends AsyncTask<Void, Integer, Void> {
 
         Activity activity;
 
@@ -66,21 +69,35 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
 
         @Override
         protected Void doInBackground(Void... voids) {
-            try {
-                Thread.sleep(4000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//                Thread.sleep(4000);
+                for (int i=0;i<150; i++){
+                    try {
+                        Thread.sleep(10);
+                        publishProgress(i);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
+            pBar.animate().alpha(0).setDuration(400).start();
+
             if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("isFirstTime", true))
                 activity.startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
             else
-                activity.startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                activity.startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
             finish();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            pBar.setProgress(values[0]);
+
         }
     }
 }

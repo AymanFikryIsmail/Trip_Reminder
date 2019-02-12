@@ -9,14 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".screens.SplashActivity">
+        <activity android:name=".screens.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".screens.WalkThroughActivity" />
+        <activity android:name=".screens.WalkThroughActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".screens.HomeActivity"
             android:label="@string/title_activity_home"
