@@ -12,6 +12,10 @@
     <color name="grey">#4d4d4d</color>
     <color name="grey1">#5d5d5d</color>
     <color name="grey2">#f2f2f2</color>
+    <color name="orange">#f48f01</color>
+    <color name="blue">#027dac</color>
+    <color name="input_border">#b7b7b7</color>
+
     <color name="bgBottomNavigation">#fe485a</color>
     <color name="title_text">#fe485a</color>
     <color name="header_title_text">#ED2A24</color>
@@ -19,7 +23,8 @@
     <color name="active_text">#f30b69</color>
     <color name="edit_hint">#9999</color>
     <color name="startcolor">#00b4d6</color>
-    <color name="endcolor">#00a0b5</color>
+    <color name="endcolor">#03489c</color>
+    <color name="input_txt">#575353</color>
 
     <color name="screen1">#00BFA5</color>
     <color name="screen2">#00B8D4</color>

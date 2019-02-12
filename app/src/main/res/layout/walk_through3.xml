@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/screen3">
+    android:background="@color/colorAccent"
+    android:orientation="vertical"
+    android:gravity="center">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/calendar_icon"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reminder App"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/bold"
+        android:textColor="@android:color/white"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="third"
-        android:textSize="40dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Our app helps you to reminder your trips  "
+        android:textSize="26sp"
         android:textStyle="bold"
+        android:fontFamily="@font/regular"
         android:textColor="@android:color/white"
         />
 
-</RelativeLayout>
+</LinearLayout>
