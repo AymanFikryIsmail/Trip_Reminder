@@ -24,14 +24,14 @@ public class SharedPref {
     //set the first time to use the app
     public void setFirst(Boolean isFirst)
     {
-        editor.putBoolean("check",isFirst);
+        editor.putBoolean("isFirst",isFirst);
         editor.commit();
     }
 
     //check for the first time to use the app
-    public boolean Check()
+    public boolean getIsFirst()
     {
-        return pref.getBoolean("check",true);
+        return pref.getBoolean("isFirst",true);
     }
 
 }

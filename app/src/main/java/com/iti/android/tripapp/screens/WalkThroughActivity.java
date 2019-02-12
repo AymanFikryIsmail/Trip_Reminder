@@ -32,7 +32,7 @@ public class WalkThroughActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPref=new SharedPref(this);
-        if(!sharedPref.Check())
+        if(!sharedPref.getIsFirst())
         {
             launchHomeScreen();
         }
@@ -147,7 +147,7 @@ public class WalkThroughActivity extends AppCompatActivity {
 
     private void launchHomeScreen(){
         sharedPref.setFirst(false);
-        Intent i=new Intent(this,HomeActivity.class);
+        Intent i=new Intent(this,SignInActivity.class);
         startActivity(i);
         finish();
     }

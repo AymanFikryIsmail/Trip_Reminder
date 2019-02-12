@@ -2,6 +2,7 @@ package com.iti.android.tripapp.screens;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,17 +14,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.iti.android.tripapp.R;
+import com.iti.android.tripapp.utils.SharedPref;
 
 public class SplashActivity extends AppCompatActivity implements AnimationListener {
 
     private ImageView boosters;
     private Animation animation;
     ProgressBar pBar;
+    SharedPref sharedPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        sharedPref=new SharedPref(this);
          pBar = findViewById(R.id.progressBar);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.splash_anim);
@@ -86,7 +90,7 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
         protected void onPostExecute(Void result) {
             pBar.animate().alpha(0).setDuration(400).start();
 
-            if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("isFirstTime", true))
+            if ( sharedPref.getIsFirst() )
                 activity.startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
             else
                 activity.startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
