@@ -11,4 +11,7 @@
     <string name="CREATEONE">CREATE ONE</string>
     <string name="asking_for_account">Don\'t have an account ?</string>
     <string name="register">Register</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
