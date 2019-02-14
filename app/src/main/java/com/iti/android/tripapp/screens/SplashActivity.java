@@ -93,7 +93,7 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
             if ( sharedPref.getIsFirst() )
                 activity.startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
             else
-                activity.startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
+                activity.startActivity(new Intent(SplashActivity.this, HomeActivity.class));
             finish();
         }
 
