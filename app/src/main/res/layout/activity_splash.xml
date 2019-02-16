@@ -5,34 +5,17 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:gravity="center"
-    android:background="@drawable/app_wallpaper"
+    android:orientation="vertical"
     tools:context="com.iti.android.tripapp.screens.SplashActivity">
 
     <ImageView
         android:id="@+id/app_logo"
-        android:layout_width="359dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="127dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/app_logo"
-        tools:layout_editor_absoluteX="103dp"
-        tools:layout_editor_absoluteY="171dp" />
+        android:layout_centerInParent="true"
+        />
 
-    <ImageView
-        android:id="@+id/app_anim_boosters"
-        android:layout_width="359dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="127dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/boosters"
-        tools:layout_editor_absoluteX="103dp"
-        tools:layout_editor_absoluteY="171dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -42,9 +25,6 @@
         android:layout_marginEnd="100dp"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="68dp"
-        tools:layout_editor_absoluteX="152dp"
-        tools:layout_editor_absoluteY="355dp" />
+        />
 
 </RelativeLayout>

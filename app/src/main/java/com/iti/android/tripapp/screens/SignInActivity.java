@@ -1,6 +1,7 @@
 package com.iti.android.tripapp.screens;
 
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,17 +19,20 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import com.iti.android.tripapp.R;
+import com.iti.android.tripapp.utils.PrefManager;
 
 public class SignInActivity extends AppCompatActivity {
 
     Button btnSignIn ;
     TextView btnRegister ;
     private FirebaseAuth mAuth;
+    PrefManager prefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        prefManager=new PrefManager(this);
         btnSignIn = findViewById(R.id.signIn);
         btnRegister = findViewById(R.id.createAccount);
         final EditText mEmailField = findViewById(R.id.editTextEmail);
@@ -49,10 +53,11 @@ public class SignInActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            prefManager.setUserId(currentUser.getUid());
                             Toast.makeText(SignInActivity.this, "SignedIn Successfully.",
                                     Toast.LENGTH_SHORT).show();
-
-                            Intent i = new Intent(SignInActivity.this, HomeActivity.class);
+                            Intent i = new Intent(SignInActivity.this, MainActivity.class);
                             startActivity (i);
 
 

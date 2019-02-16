@@ -2,9 +2,7 @@ package com.iti.android.tripapp.screens;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.animation.Animation.AnimationListener;
@@ -14,30 +12,30 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.iti.android.tripapp.R;
-import com.iti.android.tripapp.utils.SharedPref;
+import com.iti.android.tripapp.utils.PrefManager;
 
 public class SplashActivity extends AppCompatActivity implements AnimationListener {
 
     private ImageView boosters;
     private Animation animation;
     ProgressBar pBar;
-    SharedPref sharedPref;
+    PrefManager prefManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        sharedPref=new SharedPref(this);
+        prefManager =new PrefManager(this);
          pBar = findViewById(R.id.progressBar);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.splash_anim);
         animation.setAnimationListener(this);
 
-        boosters = findViewById(R.id.app_anim_boosters);
-        boosters.startAnimation(animation);
+//        boosters = findViewById(R.id.app_anim_boosters);
+//        boosters.startAnimation(animation);
         pBar.setProgress(0);
         pBar.setMax(100);
-        new LoadingTask(this).execute();
+       new LoadingTask(this).execute();
     }
 
 
@@ -90,10 +88,14 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
         protected void onPostExecute(Void result) {
             pBar.animate().alpha(0).setDuration(400).start();
 
-            if ( sharedPref.getIsFirst() )
+            if ( prefManager.getIsFirst() )
                 activity.startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
-            else
-                activity.startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+            else if(prefManager.getUserId().equals("")){
+                activity.startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+            }
+            else {
+                activity.startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            }
             finish();
         }
 

@@ -8,9 +8,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/app_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/app_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -25,13 +25,29 @@
         <activity
             android:name=".screens.WalkThroughActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".screens.HomeActivity"
-            android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBLJv51oC0sfDw418dpUs2vu7xT4tMezyw" />
+        <!-- AIzaSyBLJv51oC0sfDw418dpUs2vu7xT4tMezyw  AIzaSyBLPdtvo4KoNgMDdVYXcCtJOpM8yvkuSCQ -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+
         <activity android:name=".screens.SignInActivity" />
         <activity android:name=".screens.RegisterActivity" />
-        <activity android:name=".screens.AddTripActivity"></activity>
+        <activity android:name=".screens.AddTripActivity" />
+
+        <receiver
+            android:name=".services.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".screens.AlarmActivity" />
+        <activity
+            android:name=".screens.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

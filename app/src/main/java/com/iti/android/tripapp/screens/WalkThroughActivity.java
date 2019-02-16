@@ -16,11 +16,11 @@ import android.widget.TextView;
 
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.adapter.ViewPageAdapter;
-import com.iti.android.tripapp.utils.SharedPref;
+import com.iti.android.tripapp.utils.PrefManager;
 
 public class WalkThroughActivity extends AppCompatActivity {
     private ViewPager viewPager;
-    private SharedPref sharedPref;
+    private PrefManager prefManager;
     private TextView[] dots;
     Button btnNext,btnSkip;
     private ViewPageAdapter viewPageAdapter;
@@ -31,8 +31,8 @@ public class WalkThroughActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPref=new SharedPref(this);
-        if(!sharedPref.getIsFirst())
+        prefManager =new PrefManager(this);
+        if(!prefManager.getIsFirst())
         {
             launchHomeScreen();
         }
@@ -146,7 +146,7 @@ public class WalkThroughActivity extends AppCompatActivity {
     }
 
     private void launchHomeScreen(){
-        sharedPref.setFirst(false);
+        prefManager.setFirst(false);
         Intent i=new Intent(this,SignInActivity.class);
         startActivity(i);
         finish();
