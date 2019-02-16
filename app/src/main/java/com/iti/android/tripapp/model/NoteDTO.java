@@ -6,41 +6,27 @@ import java.io.Serializable;
  * Created by ayman on 2019-02-14.
  */
 
+
 public class NoteDTO implements Serializable {
+
+    private boolean isChecked;
+    private String content;
     private Integer note_id;
-    private String note_description;
-    private Integer note_trip_id;
 
-    public NoteDTO() {
+    public NoteDTO(boolean isChecked, String content) {
+        this.isChecked = isChecked;
+        this.content = content;
     }
 
-    public NoteDTO(Integer note_id, String note_description, Integer note_trip_id) {
-        this.note_id = note_id;
-        this.note_description = note_description;
-        this.note_trip_id = note_trip_id;
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
-    public Integer getNote_id() {
-        return note_id;
+    public boolean isChecked() {
+        return isChecked;
     }
 
-    public void setNote_id(Integer note_id) {
-        this.note_id = note_id;
-    }
-
-    public String getNote_description() {
-        return note_description;
-    }
-
-    public void setNote_description(String note_description) {
-        this.note_description = note_description;
-    }
-
-    public Integer getNote_trip_id() {
-        return note_trip_id;
-    }
-
-    public void setNote_trip_id(Integer note_trip_id) {
-        this.note_trip_id = note_trip_id;
+    public String getContent() {
+        return content;
     }
 }

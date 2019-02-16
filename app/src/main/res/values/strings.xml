@@ -29,4 +29,5 @@
     </string-array>
     <string name="title_activity_main">MainActivity</string>
 
+    <string name="confirm">Ok</string>
 </resources>

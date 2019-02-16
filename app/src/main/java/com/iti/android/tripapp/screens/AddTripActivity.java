@@ -36,6 +36,7 @@ import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.data.FireBaseHelper;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
+import com.iti.android.tripapp.components.MovableIcon;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -172,6 +173,7 @@ public class AddTripActivity extends AppCompatActivity {
 
         // click listener on alarmClock EditText
         start_time.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -196,9 +198,11 @@ public class AddTripActivity extends AppCompatActivity {
         });
 
     }
+
     void initBackDateTime(){
         // click listener on alarmClock EditText
         return_time.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -265,6 +269,7 @@ public class AddTripActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
         return_date_text.setText(sdf.format(myCalendarRound.getTime()));
     }
+
     void initAutoComplete(){
 
         Places.initialize(getApplicationContext(), API_KEY);
@@ -338,6 +343,7 @@ public class AddTripActivity extends AppCompatActivity {
         startPlaceAutocompleteFragment.setFilter(typeFilter1);
         endPlaceAutocompleteFragment.setFilter(typeFilter1);
     }
+
 
     public void addTrip(){
         String trip_name = name.getText().toString();
