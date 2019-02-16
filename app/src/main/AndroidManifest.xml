@@ -31,7 +31,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".screens.SignInActivity" />
         <activity android:name=".screens.RegisterActivity" />
-        <activity android:name=".screens.AddTripActivity"></activity>
+        <activity android:name=".screens.AddTripActivity" />
+        <activity android:name=".screens.NavigationActivity"></activity>
     </application>
 
 </manifest>

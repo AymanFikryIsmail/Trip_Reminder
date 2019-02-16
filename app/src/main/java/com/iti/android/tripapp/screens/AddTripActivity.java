@@ -15,6 +15,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.iti.android.tripapp.R;
+import com.iti.android.tripapp.components.MovableIcon;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +37,8 @@ public class AddTripActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_trip);
         Button btnSource = findViewById(R.id.btn_source);
         Button btnDest = findViewById(R.id.btn_dest);
+        tvSource = findViewById(R.id.tv_source);
+        tvDest = findViewById(R.id.tv_dest);
         Places.initialize(getApplicationContext(), API_KEY);
         btnSource.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +46,6 @@ public class AddTripActivity extends AppCompatActivity {
                 sendIntent(SOURCE);
             }
         });
-
         btnDest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,16 +70,14 @@ public class AddTripActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 Log.i("MYTAG", "Place: " + place.getName() + ", " + place.getId() + ", " + place.getLatLng());
-                if (data.getIntExtra(PLACE_NO, 0) == SOURCE)
+                if (data.getIntExtra(PLACE_NO, 0) == SOURCE) {
                     tvSource.setText(place.getAddress());
-                else if (data.getIntExtra(PLACE_NO, 0) == DESTINATION)
+                } else if (data.getIntExtra(PLACE_NO, 0) == DESTINATION) {
                     tvDest.setText(place.getAddress());
+                }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Log.i("MYTAG", status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
             }
         }
     }
