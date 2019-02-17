@@ -145,7 +145,8 @@
 
                     android:fontFamily="@font/bold"
                     android:textColor="@color/input_txt"
-                    android:text="20/8/6"/>
+                    android:text=""
+                    />
 
             </LinearLayout>
             <LinearLayout
@@ -166,7 +167,7 @@
                     android:id="@+id/start_time_text"
                     android:fontFamily="@font/bold"
                     android:textColor="@color/input_txt"
-                    android:text="15:5:5"/>
+                    android:text=""/>
 
             </LinearLayout>
         </LinearLayout>
@@ -213,7 +214,7 @@
                         android:id="@+id/return_date_text"
                         android:fontFamily="@font/bold"
                         android:textColor="@color/input_txt"
-                        android:text="20/8/6"/>
+                        android:text=""/>
 
                 </LinearLayout>
                 <LinearLayout
@@ -234,7 +235,7 @@
                         android:id="@+id/return_time_text"
                         android:fontFamily="@font/bold"
                         android:textColor="@color/input_txt"
-                        android:text="15:5:5"/>
+                        android:text=""/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -298,7 +299,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_fill"
-        android:text="@string/SIGNIN"
+        android:text="Add Trip"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:fontFamily="@font/regular"/>

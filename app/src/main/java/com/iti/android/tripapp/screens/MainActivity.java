@@ -42,8 +42,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 //                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-//                        Uri.parse("http://maps.google.com/maps?saddr=" + 30 + "," + 29 + "&daddr=" + 30.5+ "," + 29.5));
+//                        Uri.parse("http://maps.google.com/maps?saddr=" + 31.267048 + "," + 29.994168 + "&daddr=" +31.207751 + "," + 29.911807));
 //                startActivity(intent);
+////
                 startActivity(new Intent(MainActivity.this, AddTripActivity.class));
 
             }

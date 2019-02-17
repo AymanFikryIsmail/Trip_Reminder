@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.iti.android.tripapp.R;
-import com.iti.android.tripapp.data.FireBaseHelper;
+import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.model.UserDTO;
 import com.iti.android.tripapp.utils.PrefManager;
 

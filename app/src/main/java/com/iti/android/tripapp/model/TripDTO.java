@@ -1,5 +1,6 @@
 package com.iti.android.tripapp.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -7,7 +8,7 @@ import java.util.Date;
  * Created by ayman on 2019-02-08.
  */
 
-public class TripDTO {
+public class TripDTO implements Serializable {
     private int id;
     private String name;
     private String trip_start_point;
