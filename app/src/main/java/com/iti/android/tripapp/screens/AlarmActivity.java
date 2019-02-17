@@ -1,6 +1,7 @@
 package com.iti.android.tripapp.screens;
 
 import android.app.ActivityManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,20 +24,28 @@ import java.util.ArrayList;
 public class AlarmActivity extends AppCompatActivity {
 
     AlertDialog.Builder alaertBuilder;
+    NotificationHepler notificationHepler;
+    private NotificationManager notificationManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_alarm);
-        getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
-        super.onCreate(savedInstanceState);
-        ActivityManager activityManager = (ActivityManager) getApplicationContext()
-                .getSystemService(Context.ACTIVITY_SERVICE);
-        activityManager.moveTaskToFront(getTaskId(), 0);
+        setContentView(R.layout.activity_alarm);
+        AlarmActivity.this.setFinishOnTouchOutside(false);
+
+//        getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+//        super.onCreate(savedInstanceState);
+//        ActivityManager activityManager = (ActivityManager) getApplicationContext()
+//                .getSystemService(Context.ACTIVITY_SERVICE);
+//        activityManager.moveTaskToFront(getTaskId(), 0);
         Intent intentSound = new Intent(this, BackgroundSoundService.class);
-      //  intentSound.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startService(intentSound);
-        Toast.makeText(this,"hi ",Toast.LENGTH_LONG).show();
+
+
                  getIntent().getSerializableExtra("trip");
+
+                 //String notifState= getIntent().getStringExtra("");
+
 
         alaertBuilder =new AlertDialog.Builder(this);
         alaertBuilder.setTitle("Tripaddo")
@@ -58,7 +67,8 @@ public class AlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                NotificationHepler notificationHepler=new NotificationHepler(AlarmActivity.this);
+                 notificationHepler=new NotificationHepler(AlarmActivity.this);
+                notificationManager=notificationHepler.getManager();
                 notificationHepler.createNotification();
 
                 Intent intent = new Intent(AlarmActivity.this, BackgroundSoundService.class);
@@ -67,6 +77,8 @@ public class AlarmActivity extends AppCompatActivity {
                    }
                    }).setNegativeButton("Cancel Trip", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        notificationManager.cancel(0);// trip id
+
 //                        tripDTO.setTrip_status(com.example.omnia.easytripplanner.database.dto.Status.CANCELLED);
 //                        tripDAO.updateTrip(tripDTO);
 //                        Intent dismissIntent = new Intent(AlertActivity.this, RingtonePlayingService.class);

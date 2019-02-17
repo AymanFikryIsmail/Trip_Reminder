@@ -31,7 +31,9 @@ context=base;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
         }else {
-            getManager();
+            if (mManager == null) {
+                mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            }
         }
     }
     @TargetApi(Build.VERSION_CODES.O)
@@ -44,10 +46,9 @@ context=base;
     }
 
     public NotificationManager getManager() {
-        if (mManager == null) {
-            mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        }
-
+//        if (mManager == null) {
+//            mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//        }
         return mManager;
     }
 
@@ -89,8 +90,9 @@ context=base;
                         .setContentText("trip name" + " waiting to start ")
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .setContentIntent(alarmPendingIntent)
-                        .addAction(R.drawable.remove_icon, "Cancel", cancelPendingIntent)
-                        .addAction(R.drawable.selected_icon, "Start", startPendingIntent);
+//                        .addAction(R.drawable.remove_icon, "Cancel", cancelPendingIntent)
+//                        .addAction(R.drawable.selected_icon, "Start", startPendingIntent)
+                                     ;
 
         mManager.notify(0, mBuilder.build());
        // context.finish();

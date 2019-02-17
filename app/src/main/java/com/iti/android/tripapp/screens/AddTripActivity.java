@@ -86,6 +86,8 @@ public class AddTripActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
+        fireBaseHelper=new FireBaseHelper();
+
         initView();
         initAutoComplete();
 
@@ -269,28 +271,6 @@ public class AddTripActivity extends AppCompatActivity {
     void initAutoComplete(){
 
         Places.initialize(getApplicationContext(), API_KEY);
-//        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.autocomplete_start_fragment);
-//
-//// Specify the types of place data to return.
-//        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-//
-//// Set up a PlaceSelectionListener to handle the response.
-//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//            @Override
-//            public void onPlaceSelected(Place place) {
-//                // TODO: Get info about the selected place.
-//                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-//            }
-//
-//            @Override
-//            public void onError(Status status) {
-//                // TODO: Handle the error.
-//                Log.i(TAG, "An error occurred: " + status);
-//            }
-//        });
-
-
         PlaceAutocompleteFragment startPlaceAutocompleteFragment, endPlaceAutocompleteFragment;
         startPlaceAutocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager()
                 .findFragmentById(R.id.place_autocomplete_fragment_to);
@@ -366,7 +346,8 @@ public class AddTripActivity extends AppCompatActivity {
             }
             TripDTO tripDTO=new TripDTO(trip_name, trip_start_point , trip_end_point, startLng,startLng
                     ,endLng,endLat ,start_date_text.getText().toString() ,start_time_text.getText().toString()
-                     ,repeated);
+                     ,repeated,"waited");
+          //  fireBaseHelper.createTripOnFirebase(tripDTO);
             //alarm logic
             AlarmHelper.setAlarm(this,tripDTO,myCalendar);
 //            m.trips.add(tripDTO);

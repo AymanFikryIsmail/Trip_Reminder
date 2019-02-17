@@ -22,6 +22,8 @@ public class TripDTO implements Serializable {
     private String roundStatus;
     private int trip_rounded;
     private String repeated;
+    private String tripStatus;
+
     private ArrayList<String> notes;
     private String userId;
     private String duration;
@@ -29,7 +31,7 @@ public class TripDTO implements Serializable {
 
     public TripDTO(String name, String trip_start_point, String trip_end_point, Double trip_start_point_longitude,
                    Double trip_start_point_latitude, Double trip_end_point_longitude, Double trip_end_point_latitude,
-                   String trip_date, String trip_time , String repeated) {
+                   String trip_date, String trip_time , String repeated , String tripStatus) {
         this.name = name;
         this.trip_start_point = trip_start_point;
         this.trip_end_point = trip_end_point;
@@ -40,6 +42,8 @@ public class TripDTO implements Serializable {
         this.trip_date = trip_date;
         this.trip_time = trip_time;
         this.repeated=repeated;
+        this.tripStatus=tripStatus;
+
     }
 
 
