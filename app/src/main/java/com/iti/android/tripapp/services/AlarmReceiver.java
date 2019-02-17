@@ -3,8 +3,10 @@ package com.iti.android.tripapp.services;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.iti.android.tripapp.model.TripDTO;
+import com.iti.android.tripapp.screens.AlarmActivity;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -17,8 +19,10 @@ public class AlarmReceiver extends BroadcastReceiver {
     TripDTO tripDTO;
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
-     //   throw new UnsupportedOperationException("Not yet implemented");
+        Toast.makeText(context, "reciver", Toast.LENGTH_LONG).show();
+        Intent i = new Intent(context, AlarmActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra("tripId", intent.getIntExtra("tripId", 0));
+        context.startActivity(i);
     }
 }

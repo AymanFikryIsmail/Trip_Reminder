@@ -72,6 +72,7 @@ public class AddTripActivity extends AppCompatActivity {
     LinearLayout roundedLayout;
     boolean isRoundedTripChecked;
     int repeatPosition;
+    String repeated="";
     int years;
     int months;
     int days;
@@ -113,6 +114,7 @@ public class AddTripActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 repeatPosition = i;
+
             }
 
             @Override
@@ -359,10 +361,18 @@ public class AddTripActivity extends AppCompatActivity {
             Toast.makeText(this, "cannot insert passed time", Toast.LENGTH_SHORT).show();
         }  else {
 
+            if (repeatPosition == 0) {
+                repeated="";
+            }else if (repeatPosition==1){
+                repeated="Daily";
+            }else if (repeatPosition==2) {
+                repeated="Weekly";
+            }else if (repeatPosition==3) {
+                repeated="Monthly";
+            }
             TripDTO tripDTO=new TripDTO(trip_name, trip_start_point , trip_end_point, startLng,startLng
                     ,endLng,endLat ,start_date_text.getText().toString() ,start_time_text.getText().toString()
-                     );
-
+                     ,repeated);
             //alarm logic
             AlarmHelper.setAlarm(this,tripDTO,myCalendar);
 //            m.trips.add(tripDTO);
