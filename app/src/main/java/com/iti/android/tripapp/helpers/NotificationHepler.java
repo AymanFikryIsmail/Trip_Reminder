@@ -13,6 +13,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.iti.android.tripapp.R;
+import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.screens.AlarmActivity;
 import com.iti.android.tripapp.screens.MainActivity;
 
@@ -53,27 +54,24 @@ context=base;
     }
 
 
-    public void  createNotification(){
+    public void  createNotification(TripDTO tripDTO){
         // content intent
         Intent alarmIntent = new Intent(context, AlarmActivity.class);
-        alarmIntent.putExtra("user_id",0);
-        alarmIntent.putExtra("trip_id",0);
+        alarmIntent.putExtra("trip_id",tripDTO.getId());
         alarmIntent.putExtra("Notification", "notify");
-        PendingIntent alarmPendingIntent = PendingIntent.getActivity(context,  0, alarmIntent,
+        PendingIntent alarmPendingIntent = PendingIntent.getActivity(context,  tripDTO.getId(), alarmIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent cancelIntent = new Intent(context, AlarmActivity.class);
-        cancelIntent.putExtra("user_id", 0);
-        cancelIntent.putExtra("trip_id", 0);
+        cancelIntent.putExtra("trip_id", tripDTO.getId());
         cancelIntent.putExtra("cancel", "cancel");
-        PendingIntent cancelPendingIntent = PendingIntent.getActivity(context, 0,
+        PendingIntent cancelPendingIntent = PendingIntent.getActivity(context, tripDTO.getId(),
                 cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         // start intent
         Intent startIntent = new Intent(context, AlarmActivity.class);
-        startIntent.putExtra("user_id", 0);
-        startIntent.putExtra("trip_id",0);
+        startIntent.putExtra("trip_id",tripDTO.getId());
         startIntent.putExtra("start", "start");
-        PendingIntent startPendingIntent = PendingIntent.getActivity(context,  0 ,
+        PendingIntent startPendingIntent = PendingIntent.getActivity(context,  tripDTO.getId() ,
                 startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelID)

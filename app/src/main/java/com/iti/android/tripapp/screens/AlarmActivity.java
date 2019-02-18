@@ -26,7 +26,7 @@ public class AlarmActivity extends AppCompatActivity {
     AlertDialog.Builder alaertBuilder;
     NotificationHepler notificationHepler;
     private NotificationManager notificationManager;
-
+    TripDTO tripDTO;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +42,8 @@ public class AlarmActivity extends AppCompatActivity {
         startService(intentSound);
 
 
-                 getIntent().getSerializableExtra("trip");
+                 tripDTO= (TripDTO) getIntent().getSerializableExtra("trip");
 
-                 //String notifState= getIntent().getStringExtra("");
 
 
         alaertBuilder =new AlertDialog.Builder(this);
@@ -69,7 +68,7 @@ public class AlarmActivity extends AppCompatActivity {
 
                  notificationHepler=new NotificationHepler(AlarmActivity.this);
                 notificationManager=notificationHepler.getManager();
-                notificationHepler.createNotification();
+                notificationHepler.createNotification(tripDTO);
 
                 Intent intent = new Intent(AlarmActivity.this, BackgroundSoundService.class);
                 intent.setAction("cancel");
@@ -77,7 +76,7 @@ public class AlarmActivity extends AppCompatActivity {
                    }
                    }).setNegativeButton("Cancel Trip", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        notificationManager.cancel(0);// trip id
+                        notificationManager.cancel(tripDTO.getId());// trip id
 
 //                        tripDTO.setTrip_status(com.example.omnia.easytripplanner.database.dto.Status.CANCELLED);
 //                        tripDAO.updateTrip(tripDTO);

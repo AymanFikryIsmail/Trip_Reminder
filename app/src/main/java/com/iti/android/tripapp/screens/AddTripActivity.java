@@ -30,8 +30,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.helpers.FireBaseHelper;
+import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
+import com.iti.android.tripapp.utils.PrefManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -82,12 +84,13 @@ public class AddTripActivity extends AppCompatActivity {
 
     private transient ProgressDialog progressDialog = null;
 
+    PrefManager prefManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
         fireBaseHelper=new FireBaseHelper();
-
+        prefManager=new PrefManager(this);
         initView();
         initAutoComplete();
 
@@ -273,14 +276,14 @@ public class AddTripActivity extends AppCompatActivity {
         Places.initialize(getApplicationContext(), API_KEY);
         PlaceAutocompleteFragment startPlaceAutocompleteFragment, endPlaceAutocompleteFragment;
         startPlaceAutocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager()
-                .findFragmentById(R.id.place_autocomplete_fragment_to);
+                .findFragmentById(R.id.autocomplete_start_fragment);
         AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES).build();
         startPlaceAutocompleteFragment.setFilter(autocompleteFilter);
 
         startPlaceAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Toast.makeText(getApplicationContext(),place.getName().toString(),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),place.getName().toString(),Toast.LENGTH_SHORT).show();
                 placeName = (String) place.getName();
                 startLng = place.getLatLng().longitude;
                 startLat = place.getLatLng().latitude;
@@ -344,10 +347,13 @@ public class AddTripActivity extends AppCompatActivity {
             }else if (repeatPosition==3) {
                 repeated="Monthly";
             }
-            TripDTO tripDTO=new TripDTO(trip_name, trip_start_point , trip_end_point, startLng,startLng
-                    ,endLng,endLat ,start_date_text.getText().toString() ,start_time_text.getText().toString()
+            TripDTO tripDTO=new TripDTO(prefManager.getUserId() ,trip_name, trip_start_point , trip_end_point,
+                    startLat,startLng ,endLng,endLat ,start_date_text.getText().toString() ,start_time_text.getText().toString()
                      ,repeated,"waited");
-          //  fireBaseHelper.createTripOnFirebase(tripDTO);
+            int tripId= (int) MyAppDB.getAppDatabase(this).tripDao().addTrip(tripDTO);
+            tripDTO.setId(tripId);
+            fireBaseHelper.createTripOnFirebase(tripDTO);
+
             //alarm logic
             AlarmHelper.setAlarm(this,tripDTO,myCalendar);
 //            m.trips.add(tripDTO);

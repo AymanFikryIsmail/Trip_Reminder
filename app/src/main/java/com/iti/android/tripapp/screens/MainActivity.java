@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        UpComingFragment upComingFragment=new UpComingFragment();
-        loadFragment(upComingFragment,"UpComing Trips");
+//        UpComingFragment upComingFragment=new UpComingFragment();
+//        loadFragment(upComingFragment,"UpComing Trips");
     }
 
     private void  loadFragment(Fragment fragment, String barTitle){
@@ -70,6 +70,14 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UpComingFragment upComingFragment=new UpComingFragment();
+        loadFragment(upComingFragment,"UpComing Trips");
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

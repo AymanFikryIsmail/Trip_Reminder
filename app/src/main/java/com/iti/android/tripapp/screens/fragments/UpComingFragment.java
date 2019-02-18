@@ -15,7 +15,9 @@ import android.widget.ProgressBar;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.adapter.HistoryTripAdapter;
 import com.iti.android.tripapp.adapter.UpComingTripAdapter;
+import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
+import com.iti.android.tripapp.utils.PrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,20 +39,27 @@ public class UpComingFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    PrefManager prefManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_up_coming, container, false);
+        prefManager=new PrefManager(getContext());
         upComingTripRV = view.findViewById(R.id.upComingTripRV);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         upComingTripRV.setLayoutManager(mLayoutManager);
+        tripDTOArrayList= MyAppDB.getAppDatabase(getContext()).tripDao().getAllTrips("waited", prefManager.getUserId());
         upComingTripAdapter = new UpComingTripAdapter(getContext(), tripDTOArrayList);
-        tripDTOArrayList=null;
+        upComingTripRV.setAdapter(upComingTripAdapter);
         //getTripDTOArrayList();
         return  view;
     }
 
+    public void getTripDTOArrayList(){
+
+
+    }
 
 
     @Override

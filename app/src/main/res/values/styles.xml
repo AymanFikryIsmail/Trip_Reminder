@@ -17,4 +17,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <!--<item name="android:popupBackground">@drawable/menudrawable</item>-->
+        <item name="android:textColor">@color/blue</item>
+        <!--<item name="android:itemBackground">@drawable/menuitemdrawable</item>-->
+        <!--<item name="android:divider">@color/colorPrimary</item>-->
+        <!--<item name="android:dividerHeight">.2dp</item>-->
+    </style>
 </resources>
