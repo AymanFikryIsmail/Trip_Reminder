@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
@@ -18,10 +20,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iti.android.tripapp.R;
+import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
+import com.iti.android.tripapp.services.alarm.AlarmHelper;
 import com.iti.android.tripapp.utils.PrefManager;
 
 import java.util.ArrayList;
@@ -37,10 +42,13 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
     private List<TripDTO> associationsTitle =  new ArrayList<>();
 
     private PrefManager prefManager;
+    private FireBaseHelper fireBaseHelper;
+
     public UpComingTripAdapter(Context context,List<TripDTO> tripDTOList){
         this.context = context;
         this.associationsTitle = tripDTOList;
         prefManager=new PrefManager(context);
+        fireBaseHelper=new FireBaseHelper();
 
     }
 
@@ -122,7 +130,7 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                                     // update status started also update in firebase
                                     tripDTO.setTripStatus("started");
                                    MyAppDB.getAppDatabase(context).tripDao().updateTour(tripDTO);
-
+                                    showDirection(tripDTO);
                                     break;
                                 case R.id.edit:
                                     // open edit page
@@ -143,6 +151,7 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                                             //do your work here
                                             // update status started also update in firebase
                                             MyAppDB.getAppDatabase(context).tripDao().delete(tripDTO);
+                                            fireBaseHelper.removeTripFromFirebase(tripDTO);
                                         }
                                     });
                                     builder.setNegativeButton("no", new DialogInterface.OnClickListener() {
@@ -166,7 +175,23 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
 
 
             }
-
+    }
+    //open google maps and finish activity
+    public void showDirection (TripDTO tripDTO){
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + tripDTO.getTrip_end_point_latitude() + "," +
+                tripDTO.getTrip_start_point_longitude()
+                + "&travelmode=driving");
+        //Uri.parse("http://maps.google.com/maps?saddr=" + 31.267048 + "," + 29.994168 + "&daddr=" +31.207751 + "," + 29.911807));
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity( context.getPackageManager()) != null) {
+            mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(mapIntent);
+        } else {
+            Toast.makeText(context, "Please install a maps application", Toast.LENGTH_LONG).show();
+        }
+          AlarmHelper.cancelAlarm(context, tripDTO.getId());
     }
 
 }
