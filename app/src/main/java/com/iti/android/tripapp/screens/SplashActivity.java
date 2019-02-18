@@ -72,7 +72,7 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
         @Override
         protected Void doInBackground(Void... voids) {
 //                Thread.sleep(4000);
-                for (int i=0;i<150; i++){
+                for (int i=0;i<100; i++){
                     try {
                         Thread.sleep(10);
                         publishProgress(i);
@@ -91,7 +91,7 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
             if ( prefManager.getIsFirst() )
                 activity.startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
             else if(prefManager.getUserId().equals("")){
-                activity.startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+                activity.startActivity(new Intent(SplashActivity.this, MainActivity.class));
             }
             else {
                 activity.startActivity(new Intent(SplashActivity.this, MainActivity.class));

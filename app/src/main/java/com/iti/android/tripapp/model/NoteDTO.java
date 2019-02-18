@@ -1,17 +1,15 @@
 package com.iti.android.tripapp.model;
 
-import java.io.Serializable;
 
 /**
  * Created by ayman on 2019-02-14.
  */
 
 
-public class NoteDTO implements Serializable {
+public class NoteDTO {
 
     private boolean isChecked;
     private String content;
-    private Integer note_id;
 
     public NoteDTO(boolean isChecked, String content) {
         this.isChecked = isChecked;

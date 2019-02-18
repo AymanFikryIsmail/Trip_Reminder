@@ -11,10 +11,12 @@ import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
 
 public class BackgroundSoundService extends Service {
+
+    MediaPlayer player;
+
     public BackgroundSoundService() {
     }
-    private static final String TAG = null;
-    MediaPlayer player;
+
     public IBinder onBind(Intent arg0) {
 
         return null;
@@ -37,9 +39,7 @@ public class BackgroundSoundService extends Service {
             AlarmHelper.cancelAlarm(getApplicationContext(),0);
         }
         else {
-
             player.start();
-
         }
         return START_NOT_STICKY;
     }
@@ -47,18 +47,6 @@ public class BackgroundSoundService extends Service {
     public IBinder onUnBind(Intent arg0) {
         // TO DO Auto-generated method
         return null;
-    }
-
-    public void onStop() {
-
-    }
-    public void onPause() {
-
-    }
-    @Override
-    public void onDestroy() {
-        player.stop();
-        player.release();
     }
 
     @Override

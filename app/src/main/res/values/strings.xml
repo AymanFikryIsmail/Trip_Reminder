@@ -30,4 +30,6 @@
     <string name="title_activity_main">MainActivity</string>
 
     <string name="confirm">Ok</string>
+    <string name="add_trip">Add</string>
+    <string name="add_note">Add a note...</string>
 </resources>

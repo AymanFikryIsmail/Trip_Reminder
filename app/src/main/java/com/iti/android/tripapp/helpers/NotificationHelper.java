@@ -21,13 +21,13 @@ import com.iti.android.tripapp.screens.MainActivity;
  * Created by ayman on 2019-02-17.
  */
 
-public class NotificationHepler {
+public class NotificationHelper {
     public static final String channelID = "channelID";
     public static final String channelName = "Channel Name";
 
     private NotificationManager mManager;
 Context context;
-    public NotificationHepler(Context base) {
+    public NotificationHelper(Context base) {
 context=base;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();

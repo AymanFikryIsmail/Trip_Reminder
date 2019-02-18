@@ -7,14 +7,17 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -36,16 +39,14 @@ import com.iti.android.tripapp.services.alarm.AlarmHelper;
 import com.iti.android.tripapp.utils.PrefManager;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class AddTripActivity extends AppCompatActivity {
 
     private final static String API_KEY = "AIzaSyBLJv51oC0sfDw418dpUs2vu7xT4tMezyw";
-    private final static String PLACE_NO = "PlaceNo";
-    private final static int REQUEST_CODE = 1;
-    private final static int SOURCE = 1;
-    private final static int DESTINATION = 2;
 
     Double startLng = 0.0d;
     Double startLat;
@@ -54,9 +55,9 @@ public class AddTripActivity extends AppCompatActivity {
     String TAG = " asdasdasdadsasdasd";
     LatLng StartLatLang;
     LatLng endLatLang;
-    EditText name;
+    EditText name, note;
     Button addTrip;
-    ImageView start_date ,start_time ,return_date ,return_time ;
+    ImageView start_date ,start_time ,return_date ,return_time, addNote ;
     TextView start_date_text ,start_time_text , return_date_text ,return_time_text ;
     String placeName;
     String placeDestination;
@@ -66,6 +67,8 @@ public class AddTripActivity extends AppCompatActivity {
     SwitchCompat roundSwitch;
     Spinner repeat_spinner;
     LinearLayout roundedLayout;
+    List<String> notes = new ArrayList<>();
+    ListView lvNotes;
     boolean isRoundedTripChecked;
     int repeatPosition;
     String repeated="";
@@ -99,7 +102,7 @@ public class AddTripActivity extends AppCompatActivity {
         roundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true) {
+                if (isChecked) {
                     roundedLayout.setVisibility(View.VISIBLE);
                     isRoundedTripChecked = true;
                 } else {
@@ -122,6 +125,14 @@ public class AddTripActivity extends AppCompatActivity {
             }
         });
 
+        addNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!note.getText().toString().equals(""))
+                    addNote(note.getText().toString());
+            }
+        });
+
         addTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,8 +151,11 @@ public class AddTripActivity extends AppCompatActivity {
         return_date_text =  findViewById(R.id.return_date_text);
         return_time_text =  findViewById(R.id.return_time_text);
         repeat_spinner = findViewById(R.id.repeat_spinner);
-         roundSwitch = findViewById(R.id.roundedTrip);
+        roundSwitch = findViewById(R.id.roundedTrip);
         roundedLayout=findViewById(R.id.roundedLayout);
+        lvNotes = findViewById(R.id.notes);
+        note = findViewById(R.id.et_note);
+        addNote = findViewById(R.id.add_notes);
         addTrip = findViewById(R.id.addTripId);
         myCalendar.setTimeInMillis(System.currentTimeMillis());
         currentCalendar.setTimeInMillis(System.currentTimeMillis());
@@ -178,9 +192,9 @@ public class AddTripActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Calendar mcurrentTime = Calendar.getInstance();
-                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = mcurrentTime.get(Calendar.MINUTE);
+                Calendar mCurrentTime = Calendar.getInstance();
+                int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mCurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(AddTripActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -207,9 +221,9 @@ public class AddTripActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Calendar mcurrentTime2 = Calendar.getInstance();
-                int hour = mcurrentTime2.get(Calendar.HOUR_OF_DAY);
-                int minute = mcurrentTime2.get(Calendar.MINUTE);
+                Calendar mCurrentTime2 = Calendar.getInstance();
+                int hour = mCurrentTime2.get(Calendar.HOUR_OF_DAY);
+                int minute = mCurrentTime2.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker2;
                 mTimePicker2 = new TimePickerDialog(AddTripActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -274,9 +288,10 @@ public class AddTripActivity extends AppCompatActivity {
     void initAutoComplete(){
 
         Places.initialize(getApplicationContext(), API_KEY);
+
         PlaceAutocompleteFragment startPlaceAutocompleteFragment, endPlaceAutocompleteFragment;
         startPlaceAutocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager()
-                .findFragmentById(R.id.autocomplete_start_fragment);
+                .findFragmentById(R.id.place_autocomplete_fragment_from);
         AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES).build();
         startPlaceAutocompleteFragment.setFilter(autocompleteFilter);
 
@@ -323,6 +338,15 @@ public class AddTripActivity extends AppCompatActivity {
         endPlaceAutocompleteFragment.setFilter(typeFilter1);
     }
 
+    public void addNote(String note) {
+        notes.add(note);
+        String[] strings = new String[notes.size()];
+        notes.toArray(strings);
+        this.note.setText("");
+        lvNotes.setVisibility(View.VISIBLE);
+        lvNotes.setAdapter(new ArrayAdapter<>(this, R.layout.raw_note, strings));
+        lvNotes.setSelection(notes.size() - 1);
+    }
 
     public void addTrip(){
         String trip_name = name.getText().toString();

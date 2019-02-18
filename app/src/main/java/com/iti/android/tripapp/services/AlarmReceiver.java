@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.iti.android.tripapp.model.TripDTO;
@@ -18,9 +19,10 @@ public class AlarmReceiver extends BroadcastReceiver {
     String notification;
     int notificationID;
     TripDTO tripDTO;
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "reciver", Toast.LENGTH_LONG).show();
+        Log.i("TAG", "receiver called");
         Intent i = new Intent(context, AlarmActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        i.putExtra("tripId", intent.getIntExtra("tripId", 0));

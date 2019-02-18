@@ -1,37 +1,34 @@
 package com.iti.android.tripapp.screens;
 
-import android.app.ActivityManager;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.WindowManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.iti.android.tripapp.R;
-import com.iti.android.tripapp.components.MovableIcon;
-import com.iti.android.tripapp.helpers.NotificationHepler;
+import com.iti.android.tripapp.helpers.NotificationHelper;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.services.BackgroundSoundService;
+import com.iti.android.tripapp.services.FloatingIconService;
 
 import java.util.ArrayList;
 
 public class AlarmActivity extends AppCompatActivity {
 
-    AlertDialog.Builder alaertBuilder;
-    NotificationHepler notificationHepler;
+    AlertDialog.Builder alertBuilder;
+    NotificationHelper notificationHelper;
     private NotificationManager notificationManager;
     TripDTO tripDTO;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
-        AlarmActivity.this.setFinishOnTouchOutside(false);
+        setFinishOnTouchOutside(false);
 
 //        getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
 //        super.onCreate(savedInstanceState);
@@ -46,8 +43,8 @@ public class AlarmActivity extends AppCompatActivity {
 
 
 
-        alaertBuilder =new AlertDialog.Builder(this);
-        alaertBuilder.setTitle("Tripaddo")
+        alertBuilder =new AlertDialog.Builder(this);
+        alertBuilder.setTitle("Tripaddo")
                 .setMessage("Do you want to start " + "tripname" + " trip ?")
                 .setPositiveButton("start", new DialogInterface.OnClickListener() {
                     @Override
@@ -62,19 +59,21 @@ public class AlarmActivity extends AppCompatActivity {
                         finish();
 
                     }
-                }).setNeutralButton("snooze", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+                })
+                .setNeutralButton("snooze", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                 notificationHepler=new NotificationHepler(AlarmActivity.this);
-                notificationManager=notificationHepler.getManager();
-                notificationHepler.createNotification(tripDTO);
+                        NotificationHelper notificationHelper = new NotificationHelper(AlarmActivity.this);
+                        notificationManager=notificationHelper.getManager();
+                        notificationHelper.createNotification(tripDTO);
 
-                Intent intent = new Intent(AlarmActivity.this, BackgroundSoundService.class);
-                intent.setAction("cancel");
-                stopService(intent);
-                   }
-                   }).setNegativeButton("Cancel Trip", new DialogInterface.OnClickListener() {
+                        Intent intent = new Intent(AlarmActivity.this, BackgroundSoundService.class);
+                        intent.setAction("cancel");
+                        stopService(intent);
+                    }
+                })
+                .setNegativeButton("Cancel Trip", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         notificationManager.cancel(tripDTO.getId());// trip id
 
@@ -116,8 +115,9 @@ public class AlarmActivity extends AppCompatActivity {
     }
     /*  Start Floating widget service and finish current activity */
     private void startFloatingWidgetService() {
-        Intent intent = new Intent(this, MovableIcon.class);
+        Intent intent = new Intent(this, FloatingIconService.class);
         ArrayList<String> noteList = new ArrayList<>();
+        //TODO Receive actual data from db
         noteList.add("Note1");
         noteList.add("Note2");
         noteList.add("Note3");
