@@ -6,13 +6,14 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.iti.android.tripapp.helpers.local.dao.TripDao;
+import com.iti.android.tripapp.model.NoteDTO;
 import com.iti.android.tripapp.model.TripDTO;
 
 /**
  * Created by ayman on 2019-02-18.
  */
 
-@Database(entities = {TripDTO.class}, version = 1, exportSchema = false)
+@Database(entities = {TripDTO.class, NoteDTO.class}, version = 1, exportSchema = false)
 public abstract class MyAppDB extends RoomDatabase {
 
     private static MyAppDB INSTANCE;

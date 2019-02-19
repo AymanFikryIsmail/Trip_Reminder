@@ -48,7 +48,7 @@ public class AlarmActivity extends AppCompatActivity {
 
         alaertBuilder =new AlertDialog.Builder(this);
         alaertBuilder.setTitle("Tripaddo")
-                .setMessage("Do you want to start " + "tripname" + " trip ?")
+                .setMessage("Do you want to start " + tripDTO.getName() + " trip ?")
                 .setPositiveButton("start", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -56,8 +56,8 @@ public class AlarmActivity extends AppCompatActivity {
                         int tripId = getIntent().getIntExtra("tripId",0);
                         // started
                         Intent intent = new Intent(AlarmActivity.this, BackgroundSoundService.class);
-                        intent.setAction("cancel");
-                        startService(intent);
+                        //intent.setAction("cancel");
+                        stopService(intent);
                         startFloatingWidgetService();
                         finish();
 
@@ -76,7 +76,7 @@ public class AlarmActivity extends AppCompatActivity {
                    }
                    }).setNegativeButton("Cancel Trip", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        notificationManager.cancel(tripDTO.getId());// trip id
+                       // notificationManager.cancel(tripDTO.getId());// trip id
 
 //                        tripDTO.setTrip_status(com.example.omnia.easytripplanner.database.dto.Status.CANCELLED);
 //                        tripDAO.updateTrip(tripDTO);
@@ -98,8 +98,8 @@ public class AlarmActivity extends AppCompatActivity {
 
     //open google maps and finish activity
     public void showDirection (){
-        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + 31.207751 + "," + 29.911807
-                + "&travelmode=driving");
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + tripDTO.getTrip_end_point_latitude()
+                + "," + tripDTO.getTrip_end_point_longitude()+ "&travelmode=driving");
         //Uri.parse("http://maps.google.com/maps?saddr=" + 31.267048 + "," + 29.994168 + "&daddr=" +31.207751 + "," + 29.911807));
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

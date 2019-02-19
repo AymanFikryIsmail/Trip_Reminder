@@ -152,6 +152,8 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                                             // update status started also update in firebase
                                             MyAppDB.getAppDatabase(context).tripDao().delete(tripDTO);
                                             fireBaseHelper.removeTripFromFirebase(tripDTO);
+                                            associationsTitle.remove(tripDTO);
+                                            notifyDataSetChanged();
                                         }
                                     });
                                     builder.setNegativeButton("no", new DialogInterface.OnClickListener() {

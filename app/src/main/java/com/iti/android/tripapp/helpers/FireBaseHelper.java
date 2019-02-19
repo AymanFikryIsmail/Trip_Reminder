@@ -17,34 +17,40 @@ import java.util.ArrayList;
 
 public class FireBaseHelper implements Serializable {
 
+    FirebaseDatabase database;
+    public FireBaseHelper() {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+         database = FirebaseDatabase.getInstance();
+
+    }
 
     public void addUserToFirebase(UserDTO user) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users");
         myRef.child(user.getId()).setValue(user);
     }
 
     public void createTripOnFirebase(TripDTO trip) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(trip.getUserId() + "trips");
         myRef.child(Integer.toString(trip.getId())).setValue(trip);
     }
-
+    public void updateTripOnFirebase(TripDTO trip) {
+        DatabaseReference myRef = database.getReference(trip.getUserId() + "trips");
+        myRef.child(Integer.toString(trip.getId())).setValue(trip);
+    }
     public void removeTripFromFirebase(TripDTO trip) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(trip.getUserId() + "trips");
         myRef.child(Integer.toString(trip.getId())).setValue(null);
     }
 
 
     public ArrayList<TripDTO> retrieveUserTripsFromFirebase(UserDTO user) {
-        ArrayList<TripDTO> trips=null;
+         final ArrayList<TripDTO> trips;
+        trips = new ArrayList<TripDTO>();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(user.getId() + "trips");
         ref.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        ArrayList<TripDTO> trips = new ArrayList<TripDTO>();
                         for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                             TripDTO trip = userSnapshot.getValue(TripDTO.class);
                             trips.add(trip);
@@ -58,6 +64,8 @@ public class FireBaseHelper implements Serializable {
                 });
         return trips;
     }
+
+//
 //    public void createAndUpdateNotesOnFirebase(Note note) {
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference(note.get() + "trip" + note.getTripId() + "notes");
