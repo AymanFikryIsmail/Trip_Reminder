@@ -1,92 +1,103 @@
 package com.iti.android.tripapp.screens;
 
-import android.app.ActivityManager;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.WindowManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.iti.android.tripapp.R;
-import com.iti.android.tripapp.components.MovableIcon;
-import com.iti.android.tripapp.helpers.NotificationHepler;
+import com.iti.android.tripapp.helpers.FireBaseHelper;
+import com.iti.android.tripapp.helpers.NotificationHelper;
+import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.services.BackgroundSoundService;
+import com.iti.android.tripapp.services.FloatingIconService;
+import com.iti.android.tripapp.services.alarm.AlarmHelper;
 
 import java.util.ArrayList;
 
 public class AlarmActivity extends AppCompatActivity {
 
-    AlertDialog.Builder alaertBuilder;
-    NotificationHepler notificationHepler;
+    AlertDialog.Builder alertBuilder;
+    NotificationHelper notificationHelper;
     private NotificationManager notificationManager;
     TripDTO tripDTO;
+    MediaPlayer player;
+    private FireBaseHelper fireBaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
-        AlarmActivity.this.setFinishOnTouchOutside(false);
+        setFinishOnTouchOutside(false);
+        fireBaseHelper=new FireBaseHelper();
 
 //        getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
 //        super.onCreate(savedInstanceState);
 //        ActivityManager activityManager = (ActivityManager) getApplicationContext()
 //                .getSystemService(Context.ACTIVITY_SERVICE);
 //        activityManager.moveTaskToFront(getTaskId(), 0);
-        Intent intentSound = new Intent(this, BackgroundSoundService.class);
-        startService(intentSound);
+//        Intent intentSound = new Intent(this, BackgroundSoundService.class);
+//        startService(intentSound);
 
+        player = MediaPlayer.create(this, R.raw.notification);
+        player.setLooping(true); // Set looping
+        player.setVolume(100,100);
+        player.start();
+        notificationHelper=new NotificationHelper(this);
+        notificationManager=notificationHelper.getManager();
 
-                 tripDTO= (TripDTO) getIntent().getSerializableExtra("trip");
+        final int tripid= getIntent().getIntExtra("tripid",0);
+         tripDTO= MyAppDB.getAppDatabase(this).tripDao().getTrip(tripid);
 
-
-
-        alaertBuilder =new AlertDialog.Builder(this);
-        alaertBuilder.setTitle("Tripaddo")
-                .setMessage("Do you want to start " + tripDTO.getName() + " trip ?")
+        alertBuilder =new AlertDialog.Builder(this);
+        alertBuilder.setTitle("Tripaddo")
+                .setMessage("Do you want to start " + "" + " trip ?")
                 .setPositiveButton("start", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        showDirection();
                         int tripId = getIntent().getIntExtra("tripId",0);
-                        // started
-                        Intent intent = new Intent(AlarmActivity.this, BackgroundSoundService.class);
-                        //intent.setAction("cancel");
-                        stopService(intent);
+                        player.stop();
+                        player.release();
+                        tripDTO.setTripStatus("started");
+                        tripDTO.setId(tripId);
+                        // update in fire base
+                        MyAppDB.getAppDatabase(AlarmActivity.this).tripDao().updateTour(tripDTO);
+                        AlarmHelper.cancelAlarm(getApplicationContext(),tripId);
+                        notificationManager.cancel(tripid);
+
+                        showDirection();
                         startFloatingWidgetService();
                         finish();
 
                     }
-                }).setNeutralButton("snooze", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+                })
+                .setNeutralButton("snooze", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                 notificationHepler=new NotificationHepler(AlarmActivity.this);
-                notificationManager=notificationHepler.getManager();
-                notificationHepler.createNotification(tripDTO);
+                        player.stop();
+                        player.release();
+                        AlarmHelper.cancelAlarm(getApplicationContext(),tripid);
+                        notificationHelper.createNotification(tripDTO);
+                        finish();
 
-                Intent intent = new Intent(AlarmActivity.this, BackgroundSoundService.class);
-                intent.setAction("cancel");
-                stopService(intent);
-                   }
-                   }).setNegativeButton("Cancel Trip", new DialogInterface.OnClickListener() {
+                    }
+                })
+                .setNegativeButton("Cancel Trip", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                       // notificationManager.cancel(tripDTO.getId());// trip id
-
-//                        tripDTO.setTrip_status(com.example.omnia.easytripplanner.database.dto.Status.CANCELLED);
-//                        tripDAO.updateTrip(tripDTO);
-//                        Intent dismissIntent = new Intent(AlertActivity.this, RingtonePlayingService.class);
-//                        dismissIntent.setAction(RingtonePlayingService.ACTION_DISMISS);
-//                        PendingIntent pendingIntent = PendingIntent.getService(AlertActivity.this, notificationID, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                        startService(dismissIntent);
-                        Intent intent = new Intent(AlarmActivity.this, BackgroundSoundService.class);
-                        intent.setAction("cancel");
-                        stopService(intent);
+                        MyAppDB.getAppDatabase(AlarmActivity.this).tripDao().delete(tripDTO);
+                        fireBaseHelper.removeTripFromFirebase(tripDTO);
+                        player.stop();
+                        player.release();
+                        notificationManager.cancel(tripid);
+                        AlarmHelper.cancelAlarm(getApplicationContext(),tripid);
                         finish();
                     }
                 })
@@ -116,8 +127,9 @@ public class AlarmActivity extends AppCompatActivity {
     }
     /*  Start Floating widget service and finish current activity */
     private void startFloatingWidgetService() {
-        Intent intent = new Intent(this, MovableIcon.class);
+        Intent intent = new Intent(this, FloatingIconService.class);
         ArrayList<String> noteList = new ArrayList<>();
+        //TODO Receive actual data from db
         noteList.add("Note1");
         noteList.add("Note2");
         noteList.add("Note3");
@@ -127,5 +139,15 @@ public class AlarmActivity extends AppCompatActivity {
         intent.putExtra("noteList", noteList);
         startService(intent);
         finish();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        if (player!=null) {
+//            player.stop();
+//            player.release();
+//        }
     }
 }

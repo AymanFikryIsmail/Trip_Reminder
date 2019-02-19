@@ -21,13 +21,13 @@ import com.iti.android.tripapp.screens.MainActivity;
  * Created by ayman on 2019-02-17.
  */
 
-public class NotificationHepler {
+public class NotificationHelper {
     public static final String channelID = "channelID";
     public static final String channelName = "Channel Name";
 
     private NotificationManager mManager;
 Context context;
-    public NotificationHepler(Context base) {
+    public NotificationHelper(Context base) {
 context=base;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
@@ -57,19 +57,18 @@ context=base;
     public void  createNotification(TripDTO tripDTO){
         // content intent
         Intent alarmIntent = new Intent(context, AlarmActivity.class);
-        alarmIntent.putExtra("trip_id",tripDTO.getId());
-        alarmIntent.putExtra("Notification", "notify");
+        alarmIntent.putExtra("tripid",tripDTO.getId());
         PendingIntent alarmPendingIntent = PendingIntent.getActivity(context,  tripDTO.getId(), alarmIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent cancelIntent = new Intent(context, AlarmActivity.class);
-        cancelIntent.putExtra("trip_id", tripDTO.getId());
+        cancelIntent.putExtra("tripid", tripDTO.getId());
         cancelIntent.putExtra("cancel", "cancel");
         PendingIntent cancelPendingIntent = PendingIntent.getActivity(context, tripDTO.getId(),
                 cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         // start intent
         Intent startIntent = new Intent(context, AlarmActivity.class);
-        startIntent.putExtra("trip_id",tripDTO.getId());
+        startIntent.putExtra("tripid",tripDTO.getId());
         startIntent.putExtra("start", "start");
         PendingIntent startPendingIntent = PendingIntent.getActivity(context,  tripDTO.getId() ,
                 startIntent, PendingIntent.FLAG_UPDATE_CURRENT);

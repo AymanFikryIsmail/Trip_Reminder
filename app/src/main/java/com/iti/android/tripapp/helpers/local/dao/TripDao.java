@@ -21,6 +21,9 @@ public interface TripDao {
     @Query("SELECT * FROM trip where tripStatus LIKE :waiting AND userId LIKE :userId ")//
     List<TripDTO> getAllTrips(String waiting, String userId);
 
+    @Query("SELECT * FROM trip where id LIKE :tripid ")//
+    TripDTO getTrip(int tripid);
+
     //@Query("UPDATE orders SET order_price=:price WHERE order_id = :id")
     @Update
     int updateTour(TripDTO trip);

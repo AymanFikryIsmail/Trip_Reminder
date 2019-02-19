@@ -7,4 +7,6 @@
     <string name="choose_destination">Choose destination</string>
     <string name="source">Source</string>
     <string name="destination">Destination</string>
+    <string name="add_trip">Add</string>
+    <string name="add_note">Add a note...</string>
 </resources>

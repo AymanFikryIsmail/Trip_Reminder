@@ -22,26 +22,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteHolder> 
         return mNotes;
     }
 
-    static class NoteHolder extends RecyclerView.ViewHolder {
-
-        TextView textView;
-        CheckBox checkBox;
-        final int index;
-
-        NoteHolder(View v, int i) {
-            super(v);
-            index = i;
-            checkBox = v.findViewById(R.id.cb_note);
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    mNotes.get(index).setChecked(isChecked);
-                }
-            });
-            textView = v.findViewById(R.id.tv_note);
-        }
-    }
-
     public NotesAdapter(List<NoteDTO> tripNotes) {
         mNotes = tripNotes;
     }
@@ -50,17 +30,43 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteHolder> 
     public NoteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_note, parent, false);
-        return new NoteHolder(v, i++);
+        return new NoteHolder(v);
     }
 
     @Override
     public void onBindViewHolder(NoteHolder holder, int position) {
-        holder.textView.setText(mNotes.get(position).getContent());
-        holder.checkBox.setChecked(mNotes.get(position).isChecked());
+        holder.bind(position);
+//
     }
 
     @Override
     public int getItemCount() {
         return mNotes.size();
     }
+
+
+    static class NoteHolder extends RecyclerView.ViewHolder {
+
+        TextView textView;
+        CheckBox checkBox;
+        NoteHolder(View v) {
+            super(v);
+            checkBox = v.findViewById(R.id.cb_note);
+            textView = v.findViewById(R.id.tv_note);
+        }
+        void bind(final int index){
+            textView.setText(mNotes.get(index).getContent());
+        checkBox.setChecked(mNotes.get(index).isChecked());
+            if (mNotes.get(index).isChecked()){
+                checkBox.setChecked(true);
+            }
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mNotes.get(index).setChecked(isChecked);
+                }
+            });
+        }
+    }
+
 }

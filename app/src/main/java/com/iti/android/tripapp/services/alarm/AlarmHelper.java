@@ -24,7 +24,7 @@ public class AlarmHelper {
     public static void setAlarm(Context context, TripDTO trip, Calendar myCalendar) {
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         alarmIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-        alarmIntent.putExtra("trip",trip);
+        alarmIntent.putExtra("tripid",trip.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, trip.getId(),
                 alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

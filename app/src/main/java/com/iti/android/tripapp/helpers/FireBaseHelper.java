@@ -19,8 +19,8 @@ public class FireBaseHelper implements Serializable {
 
     FirebaseDatabase database;
     public FireBaseHelper() {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
          database = FirebaseDatabase.getInstance();
+        //  FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
     }
 

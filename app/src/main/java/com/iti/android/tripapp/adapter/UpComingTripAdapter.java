@@ -26,6 +26,7 @@ import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
+import com.iti.android.tripapp.services.FloatingIconService;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
 import com.iti.android.tripapp.utils.PrefManager;
 
@@ -130,7 +131,9 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                                     // update status started also update in firebase
                                     tripDTO.setTripStatus("started");
                                    MyAppDB.getAppDatabase(context).tripDao().updateTour(tripDTO);
+                                   //update fire base
                                     showDirection(tripDTO);
+                                    startFloatingWidgetService();
                                     break;
                                 case R.id.edit:
                                     // open edit page
@@ -194,6 +197,21 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
             Toast.makeText(context, "Please install a maps application", Toast.LENGTH_LONG).show();
         }
           AlarmHelper.cancelAlarm(context, tripDTO.getId());
+    }
+    /*  Start Floating widget service and finish current activity */
+    private void startFloatingWidgetService() {
+        Intent intent = new Intent(context, FloatingIconService.class);
+        ArrayList<String> noteList = new ArrayList<>();
+        //TODO Receive actual data from db
+        noteList.add("Note1");
+        noteList.add("Note2");
+        noteList.add("Note3");
+        noteList.add("Note4");
+        noteList.add("Note5");
+        noteList.add("Note6");
+        intent.putExtra("noteList", noteList);
+        context.startService(intent);
+
     }
 
 }

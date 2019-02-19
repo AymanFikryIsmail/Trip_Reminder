@@ -72,7 +72,7 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
         @Override
         protected Void doInBackground(Void... voids) {
 //                Thread.sleep(4000);
-                for (int i=0;i<150; i++){
+                for (int i=0;i<100; i++){
                     try {
                         Thread.sleep(10);
                         publishProgress(i);
