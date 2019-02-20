@@ -52,13 +52,7 @@ public class UpComingFragment extends Fragment {
         tripDTOArrayList= MyAppDB.getAppDatabase(getContext()).tripDao().getAllTrips("waited", prefManager.getUserId());
         upComingTripAdapter = new UpComingTripAdapter(getContext(), tripDTOArrayList);
         upComingTripRV.setAdapter(upComingTripAdapter);
-        //getTripDTOArrayList();
         return  view;
-    }
-
-    public void getTripDTOArrayList(){
-
-
     }
 
 

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.screens.fragments.HistoryFragment;
@@ -38,7 +44,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
          toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         prefManager=new PrefManager(this);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -46,13 +51,9 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 //                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
 //                        Uri.parse("http://maps.google.com/maps?saddr=" + 31.267048 + "," + 29.994168 + "&daddr=" +31.207751 + "," + 29.911807));
-//                startActivity(intent);
-////
                 startActivity(new Intent(MainActivity.this, AddTripActivity.class));
-
             }
         });
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -133,8 +134,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
 //            finish();
 //            startActivity(getIntent());
-            UpComingFragment historyFragment=new UpComingFragment();
-            loadFragment(historyFragment,"UpComing Trips");
+            UpComingFragment upComingFragment=new UpComingFragment();
+            loadFragment(upComingFragment,"UpComing Trips");
         } else if (id == R.id.nav_history) {
             HistoryFragment historyFragment=new HistoryFragment();
             loadFragment(historyFragment,"Trip History");
@@ -144,6 +145,27 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
             prefManager.setUserId("");
             FirebaseAuth.getInstance().signOut();
+             GoogleSignInClient mGoogleSignInClient = null;
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+            mGoogleSignInClient.signOut()
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            // ...
+                        }
+                    });
+            mGoogleSignInClient.revokeAccess()
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            // ...
+                        }
+                    });
             Intent intent=new Intent(this,SignInActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
