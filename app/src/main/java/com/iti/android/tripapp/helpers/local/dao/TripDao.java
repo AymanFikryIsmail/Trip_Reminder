@@ -8,6 +8,7 @@ import android.arch.persistence.room.Update;
 
 import com.iti.android.tripapp.model.TripDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,8 +32,11 @@ public interface TripDao {
     int countUsers();
 
     @Insert
-    void insertAll(TripDTO... trips);
+    void insertAll( ArrayList<TripDTO> tripDTOArrayList);
 
     @Delete
     void delete(TripDTO trip);
+
+    @Query("DELETE FROM trip WHERE userId LIKE :userId")
+    abstract void deleteByUserId(String userId);
 }

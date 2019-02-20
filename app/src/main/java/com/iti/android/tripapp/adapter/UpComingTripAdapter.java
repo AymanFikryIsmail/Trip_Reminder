@@ -129,9 +129,11 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                             switch (menuItem.getItemId()) {
                                 case R.id.start:
                                     // update status started also update in firebase
+
                                     tripDTO.setTripStatus("started");
                                    MyAppDB.getAppDatabase(context).tripDao().updateTour(tripDTO);
                                    //update fire base
+                                    fireBaseHelper.updateTripOnFirebase(tripDTO);
                                     showDirection(tripDTO);
                                     startFloatingWidgetService();
                                     break;

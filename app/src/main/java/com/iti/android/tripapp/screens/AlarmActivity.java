@@ -62,14 +62,15 @@ public class AlarmActivity extends AppCompatActivity {
                 .setPositiveButton("start", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        int tripId = getIntent().getIntExtra("tripId",0);
+//                        int tripId = getIntent().getIntExtra("tripId",0);
                         player.stop();
                         player.release();
                         tripDTO.setTripStatus("started");
-                        tripDTO.setId(tripId);
+                        tripDTO.setId(tripid);
+                        fireBaseHelper.updateTripOnFirebase(tripDTO);
                         // update in fire base
                         MyAppDB.getAppDatabase(AlarmActivity.this).tripDao().updateTour(tripDTO);
-                        AlarmHelper.cancelAlarm(getApplicationContext(),tripId);
+                        AlarmHelper.cancelAlarm(getApplicationContext(),tripid);
                         notificationManager.cancel(tripid);
 
                         showDirection();

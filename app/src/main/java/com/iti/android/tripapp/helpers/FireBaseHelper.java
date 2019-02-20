@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.iti.android.tripapp.helpers.local.FireBaseCallBack;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.model.UserDTO;
 
@@ -43,18 +44,21 @@ public class FireBaseHelper implements Serializable {
     }
 
 
-    public ArrayList<TripDTO> retrieveUserTripsFromFirebase(UserDTO user) {
+    public void  retrieveUserTripsFromFirebase(String userId , final FireBaseCallBack fireBaseCallBack) {
          final ArrayList<TripDTO> trips;
         trips = new ArrayList<TripDTO>();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(user.getId() + "trips");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(userId + "trips");
         ref.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            //userSnapshot.child()
                             TripDTO trip = userSnapshot.getValue(TripDTO.class);
                             trips.add(trip);
                         }
+                        fireBaseCallBack.getTrips(trips);
+
                     }
 
                     @Override
@@ -62,7 +66,6 @@ public class FireBaseHelper implements Serializable {
                         //handle databaseError
                     }
                 });
-        return trips;
     }
 
 //

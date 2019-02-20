@@ -14,9 +14,12 @@ import android.widget.ProgressBar;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.adapter.HistoryTripAdapter;
 import com.iti.android.tripapp.adapter.UpComingTripAdapter;
+import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
+import com.iti.android.tripapp.utils.PrefManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,20 +33,23 @@ public class HistoryFragment extends Fragment {
     private RecyclerView historyRV;
     HistoryTripAdapter historyTripAdapter;
     ProgressBar progressBar;
-    ArrayList<TripDTO> tripDTOArrayList;
+    List<TripDTO> tripDTOArrayList;
     SwipeRefreshLayout swipeRefreshLayout;
+    PrefManager prefManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_history, container, false);
+        prefManager=new PrefManager(getContext());
         historyRV = view.findViewById(R.id.historyRV);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         historyRV.setLayoutManager(mLayoutManager);
-        historyTripAdapter = new HistoryTripAdapter(getContext(), tripDTOArrayList);
         tripDTOArrayList=null;
-        //getTripDTOArrayList();
+        tripDTOArrayList= MyAppDB.getAppDatabase(getContext()).tripDao().getAllTrips("started", prefManager.getUserId());
+        historyTripAdapter = new HistoryTripAdapter(getContext(), tripDTOArrayList);
+        historyRV.setAdapter(historyTripAdapter);
 
         return  view;
 

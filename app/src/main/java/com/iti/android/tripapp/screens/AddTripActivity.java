@@ -371,17 +371,23 @@ public class AddTripActivity extends AppCompatActivity {
             }else if (repeatPosition==3) {
                 repeated="Monthly";
             }
+
             TripDTO tripDTO=new TripDTO(prefManager.getUserId() ,trip_name, trip_start_point , trip_end_point,
-                    startLat,startLng ,endLng,endLat ,start_date_text.getText().toString() ,start_time_text.getText().toString()
+                    startLng, startLat ,endLng,endLat ,start_date_text.getText().toString() ,start_time_text.getText().toString()
                      ,repeated,"waited");
             int tripId= (int) MyAppDB.getAppDatabase(this).tripDao().addTrip(tripDTO);
             tripDTO.setId(tripId);
             fireBaseHelper.createTripOnFirebase(tripDTO);
-
-            //alarm logic
             AlarmHelper.setAlarm(this,tripDTO,myCalendar);
-//            m.trips.add(tripDTO);
-//            m.adapter.notifyDataSetChanged();
+            if (isRoundedTripChecked){
+                TripDTO tripRoundDTO=new TripDTO(prefManager.getUserId() ,trip_name, trip_start_point , trip_end_point,
+                        endLng,endLat ,startLng,startLat ,return_date_text.getText().toString() ,return_time_text.getText().toString()
+                        ,repeated,"waited");
+                int tripRoundId= (int) MyAppDB.getAppDatabase(this).tripDao().addTrip(tripRoundDTO);
+                tripRoundDTO.setId(tripRoundId);
+                fireBaseHelper.createTripOnFirebase(tripRoundDTO);
+                AlarmHelper.setAlarm(this,tripRoundDTO,myCalendarRound);
+            }
             finish();
 
         }

@@ -27,9 +27,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.iti.android.tripapp.R;
+import com.iti.android.tripapp.helpers.FireBaseHelper;
+import com.iti.android.tripapp.helpers.local.FireBaseCallBack;
+import com.iti.android.tripapp.helpers.local.database.MyAppDB;
+import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.screens.fragments.HistoryFragment;
 import com.iti.android.tripapp.screens.fragments.UpComingFragment;
 import com.iti.android.tripapp.utils.PrefManager;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     PrefManager prefManager;
     private static final int REQUEST_CODE = 123;
+    private FireBaseHelper fireBaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
          toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        fireBaseHelper=new FireBaseHelper();
         prefManager=new PrefManager(this);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +150,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_sync) {
 
+            sync();
         } else if (id == R.id.nav_logout) {
             prefManager.setUserId("");
             FirebaseAuth.getInstance().signOut();
@@ -177,5 +186,17 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public void sync(){
 
+        MyAppDB.getAppDatabase(this).tripDao().deleteByUserId(prefManager.getUserId());
+     fireBaseHelper.retrieveUserTripsFromFirebase(prefManager.getUserId(), new FireBaseCallBack() {
+            @Override
+            public void getTrips(ArrayList<TripDTO> trips) {
+                MyAppDB.getAppDatabase(MainActivity.this).tripDao().insertAll(trips);
+                UpComingFragment upComingFragment=new UpComingFragment();
+                loadFragment(upComingFragment,"UpComing Trips");
+
+            }
+        });
+    }
 }

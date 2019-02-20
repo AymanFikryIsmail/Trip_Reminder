@@ -54,8 +54,11 @@ public class TripDTO implements Serializable {
         return tripStatus;
     }
 
-    public TripDTO(String userId, String name, String trip_start_point, String trip_end_point, Double trip_start_point_longitude,
-                   Double trip_start_point_latitude, Double trip_end_point_longitude, Double trip_end_point_latitude,
+    public TripDTO() {
+    }
+
+    public TripDTO(String userId, String name, String trip_start_point, String trip_end_point,
+                   Double trip_start_point_longitude, Double trip_start_point_latitude, Double trip_end_point_longitude, Double trip_end_point_latitude,
                    String trip_date, String trip_time , String repeated , String tripStatus ) {
         this.userId = userId;
         this.name = name;
@@ -158,5 +161,49 @@ public class TripDTO implements Serializable {
 
     public void setTripStatus(String tripStatus) {
         this.tripStatus = tripStatus;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTrip_start_point(String trip_start_point) {
+        this.trip_start_point = trip_start_point;
+    }
+
+    public void setTrip_end_point(String trip_end_point) {
+        this.trip_end_point = trip_end_point;
+    }
+
+    public void setTrip_start_point_longitude(Double trip_start_point_longitude) {
+        this.trip_start_point_longitude = trip_start_point_longitude;
+    }
+
+    public void setTrip_start_point_latitude(Double trip_start_point_latitude) {
+        this.trip_start_point_latitude = trip_start_point_latitude;
+    }
+
+    public void setTrip_end_point_longitude(Double trip_end_point_longitude) {
+        this.trip_end_point_longitude = trip_end_point_longitude;
+    }
+
+    public void setTrip_end_point_latitude(Double trip_end_point_latitude) {
+        this.trip_end_point_latitude = trip_end_point_latitude;
+    }
+
+    public void setTrip_date(String trip_date) {
+        this.trip_date = trip_date;
+    }
+
+    public void setTrip_time(String trip_time) {
+        this.trip_time = trip_time;
+    }
+
+    public void setRepeated(String repeated) {
+        this.repeated = repeated;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
