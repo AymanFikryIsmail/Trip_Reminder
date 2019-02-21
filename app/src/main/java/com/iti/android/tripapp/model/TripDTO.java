@@ -2,11 +2,13 @@ package com.iti.android.tripapp.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ayman on 2019-02-08.
@@ -42,6 +44,8 @@ public class TripDTO implements Serializable {
     private String repeated;
     @ColumnInfo(name = "tripStatus")
     private String tripStatus;
+    @ColumnInfo(name = "notes")
+    private Notes notes;
 
     @ColumnInfo(name = "userId")
     private String userId;
@@ -57,9 +61,10 @@ public class TripDTO implements Serializable {
     public TripDTO() {
     }
 
-    public TripDTO(String userId, String name, String trip_start_point, String trip_end_point,
-                   Double trip_start_point_longitude, Double trip_start_point_latitude, Double trip_end_point_longitude, Double trip_end_point_latitude,
-                   String trip_date, String trip_time , String repeated , String tripStatus ) {
+    @Ignore
+    public TripDTO(String userId, String name, String trip_start_point, String trip_end_point, Double trip_start_point_longitude,
+                   Double trip_start_point_latitude, Double trip_end_point_longitude, Double trip_end_point_latitude,
+                   String trip_date, String trip_time , String repeated , String tripStatus, Notes notes) {
         this.userId = userId;
         this.name = name;
         this.trip_start_point = trip_start_point;
@@ -72,6 +77,7 @@ public class TripDTO implements Serializable {
         this.trip_time = trip_time;
         this.repeated=repeated;
         this.tripStatus=tripStatus;
+        this.notes = notes;
 
     }
 
@@ -123,6 +129,10 @@ public class TripDTO implements Serializable {
         return roundStatus;
     }
 
+    public Notes getNotes() {
+        return notes;
+    }
+
     public int getTrip_rounded() {
         return trip_rounded;
     }
@@ -141,6 +151,10 @@ public class TripDTO implements Serializable {
 
     public String getAverageSpeed() {
         return averageSpeed;
+    }
+
+    public void setNotes(Notes notes) {
+        this.notes = notes;
     }
 
     public void setTrip_rounded(int trip_rounded) {

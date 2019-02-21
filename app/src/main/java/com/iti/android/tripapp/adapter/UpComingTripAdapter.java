@@ -1,19 +1,15 @@
 package com.iti.android.tripapp.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,12 +21,13 @@ import android.widget.Toast;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
+import com.iti.android.tripapp.model.Notes;
 import com.iti.android.tripapp.model.TripDTO;
+import com.iti.android.tripapp.screens.AddTripActivity;
 import com.iti.android.tripapp.services.FloatingIconService;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
 import com.iti.android.tripapp.utils.PrefManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +37,7 @@ import java.util.List;
 public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapter.MyViewHolder>{
 
     private Context context;
-    private List<TripDTO> associationsTitle =  new ArrayList<>();
+    private List<TripDTO> associationsTitle;
 
     private PrefManager prefManager;
     private FireBaseHelper fireBaseHelper;
@@ -50,7 +47,6 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
         this.associationsTitle = tripDTOList;
         prefManager=new PrefManager(context);
         fireBaseHelper=new FireBaseHelper();
-
     }
 
     @Override
@@ -131,15 +127,15 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                                     // update status started also update in firebase
 
                                     tripDTO.setTripStatus("started");
-                                   MyAppDB.getAppDatabase(context).tripDao().updateTour(tripDTO);
+                                   MyAppDB.getAppDatabase(context).tripDao().updateTrip(tripDTO);
                                    //update fire base
                                     fireBaseHelper.updateTripOnFirebase(tripDTO);
                                     showDirection(tripDTO);
-                                    startFloatingWidgetService();
+                                    startFloatingWidgetService(tripDTO);
                                     break;
                                 case R.id.edit:
                                     // open edit page
-
+                                    context.startActivity(new Intent(context, AddTripActivity.class).putExtra("tripDTO", tripDTO));
 
                                     break;
                                 case R.id.delete:
@@ -201,19 +197,13 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
           AlarmHelper.cancelAlarm(context, tripDTO.getId());
     }
     /*  Start Floating widget service and finish current activity */
-    private void startFloatingWidgetService() {
+    private void startFloatingWidgetService(TripDTO tripDTO) {
         Intent intent = new Intent(context, FloatingIconService.class);
-        ArrayList<String> noteList = new ArrayList<>();
-        //TODO Receive actual data from db
-        noteList.add("Note1");
-        noteList.add("Note2");
-        noteList.add("Note3");
-        noteList.add("Note4");
-        noteList.add("Note5");
-        noteList.add("Note6");
-        intent.putExtra("noteList", noteList);
-        context.startService(intent);
-
+        Notes notes = tripDTO.getNotes();
+        if (notes != null) {
+            intent.putExtra("noteList", notes.getContents());
+            context.startService(intent);
+        }
     }
 
 }

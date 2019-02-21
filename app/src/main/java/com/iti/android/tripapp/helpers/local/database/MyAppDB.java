@@ -3,10 +3,12 @@ package com.iti.android.tripapp.helpers.local.database;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import com.iti.android.tripapp.helpers.local.dao.TripDao;
 import com.iti.android.tripapp.model.NoteDTO;
+import com.iti.android.tripapp.model.NotesConverter;
 import com.iti.android.tripapp.model.TripDTO;
 
 /**
@@ -14,6 +16,7 @@ import com.iti.android.tripapp.model.TripDTO;
  */
 
 @Database(entities = {TripDTO.class}, version = 1, exportSchema = false)
+@TypeConverters({NotesConverter.class})
 public abstract class MyAppDB extends RoomDatabase {
 
     private static MyAppDB INSTANCE;

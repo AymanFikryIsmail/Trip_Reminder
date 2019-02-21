@@ -42,8 +42,8 @@ public class PrefManager {
     }
 
     public void setUserId(String userId) {
-        editor.putString("userId", userId);
-        editor.commit();
+        editor.putString("userId", userId)
+                .commit();
     }
 
 

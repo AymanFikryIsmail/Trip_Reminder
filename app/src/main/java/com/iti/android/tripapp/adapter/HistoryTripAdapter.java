@@ -127,7 +127,7 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
                                     // update status started also update in firebase
 
                                     tripDTO.setTripStatus("started");
-                                    MyAppDB.getAppDatabase(context).tripDao().updateTour(tripDTO);
+                                    MyAppDB.getAppDatabase(context).tripDao().updateTrip(tripDTO);
                                     //update fire base
                                     fireBaseHelper.updateTripOnFirebase(tripDTO);
                                     showDirection(tripDTO);

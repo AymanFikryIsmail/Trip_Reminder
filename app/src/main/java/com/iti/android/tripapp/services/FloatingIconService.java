@@ -3,6 +3,7 @@ package com.iti.android.tripapp.services;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.adapter.NotesAdapter;
@@ -32,12 +34,16 @@ public class FloatingIconService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.i("TAG", "onBind called");
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
         ArrayList<String> notesContent = intent.getStringArrayListExtra("noteList");
         for (String note : notesContent) {
             notes.add(new NoteDTO(false, note));
         }
-        return null;
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -48,7 +54,7 @@ public class FloatingIconService extends Service {
         //Add the view to the window.
         final WindowManager.LayoutParams params;
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             params = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
@@ -74,6 +80,13 @@ public class FloatingIconService extends Service {
         final View collapsedView = mFloatingIcon.findViewById(R.id.collapsed);
         final View expandedView = mFloatingIcon.findViewById(R.id.expanded);
 
+        ImageView closeButtonCollapsed = mFloatingIcon.findViewById(R.id.btn_close);
+        closeButtonCollapsed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopSelf();
+            }
+        });
         mFloatingIcon.findViewById(R.id.root_container).setOnTouchListener(new View.OnTouchListener() {
 
             private int initialX;
@@ -92,18 +105,14 @@ public class FloatingIconService extends Service {
                         initialTouchY = event.getRawY();
                         return true;
                     case MotionEvent.ACTION_UP:
-                        int Xdiff = (int) (event.getRawX() - initialTouchX);
-                        int Ydiff = (int) (event.getRawY() - initialTouchY);
-                        if (Xdiff < CLICK_DRAG_TOLERANCE && Ydiff < CLICK_DRAG_TOLERANCE) {
+                        int xDiff = (int) (event.getRawX() - initialTouchX);
+                        int yDiff = (int) (event.getRawY() - initialTouchY);
+                        if (xDiff < CLICK_DRAG_TOLERANCE && yDiff < CLICK_DRAG_TOLERANCE) {
                             collapsedView.setVisibility(View.GONE);
                             expandedView.setVisibility(View.VISIBLE);
 
                             final RecyclerView rv = mFloatingIcon.findViewById(R.id.rv_notes);
-                            /*TODO Receive actual data from file or db*/
-                            if (notes.isEmpty())
-                                for (int i = 0; i < 10; i++) {
-                                    notes.add(new NoteDTO(false, "Note" + (i + 1)));
-                                }
+
                             rv.setLayoutManager(new LinearLayoutManager(v.getContext()));
                             rv.setAdapter(new NotesAdapter(notes));
 
@@ -117,6 +126,7 @@ public class FloatingIconService extends Service {
                                     notes = ((NotesAdapter)rv.getAdapter()).getNotes();
                                 }
                             });
+                            v.performClick();
                         }
                         return true;
                     case MotionEvent.ACTION_MOVE:

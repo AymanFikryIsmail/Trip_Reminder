@@ -29,7 +29,7 @@ public class AlarmHelper {
                 alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if(trip.getRepeated().equals("Daily")){
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, myCalendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, myCalendar.getTimeInMillis(),5*60*1000, pendingIntent);
         }else if(trip.getRepeated().equals("Weekly")){
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, myCalendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY*7, pendingIntent);
         }else if(trip.getRepeated().equals("Monthly")){
