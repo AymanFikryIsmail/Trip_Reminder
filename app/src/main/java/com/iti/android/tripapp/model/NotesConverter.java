@@ -16,8 +16,10 @@ public class NotesConverter {
     public String languagesToStoredString(Notes notes) {
         String value = "";
 
-        for (String note : notes.getContents())
-            value = value.concat(note + ",");
+        if (notes.getNotes()!=null) {
+            for (String note : notes.getNotes())
+                value = value.concat(note + ",");
+        }
         return value;
     }
 }

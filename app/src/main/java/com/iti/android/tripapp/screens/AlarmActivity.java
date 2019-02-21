@@ -52,7 +52,7 @@ public class AlarmActivity extends AppCompatActivity {
         notificationHelper=new NotificationHelper(this);
         notificationManager=notificationHelper.getManager();
 
-        final int tripId= getIntent().getIntExtra("tripId",0);
+        final int tripId= getIntent().getIntExtra("tripid",0);
         tripDTO= MyAppDB.getAppDatabase(this).tripDao().getTrip(tripId);
 
         alertBuilder =new AlertDialog.Builder(this);
@@ -133,7 +133,7 @@ public class AlarmActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FloatingIconService.class);
         Notes notes = tripDTO.getNotes();
         if (notes != null) {
-            intent.putExtra("noteList", notes.getContents());
+            intent.putExtra("noteList", notes.getNotes());
             startService(intent);
         }
     }

@@ -189,7 +189,7 @@ public class AddTripActivity extends AppCompatActivity {
         startLng = trip.getTrip_start_point_longitude();
         endLat = trip.getTrip_end_point_latitude();
         endLng = trip.getTrip_end_point_longitude();
-        notes = trip.getNotes().getContents();
+        notes = trip.getNotes().getNotes();
         setAdapterAfterUpdate();
     }
 
@@ -452,7 +452,7 @@ public class AddTripActivity extends AppCompatActivity {
 
     private void updateFirebaseAndCreateAlarms() {
         TripDTO tripDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeName, placeDestination,
-                startLat,startLng ,endLng,endLat , startDateText.getText().toString() , startTimeText.getText().toString()
+                startLat,startLng ,endLat ,endLng, startDateText.getText().toString() , startTimeText.getText().toString()
                 ,repeated,"waited", new Notes(notes));
         int tripId= (int) MyAppDB.getAppDatabase(this).tripDao().addTrip(tripDTO);
         tripDTO.setId(tripId);

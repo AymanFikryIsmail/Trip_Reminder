@@ -91,7 +91,7 @@ context=base;
 //                        .addAction(R.drawable.selected_icon, "Start", startPendingIntent)
                                      ;
 
-        mManager.notify(0, mBuilder.build());
+        mManager.notify(tripDTO.getId(), mBuilder.build());
        // context.finish();
 
 

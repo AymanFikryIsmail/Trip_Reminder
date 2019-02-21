@@ -5,11 +5,12 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
-    <uses-permission android:name="TASKS"/>
+    <uses-permission android:name="TASKS" />
 
     <application
         android:allowBackup="true"
@@ -34,11 +35,11 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBLJv51oC0sfDw418dpUs2vu7xT4tMezyw" />
+            android:value="AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc" />
         <!-- AIzaSyBLJv51oC0sfDw418dpUs2vu7xT4tMezyw  AIzaSyBLPdtvo4KoNgMDdVYXcCtJOpM8yvkuSCQ -->
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/google_maps_key" />
+        <!--<meta-data-->
+            <!--android:name="com.google.android.maps.v2.API_KEY"-->
+            <!--android:value="AIzaSyBLJv51oC0sfDw418dpUs2vu7xT4tMezyw" />-->
 
         <activity android:name=".screens.SignInActivity" />
         <activity android:name=".screens.RegisterActivity" />
@@ -51,11 +52,10 @@
 
         <activity
             android:name=".screens.AlarmActivity"
-            android:launchMode="singleInstance"
             android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
             android:taskAffinity=""
-            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
-            />
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
         <activity
             android:name=".screens.MainActivity"
             android:label="@string/title_activity_main"
@@ -69,6 +69,10 @@
             android:name=".services.BackgroundSoundService"
             android:enabled="true"
             android:exported="true" />
+
+        <activity
+            android:name=".screens.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

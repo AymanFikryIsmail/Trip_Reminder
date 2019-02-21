@@ -201,7 +201,7 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
         Intent intent = new Intent(context, FloatingIconService.class);
         Notes notes = tripDTO.getNotes();
         if (notes != null) {
-            intent.putExtra("noteList", notes.getContents());
+            intent.putExtra("noteList", notes.getNotes());
             context.startService(intent);
         }
     }

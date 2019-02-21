@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         UpComingFragment upComingFragment=new UpComingFragment();
         loadFragment(upComingFragment,"UpComing Trips");
     }
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        finish();
     }
 
     private void askForSystemOverlayPermission() {

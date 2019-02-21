@@ -42,7 +42,7 @@ public class AlarmHelper {
 
     public static void cancelAlarm(Context context, int tripId) {
         Intent intent = new Intent(context, AlarmActivity.class);
-        intent.putExtra("trip_id", tripId);
+        intent.putExtra("tripid", tripId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, tripId,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

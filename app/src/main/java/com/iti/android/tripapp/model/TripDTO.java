@@ -62,8 +62,8 @@ public class TripDTO implements Serializable {
     }
 
     @Ignore
-    public TripDTO(String userId, String name, String trip_start_point, String trip_end_point, Double trip_start_point_longitude,
-                   Double trip_start_point_latitude, Double trip_end_point_longitude, Double trip_end_point_latitude,
+    public TripDTO(String userId, String name, String trip_start_point, String trip_end_point, Double trip_start_point_latitude, Double trip_start_point_longitude,
+                    Double trip_end_point_latitude,Double trip_end_point_longitude,
                    String trip_date, String trip_time , String repeated , String tripStatus, Notes notes) {
         this.userId = userId;
         this.name = name;
