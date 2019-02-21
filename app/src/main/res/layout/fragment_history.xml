@@ -1,14 +1,28 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.iti.android.tripapp.screens.fragments.HistoryFragment">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/historyRV"
+    <FrameLayout
+        android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_above="@+id/historytabs"
+        >
+    </FrameLayout>
 
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/historytabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        app:menu="@menu/histroytabs"
+        app:itemIconTint="@drawable/texttint"
+        app:itemTextColor="@drawable/texttint"
+        android:layout_gravity="bottom"
+        android:background="#ebebf2"
+        android:layout_alignParentBottom="true"/>
 
-</FrameLayout>
+</RelativeLayout>
