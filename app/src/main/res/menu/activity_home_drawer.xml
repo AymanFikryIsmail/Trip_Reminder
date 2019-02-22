@@ -10,11 +10,11 @@
             android:title="home" />
         <item
             android:id="@+id/nav_history"
-            android:icon="@drawable/tasks"
+            android:icon="@drawable/history1"
             android:title="history" />
         <item
             android:id="@+id/nav_sync"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@android:drawable/ic_popup_sync"
             android:title="sync" />
 
     </group>
@@ -24,7 +24,7 @@
 
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/logout_icon"
+                android:icon="@drawable/exit"
                 android:title="Logout" />
         </menu>
     </item>

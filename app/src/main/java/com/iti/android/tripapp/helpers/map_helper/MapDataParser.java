@@ -1,4 +1,4 @@
-package com.iti.android.tripapp.helpers;
+package com.iti.android.tripapp.helpers.map_helper;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.List;
  */
 
 public class MapDataParser {
+    String polyline = "";
+
     /** Receives a JSONObject and returns a list of lists containing latitude and longitude */
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
 
@@ -38,7 +41,6 @@ public class MapDataParser {
 
                     /** Traversing all steps */
                     for(int k=0;k<jSteps.length();k++){
-                        String polyline = "";
                         polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
                         List<LatLng> list = decodePoly(polyline);
 
@@ -63,6 +65,37 @@ public class MapDataParser {
         return routes;
     }
 
+
+    /** Receives a JSONObject and returns a list of lists containing latitude and longitude */
+    public String getImage(JSONObject jObject, double st_lat, double st_lng ,double end_lat , double end_lng){
+        String imgUrl = null;
+        double avgLong;
+        double avgLat;
+        avgLat = (st_lat + end_lat) / 2;
+        avgLong = (st_lng + end_lng) / 2;
+
+        JSONArray jRoutes;
+        JSONArray jLegs;
+        try {
+            jRoutes = jObject.getJSONArray("routes");
+            JSONObject jobj1 = jRoutes.getJSONObject(0);
+            JSONObject jarray2 = jobj1.getJSONObject("overview_polyline");
+            String code = jarray2.getString("points");
+            /** Traversing all steps */
+            for(int k=0;k<jRoutes.length();k++){
+               imgUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + avgLat + "," + avgLong + "&" +
+                        "zoom=9&size=800x380&maptype=roadmap&path=weight:7%10Ccolor:orange%7Cenc:" + code + 
+                       "&key=AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc";
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }catch (Exception e){
+        }
+
+
+        return imgUrl;
+    }
 
     /**
      * Method to decode polyline points

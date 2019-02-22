@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.iti.android.tripapp.R;
-import com.iti.android.tripapp.helpers.MapDataParser;
+import com.iti.android.tripapp.helpers.map_helper.MapDataParser;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.utils.PrefManager;
@@ -52,6 +52,16 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
     List<TripDTO> tripDTOArrayList;
 
     int[] color={Color.RED ,Color.BLUE ,Color.GREEN , Color.CYAN};
+    float [] markerColor ={              BitmapDescriptorFactory.   HUE_RED,
+
+            BitmapDescriptorFactory.HUE_BLUE,
+            BitmapDescriptorFactory.   HUE_GREEN,
+            BitmapDescriptorFactory.HUE_CYAN,
+            BitmapDescriptorFactory.   HUE_MAGENTA,
+            BitmapDescriptorFactory.   HUE_ORANGE,
+            BitmapDescriptorFactory.   HUE_ROSE,
+            BitmapDescriptorFactory.   HUE_VIOLET,
+            BitmapDescriptorFactory.   HUE_YELLOW};
     int colorIndex =0;
 
     @Override
@@ -66,6 +76,63 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        PrefManager prefManager;
+        prefManager=new PrefManager(getContext());
+        tripDTOArrayList= MyAppDB.getAppDatabase(getContext()).tripDao().getAllTrips("started", prefManager.getUserId());
+
+        for (int i=0; i<tripDTOArrayList.size();i++) {
+            LatLng startPoint=new LatLng(tripDTOArrayList.get(i).getTrip_start_point_latitude(),tripDTOArrayList.get(i).getTrip_start_point_longitude());
+            LatLng endPoint  =new LatLng(tripDTOArrayList.get(i).getTrip_end_point_latitude(),tripDTOArrayList.get(i).getTrip_end_point_longitude());
+            MarkerPoints.clear();
+
+            mMap.addMarker(new MarkerOptions().position(startPoint).title("start here")
+                    .icon(BitmapDescriptorFactory
+                            .defaultMarker(markerColor[i])));
+            MarkerPoints.add(startPoint);
+            // Adding new item to the ArrayList
+            MarkerPoints.add(endPoint);
+
+            // Creating MarkerOptions
+            MarkerOptions options = new MarkerOptions();
+            // Setting the position of the marker
+            options.position(endPoint);
+            if (MarkerPoints.size() == 1) {
+                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            } else if (MarkerPoints.size() == 2) {
+                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            }
+            mMap.addMarker(options);
+            // Checks, whether start and end locations are captured
+            if (MarkerPoints.size() >= 2) {
+                LatLng origin = MarkerPoints.get(0);
+                LatLng dest = MarkerPoints.get(1);
+
+                // Getting URL to the Google Directions API
+                String url = getUrl(origin, dest);
+                Log.d("onMapClick", url.toString());
+                FetchUrl FetchUrl = new FetchUrl();
+
+                // Start downloading json data from Google Directions API
+                FetchUrl.execute(url);
+                //move map camera
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+            }
+        }
+
+    }
 
     private String getUrl(LatLng origin, LatLng dest) {
         // Origin of route
@@ -82,36 +149,31 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
         return url;
     }
-// Fetches data from url passed
-private class FetchUrl extends AsyncTask<String, Void, String> {
-
-    @Override
-    protected String doInBackground(String... url) {
-
-        // For storing data from web service
-        String data = "";
-
-        try {
-            // Fetching the data from web service
-            data = downloadUrl(url[0]);
-            Log.d("Background Task data", data.toString());
-        } catch (Exception e) {
-            Log.d("Background Task", e.toString());
+    // Fetches data from url passed
+    private class FetchUrl extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... url) {
+            // For storing data from web service
+            String data = "";
+            try {
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+                Log.d("Background Task data", data.toString());
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
         }
-        return data;
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            ParserTask parserTask = new ParserTask();
+            // Invokes the thread for parsing the JSON data
+            parserTask.execute(result);
+
+        }
     }
-
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-
-        ParserTask parserTask = new ParserTask();
-
-        // Invokes the thread for parsing the JSON data
-        parserTask.execute(result);
-
-    }
-}
 
 
     private String downloadUrl(String strUrl) throws IOException {
@@ -151,85 +213,6 @@ private class FetchUrl extends AsyncTask<String, Void, String> {
         }
         return data;
     }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        PrefManager prefManager;
-
-        prefManager=new PrefManager(getContext());
-
-        tripDTOArrayList= MyAppDB.getAppDatabase(getContext()).tripDao().getAllTrips("started", prefManager.getUserId());
-
-        for (int i=0; i<tripDTOArrayList.size();i++) {
-            LatLng startPoint=new LatLng(tripDTOArrayList.get(i).getTrip_start_point_latitude(),tripDTOArrayList.get(i).getTrip_start_point_longitude());
-            LatLng endPoint  =new LatLng(tripDTOArrayList.get(i).getTrip_end_point_latitude(),tripDTOArrayList.get(i).getTrip_end_point_longitude());
-
-            // Already two locations
-//            if (MarkerPoints.size() > 1) {
-            MarkerPoints.clear();
-//                mMap.clear();
-//            }
-            mMap.addMarker(new MarkerOptions().position(startPoint).title("start here"));
-
-            MarkerPoints.add(startPoint);
-            // Adding new item to the ArrayList
-            MarkerPoints.add(endPoint);
-
-            // Creating MarkerOptions
-            MarkerOptions options = new MarkerOptions();
-
-            // Setting the position of the marker
-            options.position(endPoint);
-
-            /**
-             * For the start location, the color of marker is GREEN and
-             * for the end location, the color of marker is RED.
-             */
-            if (MarkerPoints.size() == 1) {
-                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-            } else if (MarkerPoints.size() == 2) {
-                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-            }
-
-
-            // Add new marker to the Google Map Android API V2
-            mMap.addMarker(options);
-
-            // Checks, whether start and end locations are captured
-            if (MarkerPoints.size() >= 2) {
-                LatLng origin = MarkerPoints.get(0);
-                LatLng dest = MarkerPoints.get(1);
-
-                // Getting URL to the Google Directions API
-                String url = getUrl(origin, dest);
-                Log.d("onMapClick", url.toString());
-                FetchUrl FetchUrl = new FetchUrl();
-
-                // Start downloading json data from Google Directions API
-                FetchUrl.execute(url);
-                //move map camera
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-            }
-        }
-
-    }
-
 
 private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
@@ -271,11 +254,9 @@ private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<St
 
             // Fetching i-th route
             List<HashMap<String, String>> path = result.get(i);
-
             // Fetching all the points in i-th route
             for (int j = 0; j < path.size(); j++) {
                 HashMap<String, String> point = path.get(j);
-
                 double lat = Double.parseDouble(point.get("lat"));
                 double lng = Double.parseDouble(point.get("lng"));
                 LatLng position = new LatLng(lat, lng);

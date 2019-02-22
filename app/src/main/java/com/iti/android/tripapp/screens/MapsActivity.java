@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.iti.android.tripapp.R;
-import com.iti.android.tripapp.helpers.MapDataParser;
+import com.iti.android.tripapp.helpers.map_helper.MapDataParser;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.utils.PrefManager;

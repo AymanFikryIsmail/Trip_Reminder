@@ -88,6 +88,7 @@ public class AddTripActivity extends AppCompatActivity {
     private transient ProgressDialog progressDialog = null;
 
     PrefManager prefManager;
+//    Calendar mCurrentTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,7 +163,10 @@ public class AddTripActivity extends AppCompatActivity {
         minutes = Integer.parseInt(trip.getTrip_time().split(":")[1]);
 
         try {
-            myCalendar.setTime(new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).parse(trip.getTrip_date()));
+            myCalendar.setTime(new SimpleDateFormat("dd/MM/yyyy", Locale.US).parse(trip.getTrip_date()));
+            myCalendar.set(Calendar.HOUR_OF_DAY,hours);
+            myCalendar.set(Calendar.MINUTE,minutes);
+
             years = myCalendar.get(Calendar.YEAR);
             months = myCalendar.get(Calendar.MONTH);
             days = myCalendar.get(Calendar.DATE);
@@ -207,6 +211,7 @@ public class AddTripActivity extends AppCompatActivity {
     }
 
     void initView(){
+//         currentCalendar = Calendar.getInstance();
         name =  findViewById(R.id.tripName_input);
         startDate =  findViewById(R.id.start_date);
         startTime =  findViewById(R.id.start_time);
@@ -258,9 +263,8 @@ public class AddTripActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Calendar mCurrentTime = Calendar.getInstance();
-                int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = mCurrentTime.get(Calendar.MINUTE);
+                int hour = myCalendar.get(Calendar.HOUR_OF_DAY);
+                int minute = myCalendar.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(AddTripActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -272,8 +276,8 @@ public class AddTripActivity extends AppCompatActivity {
                         minutes = selectedMinute;
                         hours = selectedHour;
                         myCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
-                        myCalendar.set(Calendar.MINUTE, selectedMinute - 1);
-                        myCalendar.set(Calendar.SECOND, 59);
+                        myCalendar.set(Calendar.MINUTE, selectedMinute);
+                        myCalendar.set(Calendar.SECOND, 0);
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -290,8 +294,8 @@ public class AddTripActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Calendar mCurrentTime2 = Calendar.getInstance();
-                int hour = mCurrentTime2.get(Calendar.HOUR_OF_DAY);
-                int minute = mCurrentTime2.get(Calendar.MINUTE);
+                int hour = myCalendarRound.get(Calendar.HOUR_OF_DAY);
+                int minute = myCalendarRound.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker2;
                 mTimePicker2 = new TimePickerDialog(AddTripActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override

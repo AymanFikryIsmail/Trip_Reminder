@@ -22,7 +22,7 @@
         app:itemIconTint="@drawable/texttint"
         app:itemTextColor="@drawable/texttint"
         android:layout_gravity="bottom"
-        android:background="#ebebf2"
+        android:background="@color/white"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

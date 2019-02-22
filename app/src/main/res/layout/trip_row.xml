@@ -102,7 +102,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/events_icon"
+                        android:src="@drawable/alarm_clock1"
                         android:layout_marginTop="5dp"/>
                 <TextView
                     android:id="@+id/dateTv"
