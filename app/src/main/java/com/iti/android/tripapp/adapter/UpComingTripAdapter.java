@@ -127,7 +127,8 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                                     // update status started also update in firebase
 
                                     tripDTO.setTripStatus("started");
-                                   MyAppDB.getAppDatabase(context).tripDao().updateTrip(tripDTO);
+                                    MyAppDB.getAppDatabase(context).tripDao().updateTrip(tripDTO);
+                                    AlarmHelper.cancelAlarm(context, tripDTO.getId());
                                    //update fire base
                                     fireBaseHelper.updateTripOnFirebase(tripDTO);
                                     showDirection(tripDTO);
@@ -201,7 +202,7 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
         Intent intent = new Intent(context, FloatingIconService.class);
         Notes notes = tripDTO.getNotes();
         if (notes != null) {
-            intent.putExtra("noteList", notes.getNotes());
+            intent.putExtra("noteList", tripDTO);
             context.startService(intent);
         }
     }

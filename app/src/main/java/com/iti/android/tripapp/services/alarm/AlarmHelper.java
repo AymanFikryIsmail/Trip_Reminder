@@ -29,14 +29,23 @@ public class AlarmHelper {
                 alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if(trip.getRepeated().equals("Daily")){
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, myCalendar.getTimeInMillis(),5*60*1000, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, myCalendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
         }else if(trip.getRepeated().equals("Weekly")){
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, myCalendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY*7, pendingIntent);
         }else if(trip.getRepeated().equals("Monthly")){
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, myCalendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY*30, pendingIntent);
-        }
-        else {
-        alarmManager.set(AlarmManager.RTC_WAKEUP, myCalendar.getTimeInMillis(), pendingIntent);
+        }else if(trip.getRepeated().lastIndexOf("Custom Period") != -1){
+            String[] parts = trip.getRepeated().split(":");
+            long period;
+            if (parts[1].equals("w")) {
+                period = AlarmManager.INTERVAL_DAY * 7;
+            } else {
+                period = AlarmManager.INTERVAL_DAY;
+            }
+            int duration = Integer.valueOf(parts[2]);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, myCalendar.getTimeInMillis(),period * duration, pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, myCalendar.getTimeInMillis(), pendingIntent);
         }
     }
 
@@ -44,7 +53,7 @@ public class AlarmHelper {
         Intent intent = new Intent(context, AlarmActivity.class);
         intent.putExtra("tripid", tripId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, tripId,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
         pendingIntent.cancel();

@@ -5,17 +5,18 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -30,8 +31,10 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.iti.android.tripapp.R;
+import com.iti.android.tripapp.adapter.RawNotesAdapter;
 import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
+import com.iti.android.tripapp.model.NoteDTO;
 import com.iti.android.tripapp.model.Notes;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
@@ -54,7 +57,7 @@ public class AddTripActivity extends AppCompatActivity {
     String TAG = " asdasdasdadsasdasd";
     LatLng StartLatLang;
     LatLng endLatLang;
-    EditText name, note;
+    EditText name, note, etDuration;
     Button addTrip;
     ImageView startDate, startTime, returnDate, returnTime, addNote ;
     TextView startDateText, startTimeText, returnDateText, returnTimeText;
@@ -65,12 +68,13 @@ public class AddTripActivity extends AppCompatActivity {
     Calendar currentCalendar = Calendar.getInstance();
     Calendar myCalendarRound = Calendar.getInstance();
     SwitchCompat roundSwitch;
-    Spinner repeat_spinner;
+    Spinner repeatSpinner, spPeriod;
     LinearLayout roundedLayout;
-    ArrayList<String> notes = new ArrayList<>();
-    ListView lvNotes;
+    ArrayList<NoteDTO> notes = new ArrayList<>();
+    RecyclerView rvNotes;
+    RawNotesAdapter adapter = null;
     boolean isRoundedTripChecked, isEditing;
-    int repeatPosition;
+    int repeatPosition, periodPosition;
     String repeated="";
     int years;
     int months;
@@ -118,10 +122,29 @@ public class AddTripActivity extends AppCompatActivity {
             }
         });
 
-        repeat_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        repeatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != 4) {
+                    etDuration.setVisibility(View.GONE);
+                    spPeriod.setVisibility(View.GONE);
+                } else {
+                    etDuration.setVisibility(View.VISIBLE);
+                    spPeriod.setVisibility(View.VISIBLE);
+                }
                 repeatPosition = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spPeriod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                periodPosition = i;
             }
 
             @Override
@@ -175,20 +198,27 @@ public class AddTripActivity extends AppCompatActivity {
         }
 
         repeated = trip.getRepeated();
-        switch (repeated) {
-            case "":
-                repeat_spinner.setSelection(0);
-                break;
-            case "Daily":
-                repeat_spinner.setSelection(1);
-                break;
-            case "Weekly":
-                repeat_spinner.setSelection(2);
-                break;
-            case "Monthly":
-                repeat_spinner.setSelection(3);
-                break;
+        if (repeated.equals("")) {
+                repeatSpinner.setSelection(0);
+        } else if (repeated.equals("Daily")) {
+                repeatSpinner.setSelection(1);
+        } else if (repeated.equals("Weekly")) {
+            repeatSpinner.setSelection(2);
+        } else if (repeated.equals("Monthly")) {
+            repeatSpinner.setSelection(3);
+        } else if (repeated.lastIndexOf("Custom Period") != -1) {
+            etDuration.setVisibility(View.VISIBLE);
+            spPeriod.setVisibility(View.VISIBLE);
+            String[] parts = repeated.split(":");
+            etDuration.setText(parts[2]);
+            if (parts[1].equals("d")) {
+                spPeriod.setSelection(0);
+            } else {
+                spPeriod.setSelection(1);
+            }
+            repeatSpinner.setSelection(4);
         }
+
         startLat = trip.getTrip_start_point_latitude();
         startLng = trip.getTrip_start_point_longitude();
         endLat = trip.getTrip_end_point_latitude();
@@ -221,10 +251,14 @@ public class AddTripActivity extends AppCompatActivity {
         startTimeText =  findViewById(R.id.start_time_text);
         returnDateText =  findViewById(R.id.return_date_text);
         returnTimeText =  findViewById(R.id.return_time_text);
-        repeat_spinner = findViewById(R.id.repeat_spinner);
+        repeatSpinner = findViewById(R.id.repeat_spinner);
+        etDuration =  findViewById(R.id.period_count);
+        spPeriod =  findViewById(R.id.unit_spinner);
         roundSwitch = findViewById(R.id.rounded_trip);
         roundedLayout=findViewById(R.id.rounded_layout);
-        lvNotes = findViewById(R.id.notes);
+        rvNotes = findViewById(R.id.notes);
+        rvNotes.setNestedScrollingEnabled(false);
+        rvNotes.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         note = findViewById(R.id.et_note);
         addNote = findViewById(R.id.add_notes);
         addTrip = findViewById(R.id.add_trip_id);
@@ -410,17 +444,18 @@ public class AddTripActivity extends AppCompatActivity {
     }
 
     public void addNote(String note) {
-        notes.add(note);
+        notes.add(new NoteDTO(false, note));
         setAdapterAfterUpdate();
     }
 
     private void setAdapterAfterUpdate() {
-        String[] strings = new String[notes.size()];
-        notes.toArray(strings);
         this.note.setText("");
-        lvNotes.setVisibility(View.VISIBLE);
-        lvNotes.setAdapter(new ArrayAdapter<>(this, R.layout.raw_note, strings));
-        lvNotes.setSelection(notes.size() - 1);
+        rvNotes.setVisibility(View.VISIBLE);
+        if (adapter == null) {
+            adapter = new RawNotesAdapter(notes);
+            rvNotes.setAdapter(adapter);
+        } else
+            adapter.notifyDataSetChanged();
     }
 
     public void addTrip(){
@@ -429,13 +464,12 @@ public class AddTripActivity extends AppCompatActivity {
         if (trip_name.matches("") || startTimeText.getText().toString().matches("") ||
                 startDateText.getText().toString().matches("") || placeName == null ||
                 placeDestination == null) {
-            Toast.makeText(this, "missing fields !", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "missing fields!", Toast.LENGTH_LONG).show();
 
         } else if (myCalendar.compareTo(currentCalendar) <= 0) {
 
             Toast.makeText(this, "cannot insert passed time", Toast.LENGTH_SHORT).show();
         }  else {
-
             if (repeatPosition == 0) {
                 repeated="";
             }else if (repeatPosition==1) {
@@ -444,12 +478,17 @@ public class AddTripActivity extends AppCompatActivity {
                 repeated="Weekly";
             }else if (repeatPosition==3) {
                 repeated="Monthly";
+            } else if (repeatPosition==4) {
+                if (!etDuration.getText().toString().equals("")) {
+                    if (periodPosition == 0)
+                        repeated="Custom Period:d:" + etDuration.getText().toString();
+                    else
+                        repeated="Custom Period:w:" + etDuration.getText().toString();
+                }
             }
-
             updateFirebaseAndCreateAlarms();
 
             finish();
-
         }
 
     }

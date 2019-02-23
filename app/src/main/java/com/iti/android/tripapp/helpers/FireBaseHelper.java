@@ -1,5 +1,7 @@
 package com.iti.android.tripapp.helpers;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,9 +46,9 @@ public class FireBaseHelper implements Serializable {
     }
 
 
-    public void  retrieveUserTripsFromFirebase(String userId , final FireBaseCallBack fireBaseCallBack) {
+    public void retrieveUserTripsFromFirebase(String userId , final FireBaseCallBack fireBaseCallBack) {
          final ArrayList<TripDTO> trips;
-        trips = new ArrayList<TripDTO>();
+        trips = new ArrayList<>();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(userId + "trips");
         ref.addListenerForSingleValueEvent(
                 new ValueEventListener() {

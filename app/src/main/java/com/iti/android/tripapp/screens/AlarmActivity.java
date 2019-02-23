@@ -133,7 +133,7 @@ public class AlarmActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FloatingIconService.class);
         Notes notes = tripDTO.getNotes();
         if (notes != null) {
-            intent.putExtra("noteList", notes.getNotes());
+            intent.putExtra("noteList", tripDTO);
             startService(intent);
         }
     }
