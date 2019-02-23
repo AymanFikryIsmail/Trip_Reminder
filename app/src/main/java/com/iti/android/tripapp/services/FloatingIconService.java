@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +19,11 @@ import android.widget.ImageView;
 
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.adapter.NotesAdapter;
+import com.iti.android.tripapp.helpers.FireBaseHelper;
+import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.NoteDTO;
+import com.iti.android.tripapp.model.Notes;
+import com.iti.android.tripapp.model.TripDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +32,11 @@ public class FloatingIconService extends Service {
 
     private WindowManager mWindowManager;
     private View mFloatingIcon;
-    private List<NoteDTO> notes = new ArrayList<>();
+    private ArrayList<NoteDTO> notes = new ArrayList<>();
+    private TripDTO trip;
+    private NotesAdapter adapter;
+    private RecyclerView rv;
+    FireBaseHelper fireBaseHelper = new FireBaseHelper();
 
     public FloatingIconService() {
     }
@@ -39,10 +48,10 @@ public class FloatingIconService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        ArrayList<String> notesContent = intent.getStringArrayListExtra("noteList");
-        for (String note : notesContent) {
-            notes.add(new NoteDTO(false, note));
-        }
+        trip = (TripDTO) intent.getSerializableExtra("noteList");
+        notes = trip.getNotes().getNotes();
+
+
         return START_NOT_STICKY;
     }
 
@@ -113,9 +122,11 @@ public class FloatingIconService extends Service {
 
                             final RecyclerView rv = mFloatingIcon.findViewById(R.id.rv_notes);
 
-                            rv.setLayoutManager(new LinearLayoutManager(v.getContext()));
-                            rv.setAdapter(new NotesAdapter(notes));
-
+                            if (adapter == null) {
+                                adapter = new NotesAdapter(notes);
+                                rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                            }
+                            rv.setAdapter(adapter);
                             Button dialogButton = mFloatingIcon.findViewById(R.id.btn_apply);
                             // if button is clicked, close the custom dialog
                             dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +135,10 @@ public class FloatingIconService extends Service {
                                     collapsedView.setVisibility(View.VISIBLE);
                                     expandedView.setVisibility(View.GONE);
                                     notes = ((NotesAdapter)rv.getAdapter()).getNotes();
+                                    trip.setNotes(new Notes(notes));
+                                    MyAppDB.getAppDatabase(getApplicationContext()).tripDao().updateTrip(trip);
+                                    fireBaseHelper.updateTripOnFirebase(trip);
+
                                 }
                             });
                             v.performClick();

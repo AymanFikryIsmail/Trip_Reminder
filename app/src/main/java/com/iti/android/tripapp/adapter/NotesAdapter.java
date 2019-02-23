@@ -11,18 +11,18 @@ import android.widget.TextView;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.model.NoteDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteHolder> {
 
-    private static List<NoteDTO> mNotes;
-    private int i = 0;
+    private ArrayList<NoteDTO> mNotes;
 
-    public List<NoteDTO> getNotes() {
+    public ArrayList<NoteDTO> getNotes() {
         return mNotes;
     }
 
-    public NotesAdapter(List<NoteDTO> tripNotes) {
+    public NotesAdapter(ArrayList<NoteDTO> tripNotes) {
         mNotes = tripNotes;
     }
 
@@ -36,7 +36,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteHolder> 
     @Override
     public void onBindViewHolder(NoteHolder holder, int position) {
         holder.bind(position);
-//
     }
 
     @Override
@@ -45,7 +44,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteHolder> 
     }
 
 
-    static class NoteHolder extends RecyclerView.ViewHolder {
+    class NoteHolder extends RecyclerView.ViewHolder {
 
         TextView textView;
         CheckBox checkBox;
@@ -56,7 +55,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteHolder> 
         }
         void bind(final int index){
             textView.setText(mNotes.get(index).getContent());
-        checkBox.setChecked(mNotes.get(index).isChecked());
+            checkBox.setChecked(mNotes.get(index).isChecked());
             if (mNotes.get(index).isChecked()){
                 checkBox.setChecked(true);
             }

@@ -32,7 +32,7 @@
         android:id="@+id/tv_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ss"
+        android:text=""
         android:textSize="30sp"
         android:fontFamily="@font/regular"
         android:textStyle="bold"

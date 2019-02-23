@@ -5,21 +5,19 @@ import java.util.ArrayList;
 
 public class Notes implements Serializable {
 
-    public Notes() {
-    }
+    private ArrayList<NoteDTO> notes;
 
+    public Notes() {}
 
-    private ArrayList<String> notes;
-
-    public Notes(ArrayList<String> notes) {
+    public Notes(ArrayList<NoteDTO> notes) {
         this.notes = notes;
     }
 
-    public ArrayList<String> getNotes() {
+    public ArrayList<NoteDTO> getNotes() {
         return notes;
     }
 
-    public void setNotes(ArrayList<String> notes) {
+    public void setNotes(ArrayList<NoteDTO> notes) {
         this.notes = notes;
     }
 }

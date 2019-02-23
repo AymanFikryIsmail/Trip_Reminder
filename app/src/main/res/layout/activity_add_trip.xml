@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -62,7 +62,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="start point"
+                android:hint="@string/start_point"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="end point"
+                android:hint="@string/end_point"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -238,15 +238,36 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/repeat_spinner"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/Trip_arrays"
-                android:layout_margin="16dp"
-                android:textAlignment="center"
-                android:layout_gravity="center_horizontal"
-                />
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/repeat_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="16dp"
+                    android:entries="@array/Trip_arrays"
+                    android:textAlignment="center"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/period_count"
+                    android:visibility="gone"
+                    android:inputType="number" />
+                <Spinner
+                    android:id="@+id/unit_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:entries="@array/units"
+                    android:layout_margin="16dp"
+                    android:visibility="gone"
+                    android:textAlignment="center"/>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -300,15 +321,13 @@
                     android:layout_weight="1"/>
             </LinearLayout>
 
-            <ListView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/notes"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:divider="@null"
-                android:padding="10dp"
-                android:nestedScrollingEnabled="true"
-                />
+                android:scrollbars="vertical"
+                android:layout_marginBottom="15dp" />
         </LinearLayout>
 
 
@@ -328,4 +347,4 @@
         android:fontFamily="@font/regular"/>
 
 </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
