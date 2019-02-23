@@ -28,11 +28,11 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
         prefManager =new PrefManager(this);
          pBar = findViewById(R.id.progressBar);
 
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.splash_anim);
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_up);
         animation.setAnimationListener(this);
 
-//        boosters = findViewById(R.id.app_anim_boosters);
-//        boosters.startAnimation(animation);
+        boosters = findViewById(R.id.app_logo);
+        boosters.startAnimation(animation);
         pBar.setProgress(0);
         pBar.setMax(100);
        new LoadingTask(this).execute();
@@ -45,9 +45,9 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.splash_anim);
-        animation.setAnimationListener(this);
-        boosters.startAnimation(animation);
+//        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.splash_anim);
+//        animation.setAnimationListener(this);
+//        boosters.startAnimation(animation);
     }
 
     @Override

@@ -1,70 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@drawable/splash_bg"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".screens.RegisterActivity"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     >
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:src="@drawable/app_logo"
+        android:layout_marginTop="35dp"/>
 
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".screens.RegisterActivity"
-    >
-
-
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Register "
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="@color/grey1"
+        android:fontFamily="@font/regular"
+        />
     <EditText
         android:id="@+id/editTextName"
-        android:layout_width="243dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="100dp"
-        android:ems="10"
+        android:padding="12dp"
+        android:textSize="14sp"
+        android:background="@drawable/input_drawable"
         android:hint="Name"
         android:inputType="textPersonName"
-        android:layout_gravity="center"
+        android:textColor="@color/input_txt"
+        android:textColorHint="@color/input_txt"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/phone"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="30dp"
+        />
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:background="@drawable/input_drawable"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/input_txt"
+        android:textColorHint="@color/input_txt"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/email"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="30dp"
         />
 
     <EditText
-        android:id="@+id/editTextEmail"
-        android:layout_width="243dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="textEmailAddress" />
-
-    <EditText
         android:id="@+id/editTextPassword"
-        android:layout_width="243dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
+        android:padding="12dp"
+        android:textSize="14sp"
+        android:background="@drawable/input_drawable"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColor="@color/input_txt"
+        android:textColorHint="@color/input_txt"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/lock"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="30dp"
+        />
 
     <EditText
         android:id="@+id/editTextMobile"
-        android:layout_width="243dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="100dp"
-        android:ems="10"
+        android:padding="12dp"
+        android:textSize="14sp"
+        android:background="@drawable/input_drawable"
         android:hint="Mobile Number"
         android:inputType="phone"
-        android:layout_gravity="center"
+        android:textColor="@color/input_txt"
+        android:textColorHint="@color/input_txt"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/phone"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="50dp"
         />
 
     <Button
@@ -72,13 +107,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/btn_style"
-        android:backgroundTint="@android:color/holo_orange_dark"
+        android:layout_marginStart="0dp"
+        android:background="@drawable/button_fill"
         android:text="@string/register"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
-        android:textStyle="bold" />
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:fontFamily="@font/regular"/>
+        <!--android:onClick="@{(v) -> loginViewModel.onClick(v)}"-->
 </LinearLayout>
 
     </ScrollView>
+

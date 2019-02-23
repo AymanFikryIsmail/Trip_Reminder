@@ -1,0 +1,6 @@
+<resources>
+
+    <integer name="slide_animation_duration">2500</integer>
+    <integer name="config_slide_time">2500</integer>
+
+</resources>
