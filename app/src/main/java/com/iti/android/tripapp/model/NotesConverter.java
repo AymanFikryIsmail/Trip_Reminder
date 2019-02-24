@@ -22,7 +22,7 @@ public class NotesConverter {
     @TypeConverter
     public String languagesToStoredString(Notes notes) {
         String value = "";
-        if (notes.getNotes()!=null) {
+        if (notes != null) {
             value = gson.toJson(notes);
 //            for (String note : notes.getNotes())
 //                value = value.concat(note + ",");

@@ -50,10 +50,11 @@ public class AlarmHelper {
     }
 
     public static void cancelAlarm(Context context, int tripId) {
-        Intent intent = new Intent(context, AlarmActivity.class);
+        Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra("tripid", tripId);
+        Log.i("TAG", "" + tripId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), tripId,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
         pendingIntent.cancel();

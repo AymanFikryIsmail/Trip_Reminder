@@ -35,7 +35,6 @@ public class FloatingIconService extends Service {
     private ArrayList<NoteDTO> notes = new ArrayList<>();
     private TripDTO trip;
     private NotesAdapter adapter;
-    private RecyclerView rv;
     FireBaseHelper fireBaseHelper = new FireBaseHelper();
 
     public FloatingIconService() {
