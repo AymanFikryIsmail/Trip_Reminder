@@ -69,6 +69,7 @@ public class SignInActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success
+
                             FirebaseUser currentUser = mAuth.getCurrentUser();
                             prefManager.setUserId(currentUser.getUid());
                             Toast.makeText(SignInActivity.this, "SignedIn Successfully.",
