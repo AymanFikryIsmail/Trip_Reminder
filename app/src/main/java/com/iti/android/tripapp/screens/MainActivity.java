@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,15 +43,24 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Toolbar toolbar;
+    TextView user_name;
+    TextView user_email;
+    String email;
+    View header;
     PrefManager prefManager;
     private static final int REQUEST_CODE = 123;
     private FireBaseHelper fireBaseHelper;
+
+
+    private Fragment upComingFragment;
+    private Fragment historyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
          toolbar = findViewById(R.id.toolbar);
+         toolbar.setTitle("UpComing Trips");
         setSupportActionBar(toolbar);
         fireBaseHelper=new FireBaseHelper();
         prefManager=new PrefManager(this);
@@ -72,15 +83,17 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-//        UpComingFragment upComingFragment=new UpComingFragment();
-//        loadFragment(upComingFragment,"UpComing Trips");
+        header = navigationView.getHeaderView(0);
+        if (savedInstanceState == null && getSupportFragmentManager().findFragmentByTag(toolbar.getTitle().toString()) == null) {
+            upComingFragment=new UpComingFragment();
+            loadFragment(upComingFragment,"UpComing Trips");
+        }
     }
 
     private void  loadFragment(Fragment fragment, String barTitle){
         toolbar.setTitle(barTitle);
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame_container,fragment);
+        fragmentTransaction.replace(R.id.frame_container,fragment,barTitle);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -88,10 +101,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        UpComingFragment upComingFragment=new UpComingFragment();
-        loadFragment(upComingFragment,"UpComing Trips");
+//        upComingFragment =  getSupportFragmentManager().findFragmentByTag("UpComing Trips");
+            Fragment fragment ;//=  getSupportFragmentManager().findFragmentByTag(toolbar.getTitle().toString());
+            if (toolbar.getTitle().toString().equals("UpComing Trips")){
+                fragment=new UpComingFragment();
+            }else {
+                fragment=new HistoryFragment();
+            }
+        loadFragment(fragment,toolbar.getTitle().toString());
+        user_name = header.findViewById(R.id.profile_name);
+      //  user_name.setText(prefManager.getUserData().getName());
+        user_email = header.findViewById(R.id.website);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("currentFragment",1);
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -143,10 +170,10 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
 //            finish();
 //            startActivity(getIntent());
-            UpComingFragment upComingFragment=new UpComingFragment();
+             upComingFragment=new UpComingFragment();
             loadFragment(upComingFragment,"UpComing Trips");
         } else if (id == R.id.nav_history) {
-            HistoryFragment historyFragment=new HistoryFragment();
+             historyFragment=new HistoryFragment();
             loadFragment(historyFragment,"Trip History");
 
         } else if (id == R.id.nav_sync) {

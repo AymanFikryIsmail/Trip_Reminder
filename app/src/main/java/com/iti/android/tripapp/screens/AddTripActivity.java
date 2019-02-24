@@ -502,13 +502,17 @@ public class AddTripActivity extends AppCompatActivity {
         fireBaseHelper.createTripOnFirebase(tripDTO);
         AlarmHelper.setAlarm(this,tripDTO,myCalendar);
         if (isRoundedTripChecked){
-            TripDTO tripRoundDTO=new TripDTO(prefManager.getUserId(), name.getText().toString(), placeDestination, placeName,
-                    endLng,endLat ,startLng,startLat , returnDateText.getText().toString() , returnTimeText.getText().toString()
-                    ,repeated,"waited", new Notes(notes));
-            int tripRoundId= (int) MyAppDB.getAppDatabase(this).tripDao().addTrip(tripRoundDTO);
-            tripRoundDTO.setId(tripRoundId);
-            fireBaseHelper.createTripOnFirebase(tripRoundDTO);
-            AlarmHelper.setAlarm(this,tripRoundDTO,myCalendarRound);
+            if (myCalendarRound.compareTo(myCalendar) <= 0) {
+                Toast.makeText(this, "cannot round before going", Toast.LENGTH_SHORT).show();
+            } else {
+                TripDTO tripRoundDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeDestination, placeName,
+                        endLng, endLat, startLng, startLat, returnDateText.getText().toString(), returnTimeText.getText().toString()
+                        , repeated, "waited", new Notes(notes));
+                int tripRoundId = (int) MyAppDB.getAppDatabase(this).tripDao().addTrip(tripRoundDTO);
+                tripRoundDTO.setId(tripRoundId);
+                fireBaseHelper.createTripOnFirebase(tripRoundDTO);
+                AlarmHelper.setAlarm(this, tripRoundDTO, myCalendarRound);
+            }
         }
     }
 }

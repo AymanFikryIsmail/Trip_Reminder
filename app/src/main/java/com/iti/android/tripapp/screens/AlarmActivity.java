@@ -87,9 +87,9 @@ public class AlarmActivity extends AppCompatActivity {
                         AlarmHelper.cancelAlarm(getApplicationContext(),tripId);
                         notificationHelper.createNotification(tripDTO);
 
-                        Intent intent = new Intent(AlarmActivity.this, BackgroundSoundService.class);
-                        intent.setAction("cancel");
-                        stopService(intent);
+//                        Intent intent = new Intent(AlarmActivity.this, BackgroundSoundService.class);
+//                        intent.setAction("cancel");
+//                        stopService(intent);
                         finish();
                     }
                 })

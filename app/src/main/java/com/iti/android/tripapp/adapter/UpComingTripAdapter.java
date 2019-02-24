@@ -128,7 +128,7 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
 
                                     tripDTO.setTripStatus("started");
                                     MyAppDB.getAppDatabase(context).tripDao().updateTrip(tripDTO);
-                                    AlarmHelper.cancelAlarm(context, tripDTO.getId());
+                                    AlarmHelper.cancelAlarm(context.getApplicationContext(), tripDTO.getId());
                                    //update fire base
                                     fireBaseHelper.updateTripOnFirebase(tripDTO);
                                     showDirection(tripDTO);
@@ -182,10 +182,14 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
     }
     //open google maps and finish activity
     public void showDirection (TripDTO tripDTO){
-        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + tripDTO.getTrip_end_point_latitude() + "," +
+        Uri gmmIntentUri1 = Uri.parse("google.navigation:q=" + tripDTO.getTrip_end_point_latitude() + "," +
                 tripDTO.getTrip_start_point_longitude()
                 + "&travelmode=driving");
         //Uri.parse("http://maps.google.com/maps?saddr=" + 31.267048 + "," + 29.994168 + "&daddr=" +31.207751 + "," + 29.911807));
+        Uri gmmIntentUri =Uri.parse("http://maps.google.com/maps?saddr=" +tripDTO.getTrip_start_point_latitude() + "," +
+                tripDTO.getTrip_start_point_longitude()
+                + "&daddr=" +tripDTO.getTrip_end_point_latitude() + "," + tripDTO.getTrip_end_point_longitude());
+
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mapIntent.setPackage("com.google.android.apps.maps");
