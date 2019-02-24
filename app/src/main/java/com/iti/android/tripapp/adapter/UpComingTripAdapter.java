@@ -153,6 +153,7 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                                             //do your work here
                                             // update status started also update in firebase
                                             MyAppDB.getAppDatabase(context).tripDao().delete(tripDTO);
+                                            AlarmHelper.cancelAlarm(context.getApplicationContext(), tripDTO.getId());
                                             fireBaseHelper.removeTripFromFirebase(tripDTO);
                                             associationsTitle.remove(tripDTO);
                                             notifyDataSetChanged();
@@ -205,7 +206,7 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
     private void startFloatingWidgetService(TripDTO tripDTO) {
         Intent intent = new Intent(context, FloatingIconService.class);
         Notes notes = tripDTO.getNotes();
-        if (notes != null) {
+        if (notes.getNotes().size() != 0) {
             intent.putExtra("noteList", tripDTO);
             context.startService(intent);
         }

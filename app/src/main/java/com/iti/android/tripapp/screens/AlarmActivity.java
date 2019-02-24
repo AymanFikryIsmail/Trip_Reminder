@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.iti.android.tripapp.R;
@@ -114,7 +115,7 @@ public class AlarmActivity extends AppCompatActivity {
     public void showDirection (){
         Uri gmmIntentUri1 = Uri.parse("google.navigation:q=" + tripDTO.getTrip_end_point_latitude()
                 + "," + tripDTO.getTrip_end_point_longitude()+ "&travelmode=driving");
-        Uri gmmIntentUri =Uri.parse("http://maps.google.com/maps?saddr=" +tripDTO.getTrip_start_point_latitude() + "," + tripDTO.getTrip_end_point_longitude()
+        Uri gmmIntentUri =Uri.parse("http://maps.google.com/maps?saddr=" +tripDTO.getTrip_start_point_latitude() + "," + tripDTO.getTrip_start_point_longitude()
                 + "&daddr=" +tripDTO.getTrip_end_point_latitude() + "," + tripDTO.getTrip_end_point_longitude());
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
@@ -132,7 +133,8 @@ public class AlarmActivity extends AppCompatActivity {
     private void startFloatingWidgetService() {
         Intent intent = new Intent(this, FloatingIconService.class);
         Notes notes = tripDTO.getNotes();
-        if (notes != null) {
+        if (notes.getNotes().size() != 0) {
+            Log.i("TAG", "calling service");
             intent.putExtra("noteList", tripDTO);
             startService(intent);
         }

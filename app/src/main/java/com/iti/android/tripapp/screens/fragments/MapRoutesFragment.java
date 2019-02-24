@@ -52,8 +52,8 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
     List<TripDTO> tripDTOArrayList;
 
     int[] color={Color.RED ,Color.BLUE ,Color.GREEN , Color.CYAN};
-    float [] markerColor ={              BitmapDescriptorFactory.   HUE_RED,
-
+    float [] markerColor ={
+            BitmapDescriptorFactory.   HUE_RED,
             BitmapDescriptorFactory.HUE_BLUE,
             BitmapDescriptorFactory.   HUE_GREEN,
             BitmapDescriptorFactory.HUE_CYAN,
@@ -109,9 +109,9 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
             // Setting the position of the marker
             options.position(endPoint);
             if (MarkerPoints.size() == 1) {
-                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                options.icon(BitmapDescriptorFactory.defaultMarker(markerColor[i]));
             } else if (MarkerPoints.size() == 2) {
-                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                options.icon(BitmapDescriptorFactory.defaultMarker(markerColor[i]));
             }
             mMap.addMarker(options);
             // Checks, whether start and end locations are captured

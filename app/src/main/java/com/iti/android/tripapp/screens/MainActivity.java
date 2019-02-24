@@ -1,16 +1,21 @@
 package com.iti.android.tripapp.screens;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -50,6 +56,8 @@ public class MainActivity extends AppCompatActivity
     PrefManager prefManager;
     private static final int REQUEST_CODE = 123;
     private FireBaseHelper fireBaseHelper;
+    private int attemptCount = 1;
+    private final static int ATTEMPT_LIMIT = 3;
 
 
     private Fragment upComingFragment;
@@ -61,6 +69,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
          toolbar = findViewById(R.id.toolbar);
          toolbar.setTitle("UpComing Trips");
+
         setSupportActionBar(toolbar);
         fireBaseHelper=new FireBaseHelper();
         prefManager=new PrefManager(this);
@@ -79,10 +88,29 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        askForSystemOverlayPermission();
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setCancelable(false)
+                        .setIcon(R.drawable.logout_icon)
+                        .setTitle(R.string.permissions_dialog_title)
+                        .setMessage(R.string.permissions_dialog_msg)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), REQUEST_CODE);
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+        }
+
+
+//        UpComingFragment upComingFragment=new UpComingFragment();
+//        loadFragment(upComingFragment,"UpComing Trips");
         header = navigationView.getHeaderView(0);
         if (savedInstanceState == null && getSupportFragmentManager().findFragmentByTag(toolbar.getTitle().toString()) == null) {
             upComingFragment=new UpComingFragment();
@@ -90,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void  loadFragment(Fragment fragment, String barTitle){
+    private void loadFragment(Fragment fragment, String barTitle){
         toolbar.setTitle(barTitle);
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_container,fragment,barTitle);
@@ -101,6 +129,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+//        UpComingFragment upComingFragment=new UpComingFragment();
+//        loadFragment(upComingFragment,"UpComing Trips");
 //        upComingFragment =  getSupportFragmentManager().findFragmentByTag("UpComing Trips");
             Fragment fragment ;//=  getSupportFragmentManager().findFragmentByTag(toolbar.getTitle().toString());
             if (toolbar.getTitle().toString().equals("UpComing Trips")){
@@ -121,6 +151,7 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
         outState.putInt("currentFragment",1);
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -132,15 +163,29 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
-    private void askForSystemOverlayPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-            //If the draw over permission is not available to open the settings screen
-            //to grant the permission.
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-            startActivityForResult(intent, REQUEST_CODE);
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        String toastMsg = "Attempt " + attemptCount + " out of " + ATTEMPT_LIMIT + " has failed\n Retrying...";
+        if (!Settings.canDrawOverlays(this)) {
+            if (attemptCount != ATTEMPT_LIMIT) {
+                attemptCount++;
+                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), REQUEST_CODE);
+            } else {
+                toastMsg = "Attempt " + attemptCount + " out of " + ATTEMPT_LIMIT + " has failed\n Terminating...";
+                finish();
+            }
+            issueToast(toastMsg);
         }
     }
 
+    private void issueToast(String toastMsg) {
+        Toast toast = Toast.makeText(this, toastMsg, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Trip_Project.iml" filepath="$PROJECT_DIR$/Trip_Project.iml" />
+      <module fileurl="file://D:\iti\Android\Trip_Project\Trip_Reminder.iml" filepath="D:\iti\Android\Trip_Project\Trip_Reminder.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

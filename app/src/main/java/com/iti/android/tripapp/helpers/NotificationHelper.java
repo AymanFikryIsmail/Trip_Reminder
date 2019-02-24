@@ -84,7 +84,7 @@ context=base;
                         .setContentTitle("New Trip on hold")
                         .setStyle(new NotificationCompat.BigTextStyle())
                         .setLights(Color.BLUE, 500, 500)
-                        .setContentText("trip name" + " waiting to start ")
+                        .setContentText(tripDTO.getName() + " waiting to start ")
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .setContentIntent(alarmPendingIntent)
 //                        .addAction(R.drawable.remove_icon, "Cancel", cancelPendingIntent)
