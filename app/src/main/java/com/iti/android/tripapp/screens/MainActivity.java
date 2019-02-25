@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
          toolbar = findViewById(R.id.toolbar);
          toolbar.setTitle("UpComing Trips");
-
         setSupportActionBar(toolbar);
         fireBaseHelper=new FireBaseHelper();
         prefManager=new PrefManager(this);

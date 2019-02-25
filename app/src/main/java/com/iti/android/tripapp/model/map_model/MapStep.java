@@ -8,28 +8,51 @@ import java.util.List;
  */
 
 public class MapStep implements Serializable {
-    private List<MapPoint> steps;
 
-    String copyrights;
+    private distance distance;
+    private duration duration;
 
-    public String getCopyrights() {
-        return copyrights;
+    public MapStep(distance distance, duration duration) {
+        this.distance = distance;
+        this.duration = duration;
     }
 
-    public MapStep(List<MapPoint> steps) {
-        this.steps = steps;
+    public distance getDistance() {
+        return distance;
     }
 
-    public MapStep(List<MapPoint> steps, String copyrights) {
-        this.steps = steps;
-        this.copyrights = copyrights;
+    public MapStep.duration getDuration() {
+        return duration;
     }
 
-    public List<MapPoint> getSteps() {
-        return steps;
+    public class distance{
+        String text;
+        public String getText() {
+            return text;
+        }
     }
-
-    public void setSteps(List<MapPoint> steps) {
-        this.steps = steps;
+    public class duration{
+        String text;
+        public String getText() {
+            return text;
+        }
     }
+//
+//    private List<MapPoint> steps;
+//
+//    public MapStep(List<MapPoint> steps) {
+//        this.steps = steps;
+//    }
+//
+//    public MapStep(List<MapPoint> steps, String copyrights) {
+//        this.steps = steps;
+//    }
+//
+//    public List<MapPoint> getSteps() {
+//        return steps;
+//    }
+//
+//    public void setSteps(List<MapPoint> steps) {
+//        this.steps = steps;
+//    }
 }

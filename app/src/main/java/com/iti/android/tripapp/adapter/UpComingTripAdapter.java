@@ -178,6 +178,9 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
 
                                     AlertDialog.Builder build = new AlertDialog.Builder(context);
                                   TextView  trip_name =  dialogView.findViewById(R.id.trip_name);
+                                    dialogView.findViewById(R.id.trip_distance).setVisibility(View.GONE);
+                                     dialogView.findViewById(R.id.trip_duration).setVisibility(View.GONE);
+
                                     trip_name.setText(tripDTO.getName());
                                     rvShowNotes = (RecyclerView) dialogView.findViewById(R.id.showNotes);
                                     rvShowNotes.setLayoutManager(new LinearLayoutManager(context));

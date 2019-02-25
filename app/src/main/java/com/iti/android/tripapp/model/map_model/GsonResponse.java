@@ -9,10 +9,12 @@ import retrofit2.http.Query;
  */
 
 public interface GsonResponse {
+//    @GET("json?origin=31.308860000000003%2C30.057857199999997&destination=31.23982149999999%2C30.023186100000004&key=AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc&fbclid=IwAR0SzqGJcx4O8HkvLij_sXZuFCgkad_lntijQD05XybFpDPdIuJWmtn5aeQ")
 
-    @GET("json?origin=31.308860000000003%2C30.057857199999997&destination=31.23982149999999%2C30.023186100000004&key=AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc&fbclid=IwAR0SzqGJcx4O8HkvLij_sXZuFCgkad_lntijQD05XybFpDPdIuJWmtn5aeQ")
+    @GET("json")
     Call<MapResponse> getCountries(
-//            @Query("")
-    );
+            @Query("origin") String origin,
+            @Query("destination") String destination,
+            @Query("key") String key    );
 
 }

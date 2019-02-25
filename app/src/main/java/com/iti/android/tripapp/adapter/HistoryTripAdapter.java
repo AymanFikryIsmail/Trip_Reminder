@@ -110,39 +110,58 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
             timeTv.setText(tripDTO.getTrip_time());
             dateTv.setText(tripDTO.getTrip_date());
 
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)//"https://aymanfikryeng.000webhostapp.com/images/Resturants/La-Casona-logo-for-a-restaurant.jpg")//
-//                   .apply(new RequestOptions().centerInside().placeholder(R.drawable.ic_home_black_24dp)).into(associationImage);// .apply(new RequestOptions().centerInside().placeholder(R.drawable.ic_home_black_24dp))
 //            Picasso.with(context).load("")
 //                    .fit().centerCrop()
 //                    .placeholder(R.drawable.ic_home_black_24dp)
 //                    .into(associationImage);
+
+            popupMenuTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    @SuppressLint("RestrictedApi")
+                    Context wrapper = new ContextThemeWrapper(context, R.style.PopupMenu);
+
+                    PopupMenu popupMenu =new PopupMenu(wrapper,popupMenuTxt);
+                    popupMenu.inflate(R.menu.trip_history_menu);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()) {
+                                case R.id.note:
+                                    View dialogView = LayoutInflater.from(context).inflate(R.layout.show_notes , null, false);
+                                    rvShowNotes = (RecyclerView) dialogView.findViewById(R.id.showNotes);
+                                    TextView  trip_name =  dialogView.findViewById(R.id.trip_name);
+                                    trip_distance =  dialogView.findViewById(R.id.trip_distance);
+                                    trip_duration =  dialogView.findViewById(R.id.trip_duration);
+
+                                    trip_name.setText(tripDTO.getName());
+                                    getMAp(tripDTO.getTrip_start_point_latitude(), tripDTO.getTrip_start_point_longitude(),
+                                            tripDTO.getTrip_end_point_latitude() ,tripDTO.getTrip_end_point_longitude(),
+                                            trip_distance ,trip_duration);
+                                    rvShowNotes.setLayoutManager(new LinearLayoutManager(context));
+                                    adapter= new ShowDetailsAdapter(tripDTO.getNotes().getNotes());
+                                    rvShowNotes.setAdapter(adapter);
+                                    //}
+                                    AlertDialog.Builder build = new AlertDialog.Builder(context);
+                                    build.setView(dialogView);
+
+                                    final AlertDialog alertDialog = build.create();
+                                    alertDialog.show();
+
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
+                    popupMenu.show();
+                }
+            });
+
             gridCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    View dialogView = LayoutInflater.from(context).inflate(R.layout.show_notes , null, false);
-                    rvShowNotes = (RecyclerView) dialogView.findViewById(R.id.showNotes);
-                    TextView  trip_name =  dialogView.findViewById(R.id.trip_name);
-                      trip_distance =  dialogView.findViewById(R.id.trip_distance);
-                      trip_duration =  dialogView.findViewById(R.id.trip_duration);
-
-
-
-                    trip_name.setText(tripDTO.getName());
-                    getMAp(tripDTO.getTrip_start_point_latitude(), tripDTO.getTrip_start_point_longitude(),
-                            tripDTO.getTrip_end_point_latitude() ,tripDTO.getTrip_end_point_longitude(),
-                            trip_distance ,trip_duration);
-                    rvShowNotes.setLayoutManager(new LinearLayoutManager(context));
-                    adapter= new ShowDetailsAdapter(tripDTO.getNotes().getNotes());
-                    rvShowNotes.setAdapter(adapter);
-                    //}
-                    AlertDialog.Builder build = new AlertDialog.Builder(context);
-                    build.setView(dialogView);
-
-                    final AlertDialog alertDialog = build.create();
-                    alertDialog.show();
-                }
+                                   }
             });
-            popupMenuTxt.setVisibility(View.GONE);
 
         }
     }
@@ -154,14 +173,15 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         GsonResponse service =retrofit.create(GsonResponse.class);
-        Call<MapResponse> call=service.getCountries();
-
+        String key="AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc";
+        Call<MapResponse> call=service.getCountries(stLat+","+stLng,endLat+","+endLng,key);
+//                   AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc&fbclid=IwAR0SzqGJcx4O8HkvLij_sXZuFCgkad_lntijQD05XybFpDPdIuJWmtn5aeQ
         call.enqueue(new Callback<MapResponse>() {
             @Override
             public void onResponse(Call<MapResponse> call, Response<MapResponse> response) {
                 List<MapLeg> mapRoutes=new ArrayList<>();
-                String distance = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0).getDistance().getText();
-                String duration = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0).getDuration().getText();
+                String distance = response.body().getRoutes().get(0).getLegs().get(0).getDistance().getText();
+                String duration = response.body().getRoutes().get(0).getLegs().get(0).getDuration().getText();
 
                 trip_distance.setText("Trip distance : " + distance);
                 trip_duration.setText("Trip duration : " + duration);
