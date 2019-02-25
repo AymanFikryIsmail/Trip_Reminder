@@ -103,7 +103,7 @@ register();
                     Toast.makeText(RegisterActivity.this, "Registered Successfully.",
                             Toast.LENGTH_SHORT).show();
                     FirebaseUser currentUser = mAuth.getCurrentUser();
-                    UserDTO user=new UserDTO(name,email,password,mobile);
+                    UserDTO user=new UserDTO(currentUser.getUid() ,name,email,password,mobile);
 //                    UserDTO user=new UserDTO(currentUser.getUid(),binding.editTextName.getText().toString(),email,password
 //                            ,
 //                            binding.editTextMobile.getText().toString(),""

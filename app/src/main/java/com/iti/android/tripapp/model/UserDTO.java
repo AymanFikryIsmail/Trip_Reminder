@@ -20,14 +20,13 @@ public class UserDTO {
         this.password = password;
         this.phone = phone;
     }
-//    public UserDTO(String id, String name, String email, String password, String phone , String img) {
-//        this.id = id;
-//        this.name = name;
-//        this.email = email;
-//        this.img = img;
-//        this.password = password;
-//        this.phone = phone;
-//    }
+    public UserDTO(String id, String name, String email, String password, String phone ) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+    }
 
     public boolean isEmailValid() {
         return Patterns.EMAIL_ADDRESS.matcher(getEmail()).matches();
