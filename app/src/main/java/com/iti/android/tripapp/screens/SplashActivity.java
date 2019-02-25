@@ -16,9 +16,10 @@ import com.iti.android.tripapp.utils.PrefManager;
 
 public class SplashActivity extends AppCompatActivity implements AnimationListener {
 
-    private ImageView boosters;
-    private Animation animation;
-    ProgressBar pBar;
+    Animation animBounce;
+    ImageView car;
+    int index;
+
     PrefManager prefManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,32 +27,47 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
         setContentView(R.layout.activity_splash);
 
         prefManager =new PrefManager(this);
-         pBar = findViewById(R.id.progressBar);
-
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_in_up);
-        animation.setAnimationListener(this);
-
-        boosters = findViewById(R.id.app_logo);
-        boosters.startAnimation(animation);
-        pBar.setProgress(0);
-        pBar.setMax(100);
-       new LoadingTask(this).execute();
+        index = 0;
+        car = findViewById(R.id.car);
+        animBounce = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.move_up_left);
+        animBounce.setAnimationListener(this);
+        car.startAnimation(animBounce);
+        new LoadingTask(this).execute();
     }
 
-
-    @Override
-    public void onAnimationStart(Animation animation) {
-    }
 
     @Override
     public void onAnimationEnd(Animation animation) {
-//        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.splash_anim);
-//        animation.setAnimationListener(this);
-//        boosters.startAnimation(animation);
+        // Take any action after completing the animation
+        // check for fade in animation
+        switch (index % 4) {
+            case 0:
+                animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_down_left_straight);
+                break;
+            case 1:
+                animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_up_right);
+                break;
+            case 2:
+                animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_down_right_straight);
+                break;
+            case 3:
+                animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_up_left);
+                break;
+        }
+        index++;
+        animBounce.setAnimationListener(this);
+        car.startAnimation(animBounce);
     }
 
     @Override
     public void onAnimationRepeat(Animation animation) {
+        // Animation is repeating
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+        // Animation started
     }
 
     class LoadingTask extends AsyncTask<Void, Integer, Void> {
@@ -65,8 +81,6 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ProgressBar pBar = activity.findViewById(R.id.progressBar);
-            pBar.setIndeterminate(true);
         }
 
         @Override
@@ -86,9 +100,8 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
 
         @Override
         protected void onPostExecute(Void result) {
-            pBar.animate().alpha(0).setDuration(400).start();
 
-            if ( prefManager.getIsFirst() )
+            if (prefManager.getIsFirst() )
                 activity.startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
             else if(prefManager.getUserId().equals("")){
                 activity.startActivity(new Intent(SplashActivity.this, SignInActivity.class));
@@ -96,13 +109,6 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
                 activity.startActivity(new Intent(SplashActivity.this, MainActivity.class));
             }
             finish();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            pBar.setProgress(values[0]);
-
         }
     }
 }
