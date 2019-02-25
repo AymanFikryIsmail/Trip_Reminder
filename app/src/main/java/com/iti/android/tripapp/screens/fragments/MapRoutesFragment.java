@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +23,10 @@ import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.helpers.map_helper.MapDataParser;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
+import com.iti.android.tripapp.model.map_model.GsonResponse;
+import com.iti.android.tripapp.model.map_model.MapLeg;
+import com.iti.android.tripapp.model.map_model.MapPoint;
+import com.iti.android.tripapp.model.map_model.MapResponse;
 import com.iti.android.tripapp.utils.PrefManager;
 
 import org.json.JSONObject;
@@ -35,6 +40,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,6 +87,8 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -96,7 +109,6 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
             LatLng startPoint=new LatLng(tripDTOArrayList.get(i).getTrip_start_point_latitude(),tripDTOArrayList.get(i).getTrip_start_point_longitude());
             LatLng endPoint  =new LatLng(tripDTOArrayList.get(i).getTrip_end_point_latitude(),tripDTOArrayList.get(i).getTrip_end_point_longitude());
             MarkerPoints.clear();
-
             mMap.addMarker(new MarkerOptions().position(startPoint).title("start here")
                     .icon(BitmapDescriptorFactory
                             .defaultMarker(markerColor[i])));

@@ -23,12 +23,21 @@ import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
+import com.iti.android.tripapp.model.map_model.GsonResponse;
+import com.iti.android.tripapp.model.map_model.MapLeg;
+import com.iti.android.tripapp.model.map_model.MapResponse;
 import com.iti.android.tripapp.services.FloatingIconService;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
 import com.iti.android.tripapp.utils.PrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by ayman on 2019-02-08.
@@ -44,6 +53,7 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
 
     RecyclerView rvShowNotes;
     private  ShowDetailsAdapter adapter;
+    TextView  trip_name , trip_distance , trip_duration;
     public HistoryTripAdapter(Context context,List<TripDTO> tripDTOList){
         this.context = context;
         this.associationsTitle = tripDTOList;
@@ -112,7 +122,15 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
                     View dialogView = LayoutInflater.from(context).inflate(R.layout.show_notes , null, false);
                     rvShowNotes = (RecyclerView) dialogView.findViewById(R.id.showNotes);
                     TextView  trip_name =  dialogView.findViewById(R.id.trip_name);
+                      trip_distance =  dialogView.findViewById(R.id.trip_distance);
+                      trip_duration =  dialogView.findViewById(R.id.trip_duration);
+
+
+
                     trip_name.setText(tripDTO.getName());
+                    getMAp(tripDTO.getTrip_start_point_latitude(), tripDTO.getTrip_start_point_longitude(),
+                            tripDTO.getTrip_end_point_latitude() ,tripDTO.getTrip_end_point_longitude(),
+                            trip_distance ,trip_duration);
                     rvShowNotes.setLayoutManager(new LinearLayoutManager(context));
                     adapter= new ShowDetailsAdapter(tripDTO.getNotes().getNotes());
                     rvShowNotes.setAdapter(adapter);
@@ -127,5 +145,34 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
             popupMenuTxt.setVisibility(View.GONE);
 
         }
+    }
+
+    public  void getMAp(double stLat, double stLng , double endLat , double endLng , final TextView  trip_distance , final TextView trip_duration){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://maps.googleapis.com/maps/api/directions/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        GsonResponse service =retrofit.create(GsonResponse.class);
+        Call<MapResponse> call=service.getCountries();
+
+        call.enqueue(new Callback<MapResponse>() {
+            @Override
+            public void onResponse(Call<MapResponse> call, Response<MapResponse> response) {
+                List<MapLeg> mapRoutes=new ArrayList<>();
+                String distance = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0).getDistance().getText();
+                String duration = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0).getDuration().getText();
+
+                trip_distance.setText("Trip distance : " + distance);
+                trip_duration.setText("Trip duration : " + duration);
+
+            }
+            @Override
+            public void onFailure(Call<MapResponse> call, Throwable t) {
+
+                Toast.makeText(context, "",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }

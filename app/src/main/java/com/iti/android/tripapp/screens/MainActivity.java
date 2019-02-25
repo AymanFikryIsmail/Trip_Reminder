@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity
         user_name = header.findViewById(R.id.profile_name);
       //  user_name.setText(prefManager.getUserData().getName());
         user_email = header.findViewById(R.id.website);
-       //   user_email.setText(prefManager.getUserData().getEmail());
+          user_email.setText(prefManager.getUserData().getEmail());
 
     }
 
