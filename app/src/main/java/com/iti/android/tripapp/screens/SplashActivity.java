@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
                 R.anim.move_up_left);
         animBounce.setAnimationListener(this);
         car.startAnimation(animBounce);
-        new LoadingTask(this).execute();
+//        new LoadingTask(this).execute();
     }
 
 
@@ -55,6 +55,17 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
                 animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_up_left);
                 break;
         }
+        if(index==11){
+            if (prefManager.getIsFirst() )
+                startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
+            else if(prefManager.getUserId().equals("")){
+                startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+            } else {
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            }
+            finish();
+        }
+
         index++;
         animBounce.setAnimationListener(this);
         car.startAnimation(animBounce);

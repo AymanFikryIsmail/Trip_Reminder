@@ -101,10 +101,8 @@ public class AddTripActivity extends AppCompatActivity {
         prefManager=new PrefManager(this);
         initView();
         initAutoComplete();
-
         initDate_Time();
         initBackDateTime();
-
         final TripDTO editableTrip = (TripDTO) getIntent().getSerializableExtra("tripDTO");
         if (editableTrip != null)
             reinitializeData(editableTrip);

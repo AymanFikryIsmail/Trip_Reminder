@@ -29,6 +29,8 @@ public class LoginPresenterImpl implements LoginPresenter
         if ((TextUtils.isEmpty(email) || TextUtils.isEmpty(password)))
         {
             loginView.showValidationErrorMsg();
+            loginView.hideProgress();
+
         }
         else {
 
@@ -37,9 +39,12 @@ public class LoginPresenterImpl implements LoginPresenter
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         loginView.loginSuccessFully();
+                        loginView.hideProgress();
 
                     } else {
                        loginView.loginFail();
+                        loginView.hideProgress();
+
                     }
                 }
 

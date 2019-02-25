@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,8 @@ public class SignInActivity extends AppCompatActivity  implements LoginView {
     private GoogleApiClient googleApiClient;
     GoogleSignInClient googleSignInClient;
     private static final int RC_SIGN_IN = 1;
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,9 +66,9 @@ public class SignInActivity extends AppCompatActivity  implements LoginView {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String email = mEmailField.getText().toString() ;
                 String password = mPasswordField.getText().toString() ;
+               showProgress();
                 presenter.handleLogin(email, password, mAuth, SignInActivity.this );
             }
         });
@@ -88,6 +91,8 @@ public class SignInActivity extends AppCompatActivity  implements LoginView {
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgress();
+
                 Intent intent = googleSignInClient.getSignInIntent();
                 startActivityForResult(intent, RC_SIGN_IN);
             }
@@ -101,6 +106,8 @@ public class SignInActivity extends AppCompatActivity  implements LoginView {
         btnRegister = findViewById(R.id.createAccount);
           mEmailField = findViewById(R.id.editTextEmail);
           mPasswordField = findViewById(R.id.editTextPassword);
+        progressBar = findViewById(R.id.progress);
+
     }
 
     @Override
@@ -131,6 +138,7 @@ public class SignInActivity extends AppCompatActivity  implements LoginView {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        hideProgress();
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
                         if(task.isSuccessful()){
                             UserDTO user=new UserDTO(name,email,"","");
@@ -174,15 +182,14 @@ public class SignInActivity extends AppCompatActivity  implements LoginView {
         super.onDestroy();
         mAuth.signOut();
     }
-
     @Override
     public void showProgress() {
-
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

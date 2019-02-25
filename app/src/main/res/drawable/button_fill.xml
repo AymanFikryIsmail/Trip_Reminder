@@ -7,8 +7,9 @@
     <solid android:color="@color/header_title_text"/>
 
     <gradient
-        android:startColor="@color/startcolor"
-        android:endColor="@color/colorPrimary"
+        android:startColor="@color/title_text"
+        android:centerColor="@color/colorPrimary"
+        android:endColor="@color/startcolor"
         android:angle="0"/>
 </shape>
     <!--android: ="8dp"-->
