@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iti.android.tripapp.R;
@@ -47,7 +48,7 @@ public class RawNotesAdapter extends RecyclerView.Adapter<RawNotesAdapter.RawNot
     class RawNoteHolder extends RecyclerView.ViewHolder {
 
         TextView textView;
-        FloatingActionButton button;
+        ImageView button;
 
         RawNoteHolder(View v) {
             super(v);

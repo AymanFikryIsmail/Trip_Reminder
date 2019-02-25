@@ -35,7 +35,7 @@
     <string name="title_activity_main">MainActivity</string>
 
     <string name="confirm">OK</string>
-    <string name="add_trip">Add</string>
+    <string name="add_trip">Add </string>
     <string name="add_note">Add a note…</string>
     <string name="title_activity_maps">Map</string>
     <string name="end_point">end point</string>

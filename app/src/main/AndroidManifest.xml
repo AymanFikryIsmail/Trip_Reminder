@@ -39,9 +39,14 @@
             <!--android:name="com.google.android.maps.v2.API_KEY"-->
             <!--android:value="AIzaSyBLJv51oC0sfDw418dpUs2vu7xT4tMezyw" />-->
 
-        <activity android:name=".screens.SignInActivity" />
-        <activity android:name=".screens.RegisterActivity" />
-        <activity android:name=".screens.AddTripActivity" />
+        <activity android:name=".screens.SignInActivity"
+            android:label="@string/SIGNIN"/>
+        <activity android:name=".screens.RegisterActivity"
+            android:label="@string/register"/>
+        <activity android:name=".screens.AddTripActivity"
+            android:label="Add Trip"
+            android:parentActivityName=".screens.MainActivity"
+            />
 
         <receiver
             android:name=".services.AlarmReceiver"

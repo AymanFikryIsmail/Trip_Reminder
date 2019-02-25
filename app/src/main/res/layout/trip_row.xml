@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
@@ -11,44 +10,48 @@
     card_view:cardPreventCornerOverlap="false">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/tripImage"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@drawable/app_logo"
-                android:gravity="top"
-                />
+            android:orientation="horizontal"
+            >
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:layout_marginStart="5dp">
+                <ImageView
+                    android:id="@+id/tripImage"
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/app_logo"
+                    android:gravity="top"
+                    />
                 <TextView
                     android:id="@+id/tripTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Trip name"
                     android:textColor="@color/grey"
-                    android:textSize="24sp"
-                    android:fontFamily="@font/bold"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
-
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:orientation="horizontal"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
                     >
                     <ImageView
                         android:layout_width="25dp"
@@ -59,21 +62,20 @@
                     android:id="@+id/startLoc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="startpoint"
-                    android:textSize="18sp"
-                    android:fontFamily="@font/regular"
-                    android:layout_marginStart="15dp"
+                    android:text="startpoint aaaaaaaaaaaaaaaaa"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/light"
+                    android:layout_marginStart="5dp"
                     android:textColor="@color/blue"
                     />
                 </LinearLayout>
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:orientation="horizontal"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
                     >
                     <ImageView
                         android:layout_width="25dp"
@@ -84,9 +86,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="endpoint"
-                        android:textSize="18sp"
-                        android:layout_marginStart="15dp"
-                        android:fontFamily="@font/regular"
+                        android:textSize="16sp"
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="@font/light"
                         android:textColor="@color/blue"
                         />
                 </LinearLayout>
@@ -94,10 +96,10 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:orientation="horizontal"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
                     >
                     <ImageView
                         android:layout_width="wrap_content"
@@ -137,12 +139,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
         android:text="&#8942;"
         android:textColor="@color/grey"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:fontFamily="@font/bold"
-        android:layout_marginEnd="10dp"/>
+        android:layout_margin="10dp"/>
 </RelativeLayout>
     </android.support.v7.widget.CardView>
 

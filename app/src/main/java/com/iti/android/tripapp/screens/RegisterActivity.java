@@ -42,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
 //    private ActivityRegisterBinding  binding;
 
+     EditText  mEmailField , mPasswordField , mNameField ,mMobileField ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,10 +76,10 @@ public class RegisterActivity extends AppCompatActivity {
 //            }
 //        });
 
-        final EditText mEmailField = findViewById(R.id.editTextEmail);
-        final EditText mPasswordField = findViewById(R.id.editTextPassword);
-        final EditText mNameField = findViewById(R.id.editTextName);
-        final EditText mMobileField = findViewById(R.id.editTextMobile);
+        mEmailField = findViewById(R.id.editTextEmail);
+          mPasswordField = findViewById(R.id.editTextPassword);
+          mNameField = findViewById(R.id.editTextName);
+          mMobileField = findViewById(R.id.editTextMobile);
         register = findViewById(R.id.register);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,10 +91,10 @@ register();
 
     void register(){
         mAuth = FirebaseAuth.getInstance();
-        final String email ="";// binding.editTextEmail.getText().toString() ;
-        final String password = "";//binding.editTextPassword.getText().toString() ;
-         String name = "";//mNameField.getText().toString() ;
-        String mobile  = "";//mPasswordField.getText().toString() ;
+        final String email =mEmailField.getText().toString();// binding.editTextEmail.getText().toString() ;
+        final String password = mPasswordField.getText().toString();//binding.editTextPassword.getText().toString() ;
+         final String name = mNameField.getText().toString() ;
+        final String mobile  = mPasswordField.getText().toString() ;
 
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>()
         {
@@ -102,7 +103,7 @@ register();
                     Toast.makeText(RegisterActivity.this, "Registered Successfully.",
                             Toast.LENGTH_SHORT).show();
                     FirebaseUser currentUser = mAuth.getCurrentUser();
-                    UserDTO user=new UserDTO("","","","");
+                    UserDTO user=new UserDTO(name,email,password,mobile);
 //                    UserDTO user=new UserDTO(currentUser.getUid(),binding.editTextName.getText().toString(),email,password
 //                            ,
 //                            binding.editTextMobile.getText().toString(),""

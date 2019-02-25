@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,7 +42,8 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
 
     private PrefManager prefManager;
     private FireBaseHelper fireBaseHelper;
-
+    private  ShowDetailsAdapter adapter;
+    RecyclerView rvShowNotes;
     public UpComingTripAdapter(Context context,List<TripDTO> tripDTOList){
         this.context = context;
         this.associationsTitle = tripDTOList;
@@ -168,6 +170,24 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
 
                                     alertdialog = builder.create();
                                     alertdialog.show();
+                                    break;
+                                case R.id.note :
+
+                                    // ViewGroup viewGroup = findViewById(android.R.id.content);
+                                    View dialogView = LayoutInflater.from(context).inflate(R.layout.show_notes , null, false);
+
+                                    AlertDialog.Builder build = new AlertDialog.Builder(context);
+                                  TextView  trip_name =  dialogView.findViewById(R.id.trip_name);
+                                    trip_name.setText(tripDTO.getName());
+                                    rvShowNotes = (RecyclerView) dialogView.findViewById(R.id.showNotes);
+                                    rvShowNotes.setLayoutManager(new LinearLayoutManager(context));
+//                                    if (adapter==null){
+                                    adapter= new ShowDetailsAdapter(tripDTO.getNotes().getNotes());
+                                    rvShowNotes.setAdapter(adapter);
+//                                    }
+                                    build.setView(dialogView);
+                                    final AlertDialog alertDialog = build.create();
+                                    alertDialog.show();
                                     break;
                             }
                             return false;

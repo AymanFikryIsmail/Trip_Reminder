@@ -42,7 +42,7 @@
         android:textColor="@color/input_txt"
         android:textColorHint="@color/input_txt"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/phone"
+        android:drawableStart="@drawable/user"
         android:paddingRight="10dp"
         android:paddingLeft="10dp"
         android:layout_marginTop="30dp"

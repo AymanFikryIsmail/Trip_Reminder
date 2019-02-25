@@ -18,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.auth.api.signin.internal.SignInHubActivity;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -30,12 +31,17 @@ import com.google.firebase.auth.FirebaseUser;
 
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.iti.android.tripapp.R;
+import com.iti.android.tripapp.model.UserDTO;
+import com.iti.android.tripapp.screens.login_mvp.LoginPresenter;
+import com.iti.android.tripapp.screens.login_mvp.LoginPresenterImpl;
+import com.iti.android.tripapp.screens.login_mvp.LoginView;
 import com.iti.android.tripapp.utils.PrefManager;
 
-public class SignInActivity extends AppCompatActivity {
-
+public class SignInActivity extends AppCompatActivity  implements LoginView {
+    private LoginPresenter presenter;
     Button btnSignIn ;
     TextView btnRegister ;
+    EditText mEmailField ,mPasswordField;
     private FirebaseAuth mAuth;
     PrefManager prefManager;
 
@@ -49,13 +55,10 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         prefManager=new PrefManager(this);
-        btnSignIn = findViewById(R.id.signIn);
-        btnRegister = findViewById(R.id.createAccount);
-        final EditText mEmailField = findViewById(R.id.editTextEmail);
-        final EditText mPasswordField = findViewById(R.id.editTextPassword);
+        initializeView();
+        presenter = new LoginPresenterImpl(this);
+
         mAuth = FirebaseAuth.getInstance();
-
-
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,30 +66,7 @@ public class SignInActivity extends AppCompatActivity {
 
                 String email = mEmailField.getText().toString() ;
                 String password = mPasswordField.getText().toString() ;
-
-                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(SignInActivity.this , new  OnCompleteListener<AuthResult>()
-                {
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success
-
-                            FirebaseUser currentUser = mAuth.getCurrentUser();
-                            prefManager.setUserId(currentUser.getUid());
-                            Toast.makeText(SignInActivity.this, "SignedIn Successfully.",
-                                    Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(SignInActivity.this, MainActivity.class);
-                            startActivity (i);
-
-
-                        } else {
-                            Toast.makeText(SignInActivity.this, "Authentication failed , please try again",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-
-                });
-
+                presenter.handleLogin(email, password, mAuth, SignInActivity.this );
             }
         });
 
@@ -115,6 +95,14 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 
+    private void initializeView()
+    {
+        btnSignIn = findViewById(R.id.signIn);
+        btnRegister = findViewById(R.id.createAccount);
+          mEmailField = findViewById(R.id.editTextEmail);
+          mPasswordField = findViewById(R.id.editTextPassword);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -134,17 +122,20 @@ public class SignInActivity extends AppCompatActivity {
 
     private void handleSignInResult(GoogleSignInAccount account){
         String idToken = account.getIdToken();
-        String name = account.getDisplayName();
-        String email = account.getEmail();
+        final String name = account.getDisplayName();
+          final String email = account.getEmail();
+        final String  uid= account.getId();
         // you can store user data to SharedPreference
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
                         if(task.isSuccessful()){
+                            UserDTO user=new UserDTO(name,email,"","");
+                            prefManager.setUserData(user);
+                            prefManager.setUserId(uid);
                             Toast.makeText(SignInActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                             gotoProfile();
                         }else{
@@ -157,9 +148,6 @@ public class SignInActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
-
 
     private void gotoProfile(){
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
@@ -187,4 +175,38 @@ public class SignInActivity extends AppCompatActivity {
         mAuth.signOut();
     }
 
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showValidationErrorMsg() {
+
+    }
+
+    @Override
+    public void loginSuccessFully() {
+        // Sign in success
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        prefManager.setUserId(currentUser.getUid());
+        UserDTO user=new UserDTO(currentUser.getDisplayName(),mEmailField.getText().toString(),"","");
+        prefManager.setUserData(user);
+        Toast.makeText(SignInActivity.this, "SignedIn Successfully.",
+                Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(SignInActivity.this, MainActivity.class);
+        startActivity (i);
+        finish();
+    }
+
+    @Override
+    public void loginFail() {
+        Toast.makeText(SignInActivity.this, "Authentication failed , please try again",
+                Toast.LENGTH_SHORT).show();
+    }
 }
