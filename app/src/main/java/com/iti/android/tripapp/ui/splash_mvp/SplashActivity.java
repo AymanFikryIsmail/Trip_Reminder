@@ -30,7 +30,7 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
         index = 0;
         car = findViewById(R.id.car);
         animBounce = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.move_up_left);
+                R.anim.move);
         animBounce.setAnimationListener(this);
         car.startAnimation(animBounce);
     }
@@ -38,36 +38,14 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        // Take any action after completing the animation
-        // check for fade in animation
-        switch (index % 4) {
-            case 0:
-                animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_down_left_straight);
-                break;
-            case 1:
-                animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_up_right);
-                break;
-            case 2:
-                animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_down_right_straight);
-                break;
-            case 3:
-                animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_up_left);
-                break;
+        if (prefManager.getIsFirst() )
+            startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
+        else if(prefManager.getUserId().equals("")){
+            startActivity(new Intent(SplashActivity.this, SignInActivity.class));
+        } else {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
         }
-        if(index==0){
-            if (prefManager.getIsFirst() )
-                startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
-            else if(prefManager.getUserId().equals("")){
-                startActivity(new Intent(SplashActivity.this, SignInActivity.class));
-            } else {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            }
-            finish();
-        }
-
-        index++;
-        animBounce.setAnimationListener(this);
-        car.startAnimation(animBounce);
+        finish();
     }
 
     @Override

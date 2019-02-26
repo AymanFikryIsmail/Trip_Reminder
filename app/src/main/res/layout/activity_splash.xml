@@ -22,8 +22,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/car"
         android:id="@+id/car"
-        android:layout_marginBottom="55dp"
-        android:layout_marginStart="155dp"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
