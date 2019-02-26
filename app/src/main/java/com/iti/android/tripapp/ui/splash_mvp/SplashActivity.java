@@ -1,17 +1,17 @@
-package com.iti.android.tripapp.screens;
+package com.iti.android.tripapp.ui.splash_mvp;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.iti.android.tripapp.R;
+import com.iti.android.tripapp.ui.main_mvp.MainActivity;
+import com.iti.android.tripapp.ui.WalkThroughActivity;
+import com.iti.android.tripapp.ui.login_mvp.SignInActivity;
 import com.iti.android.tripapp.utils.PrefManager;
 
 public class SplashActivity extends AppCompatActivity implements AnimationListener {
@@ -33,7 +33,6 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
                 R.anim.move_up_left);
         animBounce.setAnimationListener(this);
         car.startAnimation(animBounce);
-//        new LoadingTask(this).execute();
     }
 
 
@@ -55,7 +54,7 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
                 animBounce = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_up_left);
                 break;
         }
-        if(index==11){
+        if(index==0){
             if (prefManager.getIsFirst() )
                 startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
             else if(prefManager.getUserId().equals("")){
@@ -81,45 +80,4 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
         // Animation started
     }
 
-    class LoadingTask extends AsyncTask<Void, Integer, Void> {
-
-        Activity activity;
-
-        LoadingTask(Activity activity) {
-            this.activity = activity;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-//                Thread.sleep(4000);
-                for (int i=0;i<100; i++){
-                    try {
-                        Thread.sleep(10);
-                        publishProgress(i);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-            if (prefManager.getIsFirst() )
-                activity.startActivity(new Intent(SplashActivity.this, WalkThroughActivity.class));
-            else if(prefManager.getUserId().equals("")){
-                activity.startActivity(new Intent(SplashActivity.this, SignInActivity.class));
-            } else {
-                activity.startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            }
-            finish();
-        }
-    }
 }

@@ -1,9 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/splash_bg"
-    tools:context="com.iti.android.tripapp.screens.fragments.HistoryListFragment">
+    tools:context="com.iti.android.tripapp.ui.main_mvp.fragment.HistoryListFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/historyRV"
@@ -11,5 +11,15 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/emptyText"
+        android:text="There is no trips yet"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:textColor="@color/title_text"
+        android:fontFamily="@font/bold"
+        />
 
-</FrameLayout>
+</RelativeLayout>

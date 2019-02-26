@@ -1,4 +1,4 @@
-package com.iti.android.tripapp.screens.login_mvp;
+package com.iti.android.tripapp.ui.login_mvp;
 
 import android.content.Context;
 

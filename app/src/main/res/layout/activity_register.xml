@@ -5,11 +5,14 @@
     android:orientation="vertical"
     android:background="@drawable/splash_bg"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".screens.RegisterActivity"
+    tools:context=".ui.register_mvp.RegisterActivity"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
     >
@@ -112,9 +115,19 @@
         android:text="@string/register"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:fontFamily="@font/regular"/>
+        android:fontFamily="@font/regular"
+        android:layout_marginBottom="20dp"/>
         <!--android:onClick="@{(v) -> loginViewModel.onClick(v)}"-->
 </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
+</RelativeLayout>
     </ScrollView>
 

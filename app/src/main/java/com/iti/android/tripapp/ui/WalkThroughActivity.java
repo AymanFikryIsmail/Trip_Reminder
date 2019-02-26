@@ -1,4 +1,4 @@
-package com.iti.android.tripapp.screens;
+package com.iti.android.tripapp.ui;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.adapter.ViewPageAdapter;
+import com.iti.android.tripapp.ui.login_mvp.SignInActivity;
 import com.iti.android.tripapp.utils.PrefManager;
 
 public class WalkThroughActivity extends AppCompatActivity {

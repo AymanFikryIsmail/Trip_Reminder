@@ -1,9 +1,7 @@
-package com.iti.android.tripapp.screens;
+package com.iti.android.tripapp.ui.main_mvp;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,7 +9,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -23,7 +20,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,8 +35,10 @@ import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.local.FireBaseCallBack;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
-import com.iti.android.tripapp.screens.fragments.HistoryFragment;
-import com.iti.android.tripapp.screens.fragments.UpComingFragment;
+import com.iti.android.tripapp.ui.add_trip_mvp.AddTripActivity;
+import com.iti.android.tripapp.ui.main_mvp.fragment.HistoryFragment;
+import com.iti.android.tripapp.ui.main_mvp.fragment.UpComingFragment;
+import com.iti.android.tripapp.ui.login_mvp.SignInActivity;
 import com.iti.android.tripapp.utils.PrefManager;
 
 import java.util.ArrayList;
@@ -76,8 +74,6 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-//                        Uri.parse("http://maps.google.com/maps?saddr=" + 31.267048 + "," + 29.994168 + "&daddr=" +31.207751 + "," + 29.911807));
                 startActivity(new Intent(MainActivity.this, AddTripActivity.class));
             }
         });
@@ -106,10 +102,6 @@ public class MainActivity extends AppCompatActivity
                         .show();
             }
         }
-
-
-//        UpComingFragment upComingFragment=new UpComingFragment();
-//        loadFragment(upComingFragment,"UpComing Trips");
         header = navigationView.getHeaderView(0);
         if (savedInstanceState == null && getSupportFragmentManager().findFragmentByTag(toolbar.getTitle().toString()) == null) {
             upComingFragment=new UpComingFragment();
@@ -128,9 +120,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-//        UpComingFragment upComingFragment=new UpComingFragment();
-//        loadFragment(upComingFragment,"UpComing Trips");
-//        upComingFragment =  getSupportFragmentManager().findFragmentByTag("UpComing Trips");
             Fragment fragment ;//=  getSupportFragmentManager().findFragmentByTag(toolbar.getTitle().toString());
             if (toolbar.getTitle().toString().equals("UpComing Trips")){
                 fragment=new UpComingFragment();
@@ -142,7 +131,6 @@ public class MainActivity extends AppCompatActivity
       //  user_name.setText(prefManager.getUserData().getName());
         user_email = header.findViewById(R.id.website);
           user_email.setText(prefManager.getUserData().getEmail());
-
     }
 
     @Override
@@ -166,7 +154,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         String toastMsg = "Attempt " + attemptCount + " out of " + ATTEMPT_LIMIT + " has failed\n Retrying...";
         if (!Settings.canDrawOverlays(this)) {
             if (attemptCount != ATTEMPT_LIMIT) {
@@ -193,16 +180,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-//            finish();
-//            startActivity(getIntent());
              upComingFragment=new UpComingFragment();
             loadFragment(upComingFragment,"UpComing Trips");
         } else if (id == R.id.nav_history) {
              historyFragment=new HistoryFragment();
             loadFragment(historyFragment,"Trip History");
-
         } else if (id == R.id.nav_sync) {
-
             sync();
         } else if (id == R.id.nav_logout) {
             prefManager.setUserId("");
@@ -213,7 +196,6 @@ public class MainActivity extends AppCompatActivity
                     .requestEmail()
                     .build();
             mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
             mGoogleSignInClient.signOut()
                     .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                         @Override
@@ -240,7 +222,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void sync(){
-
         MyAppDB.getAppDatabase(this).tripDao().deleteByUserId(prefManager.getUserId());
      fireBaseHelper.retrieveUserTripsFromFirebase(prefManager.getUserId(), new FireBaseCallBack() {
             @Override

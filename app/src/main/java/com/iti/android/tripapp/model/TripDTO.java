@@ -38,15 +38,12 @@ public class TripDTO implements Serializable {
     private String trip_time;
     @ColumnInfo(name = "roundStatus")
     private String roundStatus;
-    @ColumnInfo(name = "trip_rounded")
-    private int trip_rounded;
     @ColumnInfo(name = "repeated")
     private String repeated;
     @ColumnInfo(name = "tripStatus")
     private String tripStatus;
     @ColumnInfo(name = "notes")
     private Notes notes;
-
     @ColumnInfo(name = "userId")
     private String userId;
     @ColumnInfo(name = "duration")
@@ -62,9 +59,10 @@ public class TripDTO implements Serializable {
     }
 
     @Ignore
-    public TripDTO(String userId, String name, String trip_start_point, String trip_end_point, Double trip_start_point_latitude, Double trip_start_point_longitude,
-                    Double trip_end_point_latitude,Double trip_end_point_longitude,
-                   String trip_date, String trip_time , String repeated , String tripStatus, Notes notes) {
+    public TripDTO(String userId, String name, String trip_start_point, String trip_end_point,
+                    Double trip_start_point_latitude, Double trip_start_point_longitude,
+                    Double trip_end_point_latitude,Double trip_end_point_longitude, String trip_date,
+                   String trip_time , String repeated , String tripStatus, Notes notes ,String roundStatus) {
         this.userId = userId;
         this.name = name;
         this.trip_start_point = trip_start_point;
@@ -78,7 +76,7 @@ public class TripDTO implements Serializable {
         this.repeated=repeated;
         this.tripStatus=tripStatus;
         this.notes = notes;
-
+        this.roundStatus=roundStatus;
     }
 
     public void setId(int id) {
@@ -133,9 +131,6 @@ public class TripDTO implements Serializable {
         return notes;
     }
 
-    public int getTrip_rounded() {
-        return trip_rounded;
-    }
 
     public String getRepeated() {
         return repeated;
@@ -155,10 +150,6 @@ public class TripDTO implements Serializable {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
-    }
-
-    public void setTrip_rounded(int trip_rounded) {
-        this.trip_rounded = trip_rounded;
     }
 
     public void setDuration(String duration) {

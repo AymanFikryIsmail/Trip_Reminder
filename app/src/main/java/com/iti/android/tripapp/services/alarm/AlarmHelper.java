@@ -4,17 +4,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.iti.android.tripapp.model.TripDTO;
-import com.iti.android.tripapp.screens.AlarmActivity;
 import com.iti.android.tripapp.services.AlarmReceiver;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by ayman on 2019-02-15.

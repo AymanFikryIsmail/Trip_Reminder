@@ -1,14 +1,12 @@
-package com.iti.android.tripapp.screens;
+package com.iti.android.tripapp.ui.add_trip_mvp;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -28,16 +26,12 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.adapter.RawNotesAdapter;
-import com.iti.android.tripapp.helpers.FireBaseHelper;
-import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.NoteDTO;
 import com.iti.android.tripapp.model.Notes;
 import com.iti.android.tripapp.model.TripDTO;
-import com.iti.android.tripapp.services.alarm.AlarmHelper;
 import com.iti.android.tripapp.utils.PrefManager;
 
 import java.text.ParseException;
@@ -46,24 +40,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class AddTripActivity extends AppCompatActivity {
+public class AddTripActivity extends AppCompatActivity  implements AddTripView{
 
     private final static String API_KEY = "AIzaSyBLJv51oC0sfDw418dpUs2vu7xT4tMezyw";
 
-    Double startLng = 0.0d;
-    Double startLat;
-    Double endLng;
-    Double endLat;
-    String TAG = " asdasdasdadsasdasd";
-    LatLng StartLatLang;
-    LatLng endLatLang;
+    AddTripPresenter addTripPresenter;
+    Double startLat ,startLng ,endLng ,endLat  ;
     EditText name, note, etDuration;
     Button addTrip;
     ImageView startDate, startTime, returnDate, returnTime, addNote ;
     TextView startDateText, startTimeText, returnDateText, returnTimeText;
     PlaceAutocompleteFragment startPlaceAutocompleteFragment, endPlaceAutocompleteFragment;
-    String placeName;
-    String placeDestination;
+    String placeStartName ,placeDestination;
     Calendar myCalendar = Calendar.getInstance();
     Calendar currentCalendar = Calendar.getInstance();
     Calendar myCalendarRound = Calendar.getInstance();
@@ -76,29 +64,15 @@ public class AddTripActivity extends AppCompatActivity {
     boolean isRoundedTripChecked, isEditing;
     int repeatPosition, periodPosition;
     String repeated="";
-    int years;
-    int months;
-    int days;
     public int hours = 2;
     public int minutes;
-    int years2;
-    int months2;
-    int days2;
-    public int hours2 = 2;
-    public int minutes2;
-
-    private FireBaseHelper fireBaseHelper;
-
-    private transient ProgressDialog progressDialog = null;
-
     PrefManager prefManager;
-//    Calendar mCurrentTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
-        fireBaseHelper=new FireBaseHelper();
         prefManager=new PrefManager(this);
+        addTripPresenter=new AddTripPresenterImpl(this);
         initView();
         initAutoComplete();
         initDate_Time();
@@ -170,76 +144,8 @@ public class AddTripActivity extends AppCompatActivity {
         });
     }
 
-    private void reinitializeData(TripDTO trip) {
-        isEditing = true;
-        roundSwitch.setVisibility(View.GONE);
-        name.setText(trip.getName());
-
-        startPlaceAutocompleteFragment.setText(placeName = trip.getTrip_start_point());
-        endPlaceAutocompleteFragment.setText(placeDestination = trip.getTrip_end_point());
-
-        startDateText.setText(trip.getTrip_date());
-        startTimeText.setText(trip.getTrip_time());
-        hours = Integer.parseInt(trip.getTrip_time().split(":")[0]);
-        minutes = Integer.parseInt(trip.getTrip_time().split(":")[1]);
-
-        try {
-            myCalendar.setTime(new SimpleDateFormat("dd/MM/yyyy", Locale.US).parse(trip.getTrip_date()));
-            myCalendar.set(Calendar.HOUR_OF_DAY,hours);
-            myCalendar.set(Calendar.MINUTE,minutes);
-
-            years = myCalendar.get(Calendar.YEAR);
-            months = myCalendar.get(Calendar.MONTH);
-            days = myCalendar.get(Calendar.DATE);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        repeated = trip.getRepeated();
-        if (repeated.equals("")) {
-                repeatSpinner.setSelection(0);
-        } else if (repeated.equals("Daily")) {
-                repeatSpinner.setSelection(1);
-        } else if (repeated.equals("Weekly")) {
-            repeatSpinner.setSelection(2);
-        } else if (repeated.equals("Monthly")) {
-            repeatSpinner.setSelection(3);
-        } else if (repeated.lastIndexOf("Custom Period") != -1) {
-            etDuration.setVisibility(View.VISIBLE);
-            spPeriod.setVisibility(View.VISIBLE);
-            String[] parts = repeated.split(":");
-            etDuration.setText(parts[2]);
-            if (parts[1].equals("d")) {
-                spPeriod.setSelection(0);
-            } else {
-                spPeriod.setSelection(1);
-            }
-            repeatSpinner.setSelection(4);
-        }
-
-        startLat = trip.getTrip_start_point_latitude();
-        startLng = trip.getTrip_start_point_longitude();
-        endLat = trip.getTrip_end_point_latitude();
-        endLng = trip.getTrip_end_point_longitude();
-        notes = trip.getNotes().getNotes();
-        setAdapterAfterUpdate();
-    }
-
-    private void updateTrip(TripDTO trip) {
-        TripDTO tripDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeName, placeDestination,
-                startLat,startLng ,endLng,endLat , startDateText.getText().toString() , startTimeText.getText().toString()
-                ,repeated,"waited", new Notes(notes));
-
-        tripDTO.setId(trip.getId());
-        MyAppDB.getAppDatabase(this).tripDao().updateTrip(tripDTO);
-        fireBaseHelper.updateTripOnFirebase(tripDTO);
-        AlarmHelper.setAlarm(this,tripDTO,myCalendar);
-
-        finish();
-    }
 
     void initView(){
-//         currentCalendar = Calendar.getInstance();
         name =  findViewById(R.id.tripName_input);
         startDate =  findViewById(R.id.start_date);
         startTime =  findViewById(R.id.start_time);
@@ -269,13 +175,10 @@ public class AddTripActivity extends AppCompatActivity {
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
-                years = year;
-                months = monthOfYear;
-                days = dayOfMonth;
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+                updateAlarmText();
             }
         };
         // when alarmDate editText is clicked
@@ -305,8 +208,6 @@ public class AddTripActivity extends AppCompatActivity {
                         if (selectedMinute < 10)
                             delimiter = delimiter.concat("0");
                         startTimeText.setText(selectedHour + delimiter + selectedMinute);
-                        minutes = selectedMinute;
-                        hours = selectedHour;
                         myCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
                         myCalendar.set(Calendar.MINUTE, selectedMinute);
                         myCalendar.set(Calendar.SECOND, 0);
@@ -336,8 +237,6 @@ public class AddTripActivity extends AppCompatActivity {
                         if (selectedMinute < 10)
                             delimiter = delimiter.concat("0");
                         returnTimeText.setText(selectedHour + delimiter + selectedMinute);
-                        minutes2 = selectedMinute;
-                        hours2 = selectedHour;
 
                         myCalendarRound.set(Calendar.HOUR_OF_DAY, selectedHour);
                         myCalendarRound.set(Calendar.MINUTE, selectedMinute - 1);
@@ -354,14 +253,11 @@ public class AddTripActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
                 // TODO Auto-generated method stub
-                years2 = year;
-                months2 = monthOfYear;
-                days2 = dayOfMonth;
                 myCalendarRound.set(Calendar.YEAR, year);
                 myCalendarRound.set(Calendar.MONTH, monthOfYear);
                 myCalendarRound.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                   updateLabelRound();
+                   updateAlarmTextRound();
             }
         };
 
@@ -377,19 +273,17 @@ public class AddTripActivity extends AppCompatActivity {
     }
 
     // update alarmDate Text
-    private void updateLabel() {
+    private void updateAlarmText() {
         String myFormat = "dd/MM/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
         startDateText.setText(sdf.format(myCalendar.getTime()));
     }
-
     // update alarmDate Text
-    private void updateLabelRound() {
+    private void updateAlarmTextRound() {
         String myFormat = "dd/MM/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
         returnDateText.setText(sdf.format(myCalendarRound.getTime()));
     }
-
     void initAutoComplete(){
 
         Places.initialize(getApplicationContext(), API_KEY);
@@ -403,7 +297,7 @@ public class AddTripActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(Place place) {
                 //Toast.makeText(getApplicationContext(),place.getName().toString(),Toast.LENGTH_SHORT).show();
-                placeName = (String) place.getName();
+                placeStartName = (String) place.getName();
                 startLng = place.getLatLng().longitude;
                 startLat = place.getLatLng().latitude;
             }
@@ -440,12 +334,61 @@ public class AddTripActivity extends AppCompatActivity {
         startPlaceAutocompleteFragment.setFilter(typeFilter1);
         endPlaceAutocompleteFragment.setFilter(typeFilter1);
     }
+    private void reinitializeData(TripDTO trip) {
+        isEditing = true;
+        roundSwitch.setVisibility(View.GONE);
+        name.setText(trip.getName());
 
+        startPlaceAutocompleteFragment.setText(placeStartName = trip.getTrip_start_point());
+        endPlaceAutocompleteFragment.setText(placeDestination = trip.getTrip_end_point());
+
+        startDateText.setText(trip.getTrip_date());
+        startTimeText.setText(trip.getTrip_time());
+        hours = Integer.parseInt(trip.getTrip_time().split(":")[0]);
+        minutes = Integer.parseInt(trip.getTrip_time().split(":")[1]);
+
+        try {
+            myCalendar.setTime(new SimpleDateFormat("dd/MM/yyyy", Locale.US).parse(trip.getTrip_date()));
+            myCalendar.set(Calendar.HOUR_OF_DAY,hours);
+            myCalendar.set(Calendar.MINUTE,minutes);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        repeated = trip.getRepeated();
+        if (repeated.equals("")) {
+            repeatSpinner.setSelection(0);
+        } else if (repeated.equals("Daily")) {
+            repeatSpinner.setSelection(1);
+        } else if (repeated.equals("Weekly")) {
+            repeatSpinner.setSelection(2);
+        } else if (repeated.equals("Monthly")) {
+            repeatSpinner.setSelection(3);
+        } else if (repeated.lastIndexOf("Custom Period") != -1) {
+            etDuration.setVisibility(View.VISIBLE);
+            spPeriod.setVisibility(View.VISIBLE);
+            String[] parts = repeated.split(":");
+            etDuration.setText(parts[2]);
+            if (parts[1].equals("d")) {
+                spPeriod.setSelection(0);
+            } else {
+                spPeriod.setSelection(1);
+            }
+            repeatSpinner.setSelection(4);
+        }
+
+        startLat = trip.getTrip_start_point_latitude();
+        startLng = trip.getTrip_start_point_longitude();
+        endLat = trip.getTrip_end_point_latitude();
+        endLng = trip.getTrip_end_point_longitude();
+        notes = trip.getNotes().getNotes();
+        setAdapterAfterUpdate();
+    }
     public void addNote(String note) {
         notes.add(new NoteDTO(false, note));
         setAdapterAfterUpdate();
     }
-
     private void setAdapterAfterUpdate() {
         this.note.setText("");
         rvNotes.setVisibility(View.VISIBLE);
@@ -456,16 +399,23 @@ public class AddTripActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
     }
 
+    private void updateTrip(TripDTO trip) {
+        TripDTO tripDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeStartName, placeDestination,
+                startLat,startLng ,endLat,endLng , startDateText.getText().toString() , startTimeText.getText().toString()
+                ,repeated,"waited", new Notes(notes),trip.getRoundStatus());
+        tripDTO.setId(trip.getId());
+        addTripPresenter.updateTrip(tripDTO,myCalendar);
+        finish();
+    }
+
     public void addTrip(){
         String trip_name = name.getText().toString();
-
-        if (trip_name.matches("") || startTimeText.getText().toString().matches("") ||
-                startDateText.getText().toString().matches("") || placeName == null ||
-                placeDestination == null) {
+        String startTime= startTimeText.getText().toString();
+        String startDate=startDateText.getText().toString();
+        if (trip_name.equals("") || startTime.equals("") ||startDate.equals("") ||
+                placeStartName == null || placeDestination == null) {
             Toast.makeText(this, "missing fields!", Toast.LENGTH_LONG).show();
-
         } else if (myCalendar.compareTo(currentCalendar) <= 0) {
-
             Toast.makeText(this, "cannot insert passed time", Toast.LENGTH_SHORT).show();
         }  else {
             if (repeatPosition == 0) {
@@ -485,31 +435,24 @@ public class AddTripActivity extends AppCompatActivity {
                 }
             }
             updateFirebaseAndCreateAlarms();
-
             finish();
         }
 
     }
 
     private void updateFirebaseAndCreateAlarms() {
-        TripDTO tripDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeName, placeDestination,
+        TripDTO tripDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeStartName, placeDestination,
                 startLat,startLng ,endLat ,endLng, startDateText.getText().toString() , startTimeText.getText().toString()
-                ,repeated,"waited", new Notes(notes));
-        int tripId= (int) MyAppDB.getAppDatabase(this).tripDao().addTrip(tripDTO);
-        tripDTO.setId(tripId);
-        fireBaseHelper.createTripOnFirebase(tripDTO);
-        AlarmHelper.setAlarm(this,tripDTO,myCalendar);
+                ,repeated,"waited", new Notes(notes),"single trip");
+        addTripPresenter.updateFirebaseAndCreateAlarms(tripDTO,myCalendar);
         if (isRoundedTripChecked) {
             if (myCalendarRound.compareTo(myCalendar) <= 0) {
                 Toast.makeText(this, "cannot round before going", Toast.LENGTH_SHORT).show();
             } else {
-                TripDTO tripRoundDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeDestination, placeName,
+                TripDTO tripRoundDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeDestination, placeStartName,
                         endLat, endLng, startLat, startLng, returnDateText.getText().toString(), returnTimeText.getText().toString()
-                        , repeated, "waited", new Notes(notes));
-                int tripRoundId = (int) MyAppDB.getAppDatabase(this).tripDao().addTrip(tripRoundDTO);
-                tripRoundDTO.setId(tripRoundId);
-                fireBaseHelper.createTripOnFirebase(tripRoundDTO);
-                AlarmHelper.setAlarm(this, tripRoundDTO, myCalendarRound);
+                        , repeated, "waited", new Notes(notes),"round");
+                addTripPresenter.updateFirebaseAndCreateAlarms(tripRoundDTO,myCalendarRound);
             }
         }
     }

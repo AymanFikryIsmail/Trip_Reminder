@@ -1,4 +1,4 @@
-package com.iti.android.tripapp.screens.login_mvp;
+package com.iti.android.tripapp.ui.login_mvp;
 
 /**
  * Created by ayman on 2019-02-24.

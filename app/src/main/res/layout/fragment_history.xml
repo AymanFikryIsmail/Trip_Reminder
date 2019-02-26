@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.iti.android.tripapp.screens.fragments.HistoryFragment">
+    tools:context="com.iti.android.tripapp.ui.main_mvp.fragment.HistoryFragment">
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"

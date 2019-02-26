@@ -24,7 +24,7 @@ import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.Notes;
 import com.iti.android.tripapp.model.TripDTO;
-import com.iti.android.tripapp.screens.AddTripActivity;
+import com.iti.android.tripapp.ui.add_trip_mvp.AddTripActivity;
 import com.iti.android.tripapp.services.FloatingIconService;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
 import com.iti.android.tripapp.utils.PrefManager;

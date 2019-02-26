@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".screens.SplashActivity"
+            android:name=".ui.splash_mvp.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".screens.WalkThroughActivity"
+            android:name=".ui.WalkThroughActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
@@ -39,13 +39,13 @@
             <!--android:name="com.google.android.maps.v2.API_KEY"-->
             <!--android:value="AIzaSyBLJv51oC0sfDw418dpUs2vu7xT4tMezyw" />-->
 
-        <activity android:name=".screens.SignInActivity"
+        <activity android:name=".ui.login_mvp.SignInActivity"
             android:label="@string/SIGNIN"/>
-        <activity android:name=".screens.RegisterActivity"
+        <activity android:name=".ui.register_mvp.RegisterActivity"
             android:label="@string/register"/>
-        <activity android:name=".screens.AddTripActivity"
+        <activity android:name=".ui.add_trip_mvp.AddTripActivity"
             android:label="Add Trip"
-            android:parentActivityName=".screens.MainActivity"
+            android:parentActivityName=".ui.main_mvp.MainActivity"
             />
 
         <receiver
@@ -54,13 +54,13 @@
             android:exported="true" />
 
         <activity
-            android:name=".screens.AlarmActivity"
+            android:name=".ui.alarm_mvp.AlarmActivity"
             android:launchMode="singleInstance"
             android:taskAffinity=""
             android:excludeFromRecents="true"
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
         <activity
-            android:name=".screens.MainActivity"
+            android:name=".ui.main_mvp.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -73,9 +73,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".screens.MapsActivity"
-            android:label="@string/title_activity_maps"/>
     </application>
 
 </manifest>

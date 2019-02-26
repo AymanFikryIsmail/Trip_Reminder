@@ -1,7 +1,6 @@
 package com.iti.android.tripapp.helpers;
 
 import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,8 +13,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.model.TripDTO;
-import com.iti.android.tripapp.screens.AlarmActivity;
-import com.iti.android.tripapp.screens.MainActivity;
+import com.iti.android.tripapp.ui.alarm_mvp.AlarmActivity;
 
 /**
  * Created by ayman on 2019-02-17.

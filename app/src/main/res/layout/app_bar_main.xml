@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.iti.android.tripapp.screens.MainActivity">
+    tools:context="com.iti.android.tripapp.ui.main_mvp.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

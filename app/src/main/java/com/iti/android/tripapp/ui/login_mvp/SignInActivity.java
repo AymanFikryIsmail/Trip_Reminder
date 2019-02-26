@@ -1,7 +1,6 @@
-package com.iti.android.tripapp.screens;
+package com.iti.android.tripapp.ui.login_mvp;
 
 import android.content.Intent;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.auth.api.signin.internal.SignInHubActivity;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,9 +31,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.model.UserDTO;
-import com.iti.android.tripapp.screens.login_mvp.LoginPresenter;
-import com.iti.android.tripapp.screens.login_mvp.LoginPresenterImpl;
-import com.iti.android.tripapp.screens.login_mvp.LoginView;
+import com.iti.android.tripapp.ui.main_mvp.MainActivity;
+import com.iti.android.tripapp.ui.register_mvp.RegisterActivity;
 import com.iti.android.tripapp.utils.PrefManager;
 
 public class SignInActivity extends AppCompatActivity  implements LoginView {
@@ -194,7 +191,8 @@ public class SignInActivity extends AppCompatActivity  implements LoginView {
 
     @Override
     public void showValidationErrorMsg() {
-
+        Toast.makeText(this, "Complete All fields correctly",
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override

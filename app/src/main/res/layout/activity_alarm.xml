@@ -5,6 +5,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:visibility="gone"
-    tools:context="com.iti.android.tripapp.screens.AlarmActivity">
+    tools:context="com.iti.android.tripapp.ui.alarm_mvp.AlarmActivity">
 
 </android.support.constraint.ConstraintLayout>

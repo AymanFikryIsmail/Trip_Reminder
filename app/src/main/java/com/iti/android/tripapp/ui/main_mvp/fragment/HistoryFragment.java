@@ -1,4 +1,4 @@
-package com.iti.android.tripapp.screens.fragments;
+package com.iti.android.tripapp.ui.main_mvp.fragment;
 
 
 import android.os.Bundle;
@@ -6,24 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.iti.android.tripapp.R;
-import com.iti.android.tripapp.adapter.HistoryTripAdapter;
-import com.iti.android.tripapp.adapter.UpComingTripAdapter;
-import com.iti.android.tripapp.helpers.local.database.MyAppDB;
-import com.iti.android.tripapp.model.TripDTO;
-import com.iti.android.tripapp.utils.PrefManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,7 +47,7 @@ public class HistoryFragment extends Fragment {
                     loadFragment(homeFragment);
                     return true;
                 case R.id.map_tab:
-                    MapRoutesFragment  mapRoutesFragment  = new MapRoutesFragment();
+                    MapRoutesFragment mapRoutesFragment  = new MapRoutesFragment();
                         loadFragment(mapRoutesFragment);
                     return true;
             }
