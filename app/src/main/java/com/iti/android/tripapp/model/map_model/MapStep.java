@@ -11,6 +11,7 @@ public class MapStep implements Serializable {
 
     private distance distance;
     private duration duration;
+    private List<MapStep> steps;
 
     public MapStep(distance distance, duration duration) {
         this.distance = distance;

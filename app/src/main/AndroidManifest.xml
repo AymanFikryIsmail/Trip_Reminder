@@ -30,7 +30,10 @@
         <activity
             android:name=".ui.WalkThroughActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <!-- Sample AdMob App ID: ca-app-pub-3894715747861785/9089188003-->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3894715747861785~1513826605"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc" />

@@ -4,53 +4,65 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardBackgroundColor="@color/active_text"
+    card_view:cardBackgroundColor="@color/white"
     android:layout_margin="8dp"
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="4dp"
     card_view:cardPreventCornerOverlap="false">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:padding="5dp"
+        />
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_marginStart="10dp"
     >
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/trip_name"
         android:text="aaaaa"
-        android:textColor="@color/white"
-        android:fontFamily="@font/bold"
-        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="28sp"
         android:gravity="center"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:id="@+id/mapImg"
+        android:src="@drawable/app_logo"
+        android:scaleType="fitXY"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/trip_distance"
-        android:text="0"
-        android:textColor="@color/white"
-        android:fontFamily="@font/bold"
-        android:textSize="16sp"
+        android:text="Trip distance : loading ..."
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
         android:layout_marginStart="10dp"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/trip_duration"
-        android:text="0"
-        android:textColor="@color/white"
-        android:fontFamily="@font/bold"
-        android:textSize="16sp"
+        android:text="Trip duration : loading ... "
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
         android:layout_marginStart="10dp"
         />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/showNotes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:layout_marginBottom="10dp"/>
 
 
 </LinearLayout>

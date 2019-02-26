@@ -19,17 +19,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.Notes;
 import com.iti.android.tripapp.model.TripDTO;
+import com.iti.android.tripapp.model.map_model.GsonResponse;
+import com.iti.android.tripapp.model.map_model.MapLeg;
+import com.iti.android.tripapp.model.map_model.MapResponse;
 import com.iti.android.tripapp.ui.add_trip_mvp.AddTripActivity;
 import com.iti.android.tripapp.services.FloatingIconService;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
 import com.iti.android.tripapp.utils.PrefManager;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by ayman on 2019-02-08.
@@ -92,26 +104,14 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
         }
 
         public void bind(final TripDTO tripDTO){
+            getMAp(tripDTO.getTrip_start_point_latitude(), tripDTO.getTrip_start_point_longitude(),
+                    tripDTO.getTrip_end_point_latitude() ,tripDTO.getTrip_end_point_longitude(),tripImage);
 
             tripTV.setText(tripDTO.getName());
             startLoc.setText("from :" +tripDTO.getTrip_start_point());
             endLoc.setText("to :" +tripDTO.getTrip_end_point());
             timeTv.setText(tripDTO.getTrip_time());
             dateTv.setText(tripDTO.getTrip_date());
-
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)//"https://aymanfikryeng.000webhostapp.com/images/Resturants/La-Casona-logo-for-a-restaurant.jpg")//
-//                   .apply(new RequestOptions().centerInside().placeholder(R.drawable.ic_home_black_24dp)).into(associationImage);// .apply(new RequestOptions().centerInside().placeholder(R.drawable.ic_home_black_24dp))
-//            Picasso.with(context).load("")
-//                    .fit().centerCrop()
-//                    .placeholder(R.drawable.ic_home_black_24dp)
-//                    .into(associationImage);
-                gridCardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    }
-                });
-
-
 
             popupMenuTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -203,6 +203,39 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
 
 
             }
+    }
+
+    public  void getMAp(double stLat, double stLng , double endLat , double endLng,final ImageView imageView ){
+        final double avgLat=(stLat+endLat)/2;
+        final double avgLong=(stLng+endLng)/2;
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://maps.googleapis.com/maps/api/directions/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        GsonResponse service =retrofit.create(GsonResponse.class);
+        String key="AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc";
+        Call<MapResponse> call=service.getCountries(stLat+","+stLng,endLat+","+endLng,key);
+        call.enqueue(new Callback<MapResponse>() {
+            @Override
+            public void onResponse(Call<MapResponse> call, Response<MapResponse> response) {
+                List<MapLeg> mapRoutes=new ArrayList<>();
+
+                String point= response.body().getRoutes().get(0).getOverview_polyline().getPoints();
+               String  url="https://maps.googleapis.com/maps/api/staticmap?center=" + avgLat + "," + avgLong + "&" +
+                        "zoom=12&size=500x200&maptype=roadmap&path=weight:7%10Ccolor:orange%7Cenc:" + point
+                        + "&key=AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc";
+
+                Glide.with(context).load(url).apply(RequestOptions.circleCropTransform()
+                        .placeholder(R.drawable.logo3))
+                        .into(imageView);
+            }
+            @Override
+            public void onFailure(Call<MapResponse> call, Throwable t) {
+
+                //Toast.makeText(context, "",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
     //open google maps and finish activity
     public void showDirection (TripDTO tripDTO){

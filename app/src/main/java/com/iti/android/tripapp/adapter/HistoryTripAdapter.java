@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
@@ -54,6 +56,8 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
     RecyclerView rvShowNotes;
     private  ShowDetailsAdapter adapter;
     TextView  trip_name , trip_distance , trip_duration;
+    String distance ,  duration ,point ,url;
+
     public HistoryTripAdapter(Context context,List<TripDTO> tripDTOList){
         this.context = context;
         this.associationsTitle = tripDTOList;
@@ -103,6 +107,8 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
         }
 
         public void bind(final TripDTO tripDTO){
+            getMAp(tripDTO.getTrip_start_point_latitude(), tripDTO.getTrip_start_point_longitude(),
+                    tripDTO.getTrip_end_point_latitude() ,tripDTO.getTrip_end_point_longitude(),tripImage);
 
             tripTV.setText(tripDTO.getName());
             startLoc.setText("from :" +tripDTO.getTrip_start_point());
@@ -110,10 +116,6 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
             timeTv.setText(tripDTO.getTrip_time());
             dateTv.setText(tripDTO.getTrip_date());
 
-//            Picasso.with(context).load("")
-//                    .fit().centerCrop()
-//                    .placeholder(R.drawable.ic_home_black_24dp)
-//                    .into(associationImage);
 
             popupMenuTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -133,11 +135,16 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
                                     TextView  trip_name =  dialogView.findViewById(R.id.trip_name);
                                     trip_distance =  dialogView.findViewById(R.id.trip_distance);
                                     trip_duration =  dialogView.findViewById(R.id.trip_duration);
-
+                                   ImageView mapImg =  dialogView.findViewById(R.id.mapImg);
                                     trip_name.setText(tripDTO.getName());
-                                    getMAp(tripDTO.getTrip_start_point_latitude(), tripDTO.getTrip_start_point_longitude(),
-                                            tripDTO.getTrip_end_point_latitude() ,tripDTO.getTrip_end_point_longitude(),
-                                            trip_distance ,trip_duration);
+                                    Glide.with(context).load(url).apply(RequestOptions.fitCenterTransform()
+                                            .placeholder(R.drawable.app_logo))
+                                            .into(mapImg);
+
+                                    trip_distance.setText("Trip distance : " + distance);
+                                    trip_duration.setText("Trip duration : " + duration);
+
+
                                     rvShowNotes.setLayoutManager(new LinearLayoutManager(context));
                                     adapter= new ShowDetailsAdapter(tripDTO.getNotes().getNotes());
                                     rvShowNotes.setAdapter(adapter);
@@ -166,8 +173,9 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
         }
     }
 
-    public  void getMAp(double stLat, double stLng , double endLat , double endLng , final TextView  trip_distance , final TextView trip_duration){
-
+    public  void getMAp(double stLat, double stLng , double endLat , double endLng,final ImageView imageView ){
+       final double avgLat=(stLat+endLat)/2;
+       final double avgLong=(stLng+endLng)/2;
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://maps.googleapis.com/maps/api/directions/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -175,22 +183,26 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
         GsonResponse service =retrofit.create(GsonResponse.class);
         String key="AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc";
         Call<MapResponse> call=service.getCountries(stLat+","+stLng,endLat+","+endLng,key);
-//                   AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc&fbclid=IwAR0SzqGJcx4O8HkvLij_sXZuFCgkad_lntijQD05XybFpDPdIuJWmtn5aeQ
         call.enqueue(new Callback<MapResponse>() {
             @Override
             public void onResponse(Call<MapResponse> call, Response<MapResponse> response) {
                 List<MapLeg> mapRoutes=new ArrayList<>();
-                String distance = response.body().getRoutes().get(0).getLegs().get(0).getDistance().getText();
-                String duration = response.body().getRoutes().get(0).getLegs().get(0).getDuration().getText();
+                 distance = response.body().getRoutes().get(0).getLegs().get(0).getDistance().getText();
+                 duration = response.body().getRoutes().get(0).getLegs().get(0).getDuration().getText();
 
-                trip_distance.setText("Trip distance : " + distance);
-                trip_duration.setText("Trip duration : " + duration);
+                point= response.body().getRoutes().get(0).getOverview_polyline().getPoints();
+                url="https://maps.googleapis.com/maps/api/staticmap?center=" + avgLat + "," + avgLong + "&" +
+                        "zoom=12&size=500x200&maptype=roadmap&path=weight:7%10Ccolor:orange%7Cenc:" + point
+                       + "&key=AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc";
 
+                Glide.with(context).load(url).apply(RequestOptions.circleCropTransform()
+                        .placeholder(R.drawable.logo3))
+                        .into(imageView);
             }
             @Override
             public void onFailure(Call<MapResponse> call, Throwable t) {
 
-                Toast.makeText(context, "",Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "",Toast.LENGTH_LONG).show();
             }
         });
 
