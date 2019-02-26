@@ -47,7 +47,7 @@ public class AlarmActivity extends AppCompatActivity implements AlarmView{
         final int tripId= getIntent().getIntExtra("tripid",0);
         tripDTO= MyAppDB.getAppDatabase(this).tripDao().getTrip(tripId);
         alertBuilder =new AlertDialog.Builder(this);
-        alertBuilder.setTitle("Tripaddo")
+        alertBuilder.setTitle("Tripado")
                 .setMessage("Do you want to start " + tripDTO.getName() + " trip?")
                 .setPositiveButton("start", new DialogInterface.OnClickListener() {
                     @Override

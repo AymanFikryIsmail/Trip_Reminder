@@ -20,7 +20,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("TAG", "receiver called");
         Intent i = new Intent(context, AlarmActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        i.putExtra("tripId", intent.getIntExtra("tripId", 0));

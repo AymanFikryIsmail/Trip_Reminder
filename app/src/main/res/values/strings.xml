@@ -46,4 +46,5 @@
 
         * Drawing over other apps: to show your notes when travelling\n\n
     </string>
+    <string name="no_upcoming_trips">There are no upcoming trips</string>
 </resources>
