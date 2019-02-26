@@ -56,6 +56,7 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
     private FireBaseHelper fireBaseHelper;
     private  ShowDetailsAdapter adapter;
     RecyclerView rvShowNotes;
+    String  url;
     public UpComingTripAdapter(Context context,List<TripDTO> tripDTOList){
         this.context = context;
         this.associationsTitle = tripDTOList;
@@ -99,8 +100,6 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
             startLoc = itemView.findViewById(R.id.startLoc);
             endLoc = itemView.findViewById(R.id.endLoc);
             popupMenuTxt = itemView.findViewById(R.id.popupMenuId);
-
-
         }
 
         public void bind(final TripDTO tripDTO){
@@ -108,8 +107,8 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                     tripDTO.getTrip_end_point_latitude() ,tripDTO.getTrip_end_point_longitude(),tripImage);
 
             tripTV.setText(tripDTO.getName());
-            startLoc.setText("from :" +tripDTO.getTrip_start_point());
-            endLoc.setText("to :" +tripDTO.getTrip_end_point());
+            startLoc.setText("From : " +tripDTO.getTrip_start_point());
+            endLoc.setText("To : " +tripDTO.getTrip_end_point());
             timeTv.setText(tripDTO.getTrip_time());
             dateTv.setText(tripDTO.getTrip_date());
 
@@ -180,8 +179,12 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                                   TextView  trip_name =  dialogView.findViewById(R.id.trip_name);
                                     dialogView.findViewById(R.id.trip_distance).setVisibility(View.GONE);
                                      dialogView.findViewById(R.id.trip_duration).setVisibility(View.GONE);
-
+                                    ImageView mapImg =  dialogView.findViewById(R.id.mapImg);
                                     trip_name.setText(tripDTO.getName());
+                                    Glide.with(context).load(url).apply(RequestOptions.fitCenterTransform()
+                                            .placeholder(R.drawable.app_logo))
+                                            .into(mapImg);
+
                                     rvShowNotes = (RecyclerView) dialogView.findViewById(R.id.showNotes);
                                     rvShowNotes.setLayoutManager(new LinearLayoutManager(context));
 //                                    if (adapter==null){
@@ -221,8 +224,8 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                 List<MapLeg> mapRoutes=new ArrayList<>();
 
                 String point= response.body().getRoutes().get(0).getOverview_polyline().getPoints();
-               String  url="https://maps.googleapis.com/maps/api/staticmap?center=" + avgLat + "," + avgLong + "&" +
-                        "zoom=12&size=500x200&maptype=roadmap&path=weight:7%10Ccolor:orange%7Cenc:" + point
+                 url="https://maps.googleapis.com/maps/api/staticmap?center=" + avgLat + "," + avgLong + "&" +
+                        "zoom=8&size=500x200&maptype=roadmap&path=weight:7%10Ccolor:orange%7Cenc:" + point
                         + "&key=AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc";
 
                 Glide.with(context).load(url).apply(RequestOptions.circleCropTransform()
