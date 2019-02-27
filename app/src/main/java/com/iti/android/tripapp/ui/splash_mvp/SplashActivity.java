@@ -44,6 +44,8 @@ public class SplashActivity extends AppCompatActivity implements AnimationListen
             startActivity(new Intent(SplashActivity.this, SignInActivity.class));
         } else {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+
         }
         finish();
     }

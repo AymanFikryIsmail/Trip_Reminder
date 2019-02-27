@@ -33,15 +33,15 @@ public class FireBaseHelper implements Serializable {
     }
 
     public void createTripOnFirebase(TripDTO trip) {
-        DatabaseReference myRef = database.getReference(trip.getUserId() + "trips");
+        DatabaseReference myRef = database.getReference(trip.getUserId());
         myRef.child(Integer.toString(trip.getId())).setValue(trip);
     }
     public void updateTripOnFirebase(TripDTO trip) {
-        DatabaseReference myRef = database.getReference(trip.getUserId() + "trips");
+        DatabaseReference myRef = database.getReference(trip.getUserId() );
         myRef.child(Integer.toString(trip.getId())).setValue(trip);
     }
     public void removeTripFromFirebase(TripDTO trip) {
-        DatabaseReference myRef = database.getReference(trip.getUserId() + "trips");
+        DatabaseReference myRef = database.getReference(trip.getUserId());
         myRef.child(Integer.toString(trip.getId())).setValue(null);
     }
 
@@ -49,7 +49,7 @@ public class FireBaseHelper implements Serializable {
     public void retrieveUserTripsFromFirebase(String userId , final FireBaseCallBack fireBaseCallBack) {
          final ArrayList<TripDTO> trips;
         trips = new ArrayList<>();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(userId + "trips");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(userId );
         ref.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
@@ -69,21 +69,4 @@ public class FireBaseHelper implements Serializable {
                     }
                 });
     }
-
-//
-//    public void createAndUpdateNotesOnFirebase(Note note) {
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference(note.get() + "trip" + note.getTripId() + "notes");
-//        myRef.child(Integer.toString(note.getNoteId())).setValue(note);
-//    }
-//
-//    public void removeNotesFromFirebase(Note note) {
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference(note.getUserId() + "trip" + note.getTripId() + "notes");
-//        myRef.child(Integer.toString(note.getNoteId())).setValue(null);
-//    }
-//
-
-
-
 }

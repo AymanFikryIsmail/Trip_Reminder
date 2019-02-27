@@ -32,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
         setContentView(R.layout.activity_register);
         prefManager=new PrefManager(this);
         initializeView();
+        presenter=new RegisterPresenterImpl(this);
 
 //        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
 //        binding = DataBindingUtil.setContentView(RegisterActivity.this, R.layout.activity_register);
