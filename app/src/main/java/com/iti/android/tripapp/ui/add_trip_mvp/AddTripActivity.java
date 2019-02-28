@@ -239,8 +239,8 @@ public class AddTripActivity extends AppCompatActivity  implements AddTripView{
                         returnTimeText.setText(selectedHour + delimiter + selectedMinute);
 
                         myCalendarRound.set(Calendar.HOUR_OF_DAY, selectedHour);
-                        myCalendarRound.set(Calendar.MINUTE, selectedMinute - 1);
-                        myCalendarRound.set(Calendar.SECOND, 59);
+                        myCalendarRound.set(Calendar.MINUTE, selectedMinute );
+                        myCalendarRound.set(Calendar.SECOND, 0);
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker2.setTitle("Select Time");
