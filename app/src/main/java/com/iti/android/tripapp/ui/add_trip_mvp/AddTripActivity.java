@@ -239,8 +239,8 @@ public class AddTripActivity extends AppCompatActivity  implements AddTripView{
                         returnTimeText.setText(selectedHour + delimiter + selectedMinute);
 
                         myCalendarRound.set(Calendar.HOUR_OF_DAY, selectedHour);
-                        myCalendarRound.set(Calendar.MINUTE, selectedMinute - 1);
-                        myCalendarRound.set(Calendar.SECOND, 59);
+                        myCalendarRound.set(Calendar.MINUTE, selectedMinute);
+                        myCalendarRound.set(Calendar.SECOND, 0);
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker2.setTitle("Select Time");
@@ -447,7 +447,7 @@ public class AddTripActivity extends AppCompatActivity  implements AddTripView{
         addTripPresenter.updateFirebaseAndCreateAlarms(tripDTO,myCalendar);
         if (isRoundedTripChecked) {
             if (myCalendarRound.compareTo(myCalendar) <= 0) {
-                Toast.makeText(this, "cannot round before going", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cannot round before going", Toast.LENGTH_SHORT).show();
             } else {
                 TripDTO tripRoundDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeDestination, placeStartName,
                         endLat, endLng, startLat, startLng, returnDateText.getText().toString(), returnTimeText.getText().toString()
