@@ -67,7 +67,9 @@
         <activity
             android:name=".ui.main_mvp.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"/>
 
         <service
             android:name=".services.FloatingIconService"

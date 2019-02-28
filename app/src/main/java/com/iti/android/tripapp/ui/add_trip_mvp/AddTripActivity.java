@@ -136,10 +136,22 @@ public class AddTripActivity extends AppCompatActivity  implements AddTripView{
         addTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isEditing)
-                    addTrip();
-                else
-                    updateTrip(editableTrip);
+                String trip_name = name.getText().toString();
+                String startTime= startTimeText.getText().toString();
+                String startDate=startDateText.getText().toString();
+                if (trip_name.equals("") || startTime.equals("") ||startDate.equals("") ||
+                        placeStartName == null || placeDestination == null) {
+                    Toast.makeText(AddTripActivity.this, "Missing some fields!", Toast.LENGTH_LONG).show();
+                } else if (myCalendar.compareTo(currentCalendar) <= 0) {
+                    Toast.makeText(AddTripActivity.this, "Cannot insert passed time", Toast.LENGTH_LONG).show();
+                } else if (placeStartName.equals(placeDestination)) {
+                    Toast.makeText(AddTripActivity.this, "Source and destination cannot be the same", Toast.LENGTH_LONG).show();
+                } else{
+                    if (!isEditing)
+                        addTrip();
+                    else
+                        updateTrip(editableTrip);
+                }
             }
         });
     }
@@ -409,51 +421,49 @@ public class AddTripActivity extends AppCompatActivity  implements AddTripView{
     }
 
     public void addTrip(){
-        String trip_name = name.getText().toString();
-        String startTime= startTimeText.getText().toString();
-        String startDate=startDateText.getText().toString();
-        if (trip_name.equals("") || startTime.equals("") ||startDate.equals("") ||
-                placeStartName == null || placeDestination == null) {
-            Toast.makeText(this, "missing fields!", Toast.LENGTH_LONG).show();
-        } else if (myCalendar.compareTo(currentCalendar) <= 0) {
-            Toast.makeText(this, "cannot insert passed time", Toast.LENGTH_SHORT).show();
-        }  else {
             if (repeatPosition == 0) {
-                repeated="";
-            }else if (repeatPosition==1) {
-                repeated="Daily";
-            }else if (repeatPosition==2) {
-                repeated="Weekly";
-            }else if (repeatPosition==3) {
-                repeated="Monthly";
-            } else if (repeatPosition==4) {
+                repeated = "";
+            } else if (repeatPosition == 1) {
+                repeated = "Daily";
+            } else if (repeatPosition == 2) {
+                repeated = "Weekly";
+            } else if (repeatPosition == 3) {
+                repeated = "Monthly";
+            } else if (repeatPosition == 4) {
                 if (!etDuration.getText().toString().equals("")) {
                     if (periodPosition == 0)
-                        repeated="Custom Period:d:" + etDuration.getText().toString();
+                        repeated = "Custom Period:d:" + etDuration.getText().toString();
                     else
-                        repeated="Custom Period:w:" + etDuration.getText().toString();
+                        repeated = "Custom Period:w:" + etDuration.getText().toString();
                 }
             }
             updateFirebaseAndCreateAlarms();
-            finish();
-        }
-
     }
 
     private void updateFirebaseAndCreateAlarms() {
         TripDTO tripDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeStartName, placeDestination,
                 startLat,startLng ,endLat ,endLng, startDateText.getText().toString() , startTimeText.getText().toString()
                 ,repeated,"waited", new Notes(notes),"single trip");
-        addTripPresenter.updateFirebaseAndCreateAlarms(tripDTO,myCalendar);
         if (isRoundedTripChecked) {
-            if (myCalendarRound.compareTo(myCalendar) <= 0) {
-                Toast.makeText(this, "Cannot round before going", Toast.LENGTH_SHORT).show();
+            String startTime= startTimeText.getText().toString();
+            String startDate=startDateText.getText().toString();
+            if (!(startTime.equals("") && startDate.equals(""))) {
+                if (myCalendarRound.compareTo(myCalendar) <= 0) {
+                    Toast.makeText(this, "Cannot round before going", Toast.LENGTH_SHORT).show();
+                } else {
+                    addTripPresenter.updateFirebaseAndCreateAlarms(tripDTO,myCalendar);
+                    TripDTO tripRoundDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeDestination, placeStartName,
+                            endLat, endLng, startLat, startLng, returnDateText.getText().toString(), returnTimeText.getText().toString()
+                            , repeated, "waited", new Notes(notes), "round");
+                    addTripPresenter.updateFirebaseAndCreateAlarms(tripRoundDTO, myCalendarRound);
+                    finish();
+                }
             } else {
-                TripDTO tripRoundDTO = new TripDTO(prefManager.getUserId(), name.getText().toString(), placeDestination, placeStartName,
-                        endLat, endLng, startLat, startLng, returnDateText.getText().toString(), returnTimeText.getText().toString()
-                        , repeated, "waited", new Notes(notes),"round");
-                addTripPresenter.updateFirebaseAndCreateAlarms(tripRoundDTO,myCalendarRound);
+                Toast.makeText(this, "Missing round time/date fields!", Toast.LENGTH_LONG).show();
             }
+        } else {
+            addTripPresenter.updateFirebaseAndCreateAlarms(tripDTO,myCalendar);
+            finish();
         }
     }
 }

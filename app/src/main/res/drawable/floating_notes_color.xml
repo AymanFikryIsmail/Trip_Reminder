@@ -11,25 +11,17 @@
     android:shape="rectangle">
 
     <!-- view background color -->
-    <solid android:color="#03A14D"></solid>
-
-    <!-- view border color and width -->
-    <stroke
-        android:width="0dp"
-        android:color="@color/white"></stroke>
+    <solid android:color="@color/blue"/>
 
     <!-- If you want to add some padding -->
     <padding
         android:bottom="10dp"
         android:left="60dp"
         android:right="60dp"
-        android:top="10dp"></padding>
+        android:top="10dp"/>
 
     <!-- Here is the corner radius -->
     <corners
-        android:bottomLeftRadius="37dp"
-        android:bottomRightRadius="37dp"
-        android:topLeftRadius="37dp"
-        android:topRightRadius="37dp" />
+        android:radius="15dp"/>
 
 </shape>

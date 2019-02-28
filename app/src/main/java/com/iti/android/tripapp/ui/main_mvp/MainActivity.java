@@ -10,8 +10,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity
         header = navigationView.getHeaderView(0);
         if (savedInstanceState == null && getSupportFragmentManager().findFragmentByTag(toolbar.getTitle().toString()) == null) {
             upComingFragment=new UpComingFragment();
-            loadFragment(upComingFragment,"UpComing Trips");
+            loadFragment(upComingFragment,"Upcoming Trips");
         }
     }
 
@@ -160,7 +162,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
             Fragment fragment ;//=  getSupportFragmentManager().findFragmentByTag(toolbar.getTitle().toString());
-            if (toolbar.getTitle().toString().equals("UpComing Trips")){
+            if (toolbar.getTitle().toString().equals("Upcoming Trips")){
                 fragment=new UpComingFragment();
             }else {
                 fragment=new HistoryFragment();
