@@ -59,17 +59,6 @@ context=base;
         PendingIntent alarmPendingIntent = PendingIntent.getActivity(context,  tripDTO.getId(), alarmIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent cancelIntent = new Intent(context, AlarmActivity.class);
-        cancelIntent.putExtra("tripid", tripDTO.getId());
-        cancelIntent.putExtra("cancel", "cancel");
-        PendingIntent cancelPendingIntent = PendingIntent.getActivity(context, tripDTO.getId(),
-                cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        // start intent
-        Intent startIntent = new Intent(context, AlarmActivity.class);
-        startIntent.putExtra("tripid",tripDTO.getId());
-        startIntent.putExtra("start", "start");
-        PendingIntent startPendingIntent = PendingIntent.getActivity(context,  tripDTO.getId() ,
-                startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelID)
                 .setOngoing(true)

@@ -60,9 +60,7 @@ public class FireBaseHelper implements Serializable {
                             trips.add(trip);
                         }
                         fireBaseCallBack.getTrips(trips);
-
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         //handle databaseError
