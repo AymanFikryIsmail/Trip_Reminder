@@ -7,26 +7,23 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_tasks"
-            android:title="home" />
+            android:title="Home" />
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_history"
-            android:title="history" />
+            android:title="History" />
         <item
             android:id="@+id/nav_sync"
             android:icon="@android:drawable/ic_popup_sync"
-            android:title="sync" />
+            android:title="Sync" />
 
     </group>
 
-    <item android:title="logout">
-        <menu>
+
 
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_exit"
                 android:title="Logout" />
-        </menu>
-    </item>
 
 </menu>
