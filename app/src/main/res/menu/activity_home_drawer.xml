@@ -6,11 +6,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/tasks"
+            android:icon="@drawable/ic_tasks"
             android:title="home" />
         <item
             android:id="@+id/nav_history"
-            android:icon="@drawable/history1"
+            android:icon="@drawable/ic_history"
             android:title="history" />
         <item
             android:id="@+id/nav_sync"
@@ -24,7 +24,7 @@
 
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/exit"
+                android:icon="@drawable/ic_exit"
                 android:title="Logout" />
         </menu>
     </item>

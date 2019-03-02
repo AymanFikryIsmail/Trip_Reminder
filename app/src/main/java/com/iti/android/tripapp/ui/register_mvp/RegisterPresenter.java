@@ -1,7 +1,5 @@
 package com.iti.android.tripapp.ui.register_mvp;
 
-import android.content.Context;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.iti.android.tripapp.model.UserDTO;
 

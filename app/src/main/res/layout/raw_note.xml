@@ -23,6 +23,6 @@
             android:id="@+id/btn_delete"
             android:paddingTop="8dp"
             android:layout_margin="3dp"
-            android:src="@drawable/remove_icon"
+            android:src="@drawable/ic_remove"
             />
     </LinearLayout>

@@ -1,17 +1,17 @@
 package com.iti.android.tripapp.ui.splash_mvp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.animation.Animation.AnimationListener;
+import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.iti.android.tripapp.R;
-import com.iti.android.tripapp.ui.main_mvp.MainActivity;
 import com.iti.android.tripapp.ui.WalkThroughActivity;
 import com.iti.android.tripapp.ui.login_mvp.SignInActivity;
+import com.iti.android.tripapp.ui.main_mvp.MainActivity;
 import com.iti.android.tripapp.utils.PrefManager;
 
 public class SplashActivity extends AppCompatActivity implements AnimationListener {

@@ -2,9 +2,6 @@ package com.iti.android.tripapp.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
@@ -17,19 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.helpers.FireBaseHelper;
-import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.model.map_model.GsonResponse;
 import com.iti.android.tripapp.model.map_model.MapLeg;
 import com.iti.android.tripapp.model.map_model.MapResponse;
-import com.iti.android.tripapp.services.FloatingIconService;
-import com.iti.android.tripapp.services.alarm.AlarmHelper;
 import com.iti.android.tripapp.utils.PrefManager;
 
 import java.util.ArrayList;
@@ -131,7 +124,7 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
                             switch (menuItem.getItemId()) {
                                 case R.id.note:
                                     View dialogView = LayoutInflater.from(context).inflate(R.layout.show_notes , null, false);
-                                    rvShowNotes = (RecyclerView) dialogView.findViewById(R.id.showNotes);
+                                    rvShowNotes = dialogView.findViewById(R.id.showNotes);
                                     TextView  trip_name =  dialogView.findViewById(R.id.trip_name);
                                     trip_distance =  dialogView.findViewById(R.id.trip_distance);
                                     trip_duration =  dialogView.findViewById(R.id.trip_duration);
@@ -196,7 +189,7 @@ public class HistoryTripAdapter extends RecyclerView.Adapter<HistoryTripAdapter.
                        + "&key=AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc";
 
                 Glide.with(context).load(url).apply(RequestOptions.circleCropTransform()
-                        .placeholder(R.drawable.logo3))
+                        .placeholder(R.drawable.ic_logo))
                         .into(imageView);
             }
             @Override

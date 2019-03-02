@@ -9,14 +9,14 @@
         android:title="History"
         app:showAsAction="always|withText"
         android:enabled="true"
-        android:icon="@drawable/history1"
+        android:icon="@drawable/ic_history"
         />
     <item
     android:id="@+id/map_tab"
     android:title="map"
     app:showAsAction="always|withText"
     android:enabled="true"
-    android:icon="@drawable/map"
+    android:icon="@drawable/ic_map_marker"
     />
 
 </menu>

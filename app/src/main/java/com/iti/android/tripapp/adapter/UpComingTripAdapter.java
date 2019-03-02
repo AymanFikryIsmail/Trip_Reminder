@@ -29,9 +29,9 @@ import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.model.map_model.GsonResponse;
 import com.iti.android.tripapp.model.map_model.MapLeg;
 import com.iti.android.tripapp.model.map_model.MapResponse;
-import com.iti.android.tripapp.ui.add_trip_mvp.AddTripActivity;
 import com.iti.android.tripapp.services.FloatingIconService;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
+import com.iti.android.tripapp.ui.add_trip_mvp.AddTripActivity;
 import com.iti.android.tripapp.utils.PrefManager;
 
 import java.util.ArrayList;
@@ -185,7 +185,7 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                                             .placeholder(R.drawable.app_logo))
                                             .into(mapImg);
 
-                                    rvShowNotes = (RecyclerView) dialogView.findViewById(R.id.showNotes);
+                                    rvShowNotes = dialogView.findViewById(R.id.showNotes);
                                     rvShowNotes.setLayoutManager(new LinearLayoutManager(context));
 //                                    if (adapter==null){
                                     adapter= new ShowDetailsAdapter(tripDTO.getNotes().getNotes());
@@ -229,7 +229,7 @@ public class UpComingTripAdapter extends RecyclerView.Adapter<UpComingTripAdapte
                         + "&key=AIzaSyCeYHDhDctqGmb5APIdyWrd-imDO2DkQHc";
 
                 Glide.with(context).load(url).apply(RequestOptions.circleCropTransform()
-                        .placeholder(R.drawable.logo3))
+                        .placeholder(R.drawable.ic_logo))
                         .into(imageView);
             }
             @Override

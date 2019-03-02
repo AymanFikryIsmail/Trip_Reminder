@@ -12,7 +12,6 @@ import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.model.NoteDTO;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteHolder> {
 

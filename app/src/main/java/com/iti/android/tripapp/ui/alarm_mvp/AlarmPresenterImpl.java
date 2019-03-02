@@ -2,17 +2,12 @@ package com.iti.android.tripapp.ui.alarm_mvp;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.media.MediaPlayer;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.NotificationHelper;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
-import com.iti.android.tripapp.model.UserDTO;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
-import com.iti.android.tripapp.utils.PrefManager;
 
 /**
  * Created by ayman on 2019-02-24.

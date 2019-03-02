@@ -6,9 +6,7 @@ import android.content.Context;
 import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.NotificationHelper;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
-import com.iti.android.tripapp.model.Notes;
 import com.iti.android.tripapp.model.TripDTO;
-import com.iti.android.tripapp.model.UserDTO;
 import com.iti.android.tripapp.services.alarm.AlarmHelper;
 
 import java.util.Calendar;

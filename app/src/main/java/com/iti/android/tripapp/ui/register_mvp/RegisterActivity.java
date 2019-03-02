@@ -1,8 +1,8 @@
 package com.iti.android.tripapp.ui.register_mvp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,7 +10,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.model.UserDTO;
 import com.iti.android.tripapp.ui.main_mvp.MainActivity;
@@ -87,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
         UserDTO user=new UserDTO(name,email,password,mobile);
         showProgress();
         presenter.handleRegister(user, mAuth);
-       //                    UserDTO user=new UserDTO(currentUser.getUid(),binding.editTextName.getText().toString(),email,password
+       //                    UserDTO ic_user=new UserDTO(currentUser.getUid(),binding.editTextName.getText().toString(),ic_email,password
 //                            ,binding.editTextMobile.getText().toString(),"");
     }
     @Override

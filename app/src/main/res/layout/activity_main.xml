@@ -25,7 +25,7 @@
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="match_parent"-->
         <!--android:layout_gravity="start"-->
-        <!--android:background="@color/white"-->
+        <!--android:bg_app="@color/white"-->
         <!--android:fitsSystemWindows="true"-->
         <!--app:itemBackground="@color/white"-->
         <!--app:headerLayout="@layout/nav_header_home"-->

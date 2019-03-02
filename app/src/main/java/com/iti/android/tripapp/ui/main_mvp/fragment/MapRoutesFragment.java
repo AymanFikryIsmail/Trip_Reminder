@@ -19,8 +19,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.iti.android.tripapp.R;
-import com.iti.android.tripapp.helpers.map_helper.MapDataParser;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
+import com.iti.android.tripapp.helpers.map_helper.MapDataParser;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.utils.PrefManager;
 
@@ -79,12 +79,12 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
 
 
     /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
+     * Manipulates the ic_map_marker once available.
+     * This callback is triggered when the ic_map_marker is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
      * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * If Google Play services is not installed on the device, the ic_user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the ic_user has
      * installed Google Play services and returned to the app.
      */
     @Override
@@ -122,12 +122,12 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
 
                 // Getting URL to the Google Directions API
                 String url = getUrl(origin, dest);
-                Log.d("onMapClick", url.toString());
+                Log.d("onMapClick", url);
                 FetchUrl FetchUrl = new FetchUrl();
 
                 // Start downloading json data from Google Directions API
                 FetchUrl.execute(url);
-                //move map camera
+                //move ic_map_marker camera
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
             }
@@ -136,9 +136,9 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private String getUrl(LatLng origin, LatLng dest) {
-        // Origin of route
+        // Origin of ic_route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-        // Destination of route
+        // Destination of ic_route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
         // Sensor enabled
         String sensor = "sensor=false";
@@ -159,7 +159,7 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
             try {
                 // Fetching the data from web service
                 data = downloadUrl(url[0]);
-                Log.d("Background Task data", data.toString());
+                Log.d("Background Task data", data);
             } catch (Exception e) {
                 Log.d("Background Task", e.toString());
             }
@@ -203,7 +203,7 @@ public class MapRoutesFragment extends Fragment implements OnMapReadyCallback {
             }
 
             data = sb.toString();
-            Log.d("downloadUrl", data.toString());
+            Log.d("downloadUrl", data);
             br.close();
 
         } catch (Exception e) {
@@ -226,7 +226,7 @@ private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<St
 
         try {
             jObject = new JSONObject(jsonData[0]);
-            Log.d("ParserTask",jsonData[0].toString());
+            Log.d("ParserTask", jsonData[0]);
             MapDataParser parser = new MapDataParser();
             Log.d("ParserTask", parser.toString());
 
@@ -253,9 +253,9 @@ private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<St
             points = new ArrayList<>();
             lineOptions = new PolylineOptions();
 
-            // Fetching i-th route
+            // Fetching i-th ic_route
             List<HashMap<String, String>> path = result.get(i);
-            // Fetching all the points in i-th route
+            // Fetching all the points in i-th ic_route
             for (int j = 0; j < path.size(); j++) {
                 HashMap<String, String> point = path.get(j);
                 double lat = Double.parseDouble(point.get("lat"));
@@ -265,7 +265,7 @@ private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<St
                 points.add(position);
             }
 
-            // Adding all the points in the route to LineOptions
+            // Adding all the points in the ic_route to LineOptions
             lineOptions.addAll(points);
             lineOptions.width(10);
             if (colorIndex>3){colorIndex=0;}
@@ -276,7 +276,7 @@ private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<St
 
         }
 
-        // Drawing polyline in the Google Map for the i-th route
+        // Drawing polyline in the Google Map for the i-th ic_route
         if(lineOptions != null) {
             mMap.addPolyline(lineOptions);
         }

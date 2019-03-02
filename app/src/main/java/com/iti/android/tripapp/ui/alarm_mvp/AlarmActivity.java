@@ -5,9 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,8 +18,6 @@ import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.Notes;
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.services.FloatingIconService;
-import com.iti.android.tripapp.services.alarm.AlarmHelper;
-import com.iti.android.tripapp.ui.register_mvp.RegisterPresenterImpl;
 
 
 public class AlarmActivity extends AppCompatActivity implements AlarmView{

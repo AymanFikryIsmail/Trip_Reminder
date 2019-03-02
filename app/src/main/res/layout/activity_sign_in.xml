@@ -2,23 +2,22 @@
 <ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/splash_bg"
+    android:background="@drawable/bg_app"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    tools:context=".ui.login_mvp.SignInActivity"
-    >
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            tools:context=".ui.login_mvp.SignInActivity">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,7 +46,7 @@
             android:textColor="@color/input_txt"
             android:textColorHint="@color/input_txt"
             android:drawablePadding="10dp"
-            android:drawableStart="@drawable/email"
+            android:drawableStart="@drawable/ic_email"
             android:paddingRight="10dp"
             android:paddingLeft="10dp"
             android:layout_marginTop="30dp"
@@ -64,7 +63,7 @@
         android:textColor="@color/input_txt"
         android:textColorHint="@color/input_txt"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/lock"
+        android:drawableStart="@drawable/ic_lock"
         android:paddingRight="10dp"
         android:paddingLeft="10dp"
         android:layout_marginTop="30dp"

@@ -4,9 +4,6 @@ import android.arch.persistence.room.TypeConverter;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class NotesConverter {
 
     private Gson gson = new Gson();

@@ -39,7 +39,7 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/file"
+                android:src="@drawable/ic_file"
                 android:id="@+id/add_notes"
                 android:paddingStart="15dp"
                 android:layout_weight="1"/>

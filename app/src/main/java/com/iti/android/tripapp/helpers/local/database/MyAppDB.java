@@ -7,7 +7,6 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import com.iti.android.tripapp.helpers.local.dao.TripDao;
-import com.iti.android.tripapp.model.NoteDTO;
 import com.iti.android.tripapp.model.NotesConverter;
 import com.iti.android.tripapp.model.TripDTO;
 
@@ -26,7 +25,7 @@ public abstract class MyAppDB extends RoomDatabase {
     public static MyAppDB getAppDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), MyAppDB.class, "user-database")
+                    Room.databaseBuilder(context.getApplicationContext(), MyAppDB.class, "ic_user-database")
                             // allow queries on the main thread.
                             // Don't do this on a real app! See PersistenceBasicSample for an example.
                             .allowMainThreadQueries()

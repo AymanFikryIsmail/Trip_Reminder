@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/splash_bg"
+    android:background="@drawable/bg_app"
     tools:context="com.iti.android.tripapp.ui.add_trip_mvp.AddTripActivity">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -144,7 +141,7 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/calender1"
+                    android:src="@drawable/ic_calendar_colored"
                     android:id="@+id/start_date"
                     />
                 <TextView
@@ -166,7 +163,7 @@
             <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/clock2"
+                    android:src="@drawable/ic_alarm_clock"
                 android:id="@+id/start_time"
                     />
                 <TextView
@@ -214,7 +211,7 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/calender1"
+                        android:src="@drawable/ic_calendar_colored"
                         android:id="@+id/return_date"
                         />
                     <TextView
@@ -235,7 +232,7 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/clock2"
+                        android:src="@drawable/ic_alarm_clock"
                         android:id="@+id/return_time"
                         />
                     <TextView
@@ -332,7 +329,7 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/file"
+                    android:src="@drawable/ic_file"
                     android:id="@+id/add_notes"
                     android:paddingStart="15dp"
                     android:layout_weight="1"/>

@@ -1,8 +1,6 @@
 package com.iti.android.tripapp.ui.alarm_mvp;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.iti.android.tripapp.model.TripDTO;
-import com.iti.android.tripapp.model.UserDTO;
 
 /**
  * Created by ayman on 2019-02-24.

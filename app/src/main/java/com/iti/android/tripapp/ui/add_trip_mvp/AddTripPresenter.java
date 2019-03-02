@@ -1,7 +1,6 @@
 package com.iti.android.tripapp.ui.add_trip_mvp;
 
 import com.iti.android.tripapp.model.TripDTO;
-import com.iti.android.tripapp.model.UserDTO;
 
 import java.util.Calendar;
 

@@ -3,8 +3,6 @@ package com.iti.android.tripapp.services;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.IBinder;
 
 import com.iti.android.tripapp.R;
@@ -32,7 +30,7 @@ public class BackgroundSoundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
 
-        if ("cancel".equals(action)){
+        if ("ic_cancel".equals(action)){
             stopSelf();
             player.stop();
             player.release();

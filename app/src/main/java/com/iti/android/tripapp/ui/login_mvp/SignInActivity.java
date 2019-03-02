@@ -1,9 +1,9 @@
 package com.iti.android.tripapp.ui.login_mvp;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +27,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.iti.android.tripapp.R;
 import com.iti.android.tripapp.model.UserDTO;
@@ -96,7 +95,6 @@ public class SignInActivity extends AppCompatActivity  implements LoginView {
         });
     }
 
-
     private void initializeView()
     {
         btnSignIn = findViewById(R.id.signIn);
@@ -129,7 +127,7 @@ public class SignInActivity extends AppCompatActivity  implements LoginView {
         final String name = account.getDisplayName();
           final String email = account.getEmail();
         final String  uid= account.getId();
-        // you can store user data to SharedPreference
+        // you can store ic_user data to SharedPreference
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -164,7 +162,7 @@ public class SignInActivity extends AppCompatActivity  implements LoginView {
 
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null).
+        // Check if ic_user is signed in (non-null).
         FirebaseUser currentUser = mAuth.getCurrentUser();
     }
     @Override

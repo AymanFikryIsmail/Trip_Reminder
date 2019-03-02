@@ -9,20 +9,20 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,10 +41,11 @@ import com.iti.android.tripapp.helpers.FireBaseHelper;
 import com.iti.android.tripapp.helpers.local.FireBaseCallBack;
 import com.iti.android.tripapp.helpers.local.database.MyAppDB;
 import com.iti.android.tripapp.model.TripDTO;
+import com.iti.android.tripapp.model.UserDTO;
 import com.iti.android.tripapp.ui.add_trip_mvp.AddTripActivity;
+import com.iti.android.tripapp.ui.login_mvp.SignInActivity;
 import com.iti.android.tripapp.ui.main_mvp.fragment.HistoryFragment;
 import com.iti.android.tripapp.ui.main_mvp.fragment.UpComingFragment;
-import com.iti.android.tripapp.ui.login_mvp.SignInActivity;
 import com.iti.android.tripapp.utils.PrefManager;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     TextView user_name;
     TextView user_email;
     String email;
+    NavigationView navigationView;
     View header;
     PrefManager prefManager;
     private static final int REQUEST_CODE = 123;
@@ -67,11 +69,14 @@ public class MainActivity extends AppCompatActivity
     private Fragment upComingFragment;
     private Fragment historyFragment;
     private AdView mAdView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progressBar = findViewById(R.id.progress);
+
         MobileAds.initialize(this, "ca-app-pub-3894715747861785~1513826605");
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -95,19 +100,21 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
+                // Code to be executed when the ic_user has left the app.
             }
 
             @Override
             public void onAdClosed() {
-                // Code to be executed when the user is about to return
+                // Code to be executed when the ic_user is about to return
                 // to the app after tapping on an ad.
             }
         });
 
 
         toolbar = findViewById(R.id.toolbar);
-         toolbar.setTitle("UpComing Trips");
+        toolbar.setTitle("Upcoming Trips");
+        prefManager=new PrefManager(this);
+
         setSupportActionBar(toolbar);
         fireBaseHelper=new FireBaseHelper();
         prefManager=new PrefManager(this);
@@ -124,13 +131,13 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setCancelable(false)
-                        .setIcon(R.drawable.logout_icon)
+                        .setIcon(R.drawable.ic_logo)
                         .setTitle(R.string.permissions_dialog_title)
                         .setMessage(R.string.permissions_dialog_msg)
                         .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -144,6 +151,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
         header = navigationView.getHeaderView(0);
+
         if (savedInstanceState == null && getSupportFragmentManager().findFragmentByTag(toolbar.getTitle().toString()) == null) {
             upComingFragment=new UpComingFragment();
             loadFragment(upComingFragment,"Upcoming Trips");
@@ -168,10 +176,12 @@ public class MainActivity extends AppCompatActivity
                 fragment=new HistoryFragment();
             }
         loadFragment(fragment,toolbar.getTitle().toString());
+        UserDTO user = prefManager.getUserData();
+        Log.i("TESTING", user.getEmail() + " " + user.getName());
         user_name = header.findViewById(R.id.profile_name);
-      //  user_name.setText(prefManager.getUserData().getName());
-        user_email = header.findViewById(R.id.website);
-          user_email.setText(prefManager.getUserData().getEmail());
+        user_name.setText(user.getName()!=null?user.getName():"");
+        user_email = header.findViewById(R.id.email);
+        user_email.setText(user.getEmail());
     }
 
     @Override
@@ -222,11 +232,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
              upComingFragment=new UpComingFragment();
-            loadFragment(upComingFragment,"UpComing Trips");
+            loadFragment(upComingFragment,"Upcoming Trips");
         } else if (id == R.id.nav_history) {
              historyFragment=new HistoryFragment();
             loadFragment(historyFragment,"Trip History");
         } else if (id == R.id.nav_sync) {
+            item.setChecked(false);
             sync();
         } else if (id == R.id.nav_logout) {
             prefManager.setUserId("");
@@ -263,16 +274,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void sync(){
+        showProgress();
         MyAppDB.getAppDatabase(this).tripDao().deleteByUserId(prefManager.getUserId());
-     fireBaseHelper.retrieveUserTripsFromFirebase(prefManager.getUserId(), new FireBaseCallBack() {
+        fireBaseHelper.retrieveUserTripsFromFirebase(prefManager.getUserId(), new FireBaseCallBack() {
             @Override
             public void getTrips(ArrayList<TripDTO> trips) {
                 MyAppDB.getAppDatabase(MainActivity.this).tripDao().insertAll(trips);
-                UpComingFragment upComingFragment=new UpComingFragment();
-                loadFragment(upComingFragment,"UpComing Trips");
-
+                Fragment fragment ;//=  getSupportFragmentManager().findFragmentByTag(toolbar.getTitle().toString());
+                if (toolbar.getTitle().toString().equals("Upcoming Trips")){
+                    fragment=new UpComingFragment();
+                    navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
+                } else {
+                    fragment=new HistoryFragment();
+                    navigationView.getMenu().findItem(R.id.nav_history).setChecked(true);
+                }
+                hideProgress();
+                loadFragment(fragment,toolbar.getTitle().toString());
             }
         });
+    }
+    public void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgress() {
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

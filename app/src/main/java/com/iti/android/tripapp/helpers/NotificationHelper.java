@@ -74,8 +74,8 @@ context=base;
                         .setContentText(tripDTO.getName() + " waiting to start ")
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .setContentIntent(alarmPendingIntent)
-//                        .addAction(R.drawable.remove_icon, "Cancel", cancelPendingIntent)
-//                        .addAction(R.drawable.selected_icon, "Start", startPendingIntent)
+//                        .addAction(R.drawable.ic_remove, "Cancel", cancelPendingIntent)
+//                        .addAction(R.drawable.ic_selected, "Start", startPendingIntent)
                                      ;
 
         mManager.notify(tripDTO.getId(), mBuilder.build());

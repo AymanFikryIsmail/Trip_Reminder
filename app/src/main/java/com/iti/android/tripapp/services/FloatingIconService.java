@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,7 +24,6 @@ import com.iti.android.tripapp.model.Notes;
 import com.iti.android.tripapp.model.TripDTO;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FloatingIconService extends Service {
 
@@ -101,7 +98,7 @@ public class FloatingIconService extends Service {
             private int initialY;
             private float initialTouchX;
             private float initialTouchY;
-            private final static float CLICK_DRAG_TOLERANCE = 10; // Often, there will be a slight, unintentional, drag when the user taps the FAB, so we need to account for this.
+            private final static float CLICK_DRAG_TOLERANCE = 10; // Often, there will be a slight, unintentional, drag when the ic_user taps the FAB, so we need to account for this.
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {

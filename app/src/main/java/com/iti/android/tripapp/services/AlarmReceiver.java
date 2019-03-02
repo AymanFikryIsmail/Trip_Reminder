@@ -3,7 +3,6 @@ package com.iti.android.tripapp.services;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.iti.android.tripapp.model.TripDTO;
 import com.iti.android.tripapp.ui.alarm_mvp.AlarmActivity;
