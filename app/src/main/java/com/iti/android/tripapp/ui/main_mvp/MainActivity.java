@@ -46,6 +46,7 @@ import com.iti.android.tripapp.ui.add_trip_mvp.AddTripActivity;
 import com.iti.android.tripapp.ui.login_mvp.SignInActivity;
 import com.iti.android.tripapp.ui.main_mvp.fragment.HistoryFragment;
 import com.iti.android.tripapp.ui.main_mvp.fragment.UpComingFragment;
+import com.iti.android.tripapp.utils.NetworkUtilities;
 import com.iti.android.tripapp.utils.PrefManager;
 
 import java.util.ArrayList;
@@ -238,7 +239,11 @@ public class MainActivity extends AppCompatActivity
             loadFragment(historyFragment,"Trip History");
         } else if (id == R.id.nav_sync) {
             item.setChecked(false);
-            sync();
+            if (NetworkUtilities.isOnline(this)) {
+                sync();
+            }else {
+                Toast.makeText(this, "Please , connect network", Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.nav_logout) {
             prefManager.setUserId("");
             FirebaseAuth.getInstance().signOut();
