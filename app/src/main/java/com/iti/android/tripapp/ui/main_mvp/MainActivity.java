@@ -1,17 +1,22 @@
 package com.iti.android.tripapp.ui.main_mvp;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -72,6 +77,7 @@ public class MainActivity extends AppCompatActivity
     private AdView mAdView;
     private ProgressBar progressBar;
 
+    private  CoordinatorLayout coordinatorLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +132,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(MainActivity.this, AddTripActivity.class));
             }
         });
+         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -242,7 +250,10 @@ public class MainActivity extends AppCompatActivity
             if (NetworkUtilities.isOnline(this)) {
                 sync();
             }else {
-                Toast.makeText(this, "Please , connect network", Toast.LENGTH_SHORT).show();
+                Snackbar snackbar= Snackbar.make(coordinatorLayout,"Please, Connect to Internet",Snackbar.LENGTH_LONG);
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.colorPrimaryDark));
+                snackbar.show();
             }
         } else if (id == R.id.nav_logout) {
             prefManager.setUserId("");

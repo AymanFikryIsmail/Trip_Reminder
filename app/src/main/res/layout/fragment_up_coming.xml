@@ -16,9 +16,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/emptyText"
         android:text="@string/no_upcoming_trips"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimary"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:textColor="@color/title_text"
         android:fontFamily="@font/bold"
         />
 
